@@ -1,5 +1,6 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
 import {
   ArrowRight,
   Sparkles,
@@ -11,11 +12,13 @@ import {
   Clock,
   PartyPopper,
   AlertTriangle,
+  ShieldCheck,
 } from "lucide-react";
 import { PageShell } from "@/components/PageShell";
 import { ReadinessRing } from "@/components/ReadinessRing";
 import { AssistantFab } from "@/components/AssistantFab";
 import { StepCard } from "@/components/StepCard";
+import { InfoTip } from "@/components/InfoTip";
 import {
   FIRST_TIME_VOTER_JOURNEY,
   PHASES,
@@ -25,6 +28,7 @@ import {
 } from "@/lib/journey";
 import { useProfile, getCompleted, toggleCompleted, setCompleted as persistCompleted } from "@/lib/storage";
 import { OnboardingDialog } from "@/components/OnboardingDialog";
+import { checkMilestones, resetMilestones } from "@/lib/milestones";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/dashboard")({
@@ -38,7 +42,6 @@ export const Route = createFileRoute("/dashboard")({
 });
 
 function DashboardPage() {
-  const navigate = useNavigate();
   const { profile, hydrated, setProfile } = useProfile();
   const steps = FIRST_TIME_VOTER_JOURNEY;
   const [completed, setCompletedState] = useState<string[]>([]);
@@ -68,19 +71,49 @@ function DashboardPage() {
   );
 
   function markDone(id: string) {
+    const wasDone = completed.includes(id);
+    const prevScore = calcReadiness(completed, steps);
     const next = toggleCompleted(id);
     setCompletedState(next);
+    const nextScore = calcReadiness(next, steps);
+    if (!wasDone) {
+      const step = steps.find((s) => s.id === id);
+      toast.success("Step completed successfully", {
+        description: step ? `${step.title} · +${step.weight}% readiness` : undefined,
+      });
+      checkMilestones(prevScore, nextScore);
+    }
   }
 
   function resetJourney() {
     persistCompleted([]);
+    resetMilestones();
     setCompletedState([]);
+    toast("Progress reset", { description: "Your journey has been cleared." });
   }
 
   if (hydrated && !profile) {
     return (
       <PageShell>
         <OnboardingDialog onComplete={(p) => setProfile(p)} defaultGoal="register" />
+      </PageShell>
+    );
+  }
+
+  // Loading skeleton while hydrating
+  if (!hydrated) {
+    return (
+      <PageShell crumbs={[{ label: "Dashboard" }]}>
+        <div className="space-y-6">
+          <div className="skeleton h-24 w-full" />
+          <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
+            <div className="space-y-4">
+              <div className="skeleton h-40 w-full" />
+              <div className="skeleton h-32 w-full" />
+            </div>
+            <div className="skeleton h-72 w-full" />
+          </div>
+        </div>
       </PageShell>
     );
   }
