@@ -1,0 +1,127 @@
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { Share2, RotateCcw, ArrowRight, MapPin, PartyPopper } from "lucide-react";
+import { PageShell } from "@/components/PageShell";
+import { ReadinessRing } from "@/components/ReadinessRing";
+import { FIRST_TIME_VOTER_JOURNEY, calcReadiness } from "@/lib/journey";
+import { useProfile, getCompleted, setCompleted as persistCompleted } from "@/lib/storage";
+
+export const Route = createFileRoute("/done")({
+  head: () => ({
+    meta: [
+      { title: "You're ready to vote 🎉 — VoteRoute" },
+      { name: "description", content: "Celebration: you've completed your voting journey. Share to encourage friends." },
+      { property: "og:title", content: "I'm ready to vote 🎉" },
+      { property: "og:description", content: "I just completed my full voting journey on VoteRoute — start yours." },
+    ],
+  }),
+  component: DonePage,
+});
+
+function DonePage() {
+  const navigate = useNavigate();
+  const { profile } = useProfile();
+  const [completed, setCompleted] = useState<string[]>([]);
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => setCompleted(getCompleted()), []);
+
+  const score = calcReadiness(completed, FIRST_TIME_VOTER_JOURNEY);
+  const allDone = score === 100;
+
+  async function share() {
+    const city = profile?.city ?? "my city";
+    const text = `🎉 I just completed my voting journey on VoteRoute! Ready to vote in ${city}. Start yours →`;
+    const url = typeof window !== "undefined" ? window.location.origin : "";
+    if (typeof navigator !== "undefined" && (navigator as Navigator).share) {
+      try {
+        await (navigator as Navigator).share({ title: "I'm ready to vote!", text, url });
+        return;
+      } catch {
+        // fall through
+      }
+    }
+    if (typeof navigator !== "undefined" && navigator.clipboard) {
+      await navigator.clipboard.writeText(`${text} ${url}`);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2200);
+    }
+  }
+
+  function restart() {
+    persistCompleted([]);
+    setCompleted([]);
+    navigate({ to: "/dashboard" });
+  }
+
+  if (!allDone) {
+    return (
+      <PageShell crumbs={[{ label: "Dashboard", to: "/dashboard" }, { label: "Completion" }]}>
+        <div className="rounded-3xl border border-dashed border-border p-10 text-center">
+          <PartyPopper className="mx-auto h-10 w-10 text-muted-foreground" />
+          <h1 className="mt-3 text-xl font-semibold">Not quite there yet — {score}% ready</h1>
+          <p className="mt-1 text-sm text-muted-foreground max-w-md mx-auto">
+            Finish every step in your journey to unlock your celebration screen.
+          </p>
+          <Link
+            to="/dashboard"
+            className="mt-5 inline-flex items-center gap-1.5 rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground"
+          >
+            Back to dashboard <ArrowRight className="h-3.5 w-3.5" />
+          </Link>
+        </div>
+      </PageShell>
+    );
+  }
+
+  return (
+    <PageShell crumbs={[{ label: "Dashboard", to: "/dashboard" }, { label: "🎉 Done" }]}>
+      <div className="mx-auto max-w-2xl">
+        <div className="overflow-hidden rounded-3xl border border-border bg-card shadow-glow">
+          <div className="bg-gradient-to-br from-primary via-primary to-leaf p-8 sm:p-10 text-center text-primary-foreground">
+            <div className="mx-auto grid h-20 w-20 place-items-center rounded-full bg-primary-foreground/20 backdrop-blur-sm">
+              <PartyPopper className="h-10 w-10" />
+            </div>
+            <h1 className="mt-5 text-3xl sm:text-4xl font-bold tracking-tight">You're ready to vote!</h1>
+            {profile && (
+              <p className="mt-2 text-sm opacity-90 inline-flex items-center gap-1">
+                <MapPin className="h-3.5 w-3.5" /> {profile.city}, {profile.state}
+              </p>
+            )}
+            <div className="mt-6 inline-block rounded-2xl bg-primary-foreground/15 backdrop-blur-sm p-4">
+              <ReadinessRing score={100} size={140} stroke={12} label="Readiness" sublabel="Complete" />
+            </div>
+          </div>
+
+          <div className="p-6 sm:p-8 space-y-3">
+            <p className="text-center text-sm text-muted-foreground">
+              Save this page or take a screenshot. On election day, head to your polling booth between 7 AM – 6 PM with your Voter ID.
+            </p>
+
+            <button
+              onClick={share}
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-medium text-primary-foreground hover:bg-primary/90 shadow-glow"
+            >
+              <Share2 className="h-4 w-4" />
+              {copied ? "Copied to clipboard ✓" : "Share my voting journey"}
+            </button>
+
+            <Link
+              to="/timeline"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-border bg-background px-5 py-3 text-sm font-medium hover:bg-muted"
+            >
+              View my timeline
+            </Link>
+
+            <button
+              onClick={restart}
+              className="inline-flex w-full items-center justify-center gap-1.5 text-xs text-muted-foreground hover:text-foreground"
+            >
+              <RotateCcw className="h-3 w-3" /> Start over for next election
+            </button>
+          </div>
+        </div>
+      </div>
+    </PageShell>
+  );
+}

@@ -9,12 +9,55 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TimelineRouteImport } from './routes/timeline'
+import { Route as ReadinessRouteImport } from './routes/readiness'
+import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as JourneyRouteImport } from './routes/journey'
+import { Route as HelpRouteImport } from './routes/help'
+import { Route as DoneRouteImport } from './routes/done'
+import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as AssistantRouteImport } from './routes/assistant'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as StepStepIdRouteImport } from './routes/step.$stepId'
 
+const TimelineRoute = TimelineRouteImport.update({
+  id: '/timeline',
+  path: '/timeline',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReadinessRoute = ReadinessRouteImport.update({
+  id: '/readiness',
+  path: '/readiness',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const JourneyRoute = JourneyRouteImport.update({
   id: '/journey',
   path: '/journey',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HelpRoute = HelpRouteImport.update({
+  id: '/help',
+  path: '/help',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DoneRoute = DoneRouteImport.update({
+  id: '/done',
+  path: '/done',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AssistantRoute = AssistantRouteImport.update({
+  id: '/assistant',
+  path: '/assistant',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -22,40 +65,157 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StepStepIdRoute = StepStepIdRouteImport.update({
+  id: '/step/$stepId',
+  path: '/step/$stepId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/assistant': typeof AssistantRoute
+  '/dashboard': typeof DashboardRoute
+  '/done': typeof DoneRoute
+  '/help': typeof HelpRoute
   '/journey': typeof JourneyRoute
+  '/profile': typeof ProfileRoute
+  '/readiness': typeof ReadinessRoute
+  '/timeline': typeof TimelineRoute
+  '/step/$stepId': typeof StepStepIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/assistant': typeof AssistantRoute
+  '/dashboard': typeof DashboardRoute
+  '/done': typeof DoneRoute
+  '/help': typeof HelpRoute
   '/journey': typeof JourneyRoute
+  '/profile': typeof ProfileRoute
+  '/readiness': typeof ReadinessRoute
+  '/timeline': typeof TimelineRoute
+  '/step/$stepId': typeof StepStepIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/assistant': typeof AssistantRoute
+  '/dashboard': typeof DashboardRoute
+  '/done': typeof DoneRoute
+  '/help': typeof HelpRoute
   '/journey': typeof JourneyRoute
+  '/profile': typeof ProfileRoute
+  '/readiness': typeof ReadinessRoute
+  '/timeline': typeof TimelineRoute
+  '/step/$stepId': typeof StepStepIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/journey'
+  fullPaths:
+    | '/'
+    | '/assistant'
+    | '/dashboard'
+    | '/done'
+    | '/help'
+    | '/journey'
+    | '/profile'
+    | '/readiness'
+    | '/timeline'
+    | '/step/$stepId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/journey'
-  id: '__root__' | '/' | '/journey'
+  to:
+    | '/'
+    | '/assistant'
+    | '/dashboard'
+    | '/done'
+    | '/help'
+    | '/journey'
+    | '/profile'
+    | '/readiness'
+    | '/timeline'
+    | '/step/$stepId'
+  id:
+    | '__root__'
+    | '/'
+    | '/assistant'
+    | '/dashboard'
+    | '/done'
+    | '/help'
+    | '/journey'
+    | '/profile'
+    | '/readiness'
+    | '/timeline'
+    | '/step/$stepId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AssistantRoute: typeof AssistantRoute
+  DashboardRoute: typeof DashboardRoute
+  DoneRoute: typeof DoneRoute
+  HelpRoute: typeof HelpRoute
   JourneyRoute: typeof JourneyRoute
+  ProfileRoute: typeof ProfileRoute
+  ReadinessRoute: typeof ReadinessRoute
+  TimelineRoute: typeof TimelineRoute
+  StepStepIdRoute: typeof StepStepIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/timeline': {
+      id: '/timeline'
+      path: '/timeline'
+      fullPath: '/timeline'
+      preLoaderRoute: typeof TimelineRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/readiness': {
+      id: '/readiness'
+      path: '/readiness'
+      fullPath: '/readiness'
+      preLoaderRoute: typeof ReadinessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/journey': {
       id: '/journey'
       path: '/journey'
       fullPath: '/journey'
       preLoaderRoute: typeof JourneyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/help': {
+      id: '/help'
+      path: '/help'
+      fullPath: '/help'
+      preLoaderRoute: typeof HelpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/done': {
+      id: '/done'
+      path: '/done'
+      fullPath: '/done'
+      preLoaderRoute: typeof DoneRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/assistant': {
+      id: '/assistant'
+      path: '/assistant'
+      fullPath: '/assistant'
+      preLoaderRoute: typeof AssistantRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -65,22 +225,28 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/step/$stepId': {
+      id: '/step/$stepId'
+      path: '/step/$stepId'
+      fullPath: '/step/$stepId'
+      preLoaderRoute: typeof StepStepIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AssistantRoute: AssistantRoute,
+  DashboardRoute: DashboardRoute,
+  DoneRoute: DoneRoute,
+  HelpRoute: HelpRoute,
   JourneyRoute: JourneyRoute,
+  ProfileRoute: ProfileRoute,
+  ReadinessRoute: ReadinessRoute,
+  TimelineRoute: TimelineRoute,
+  StepStepIdRoute: StepStepIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}

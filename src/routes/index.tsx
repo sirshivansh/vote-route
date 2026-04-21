@@ -3,7 +3,7 @@ import { useState } from "react";
 import { ArrowRight, MapPin, ShieldCheck, Sparkles, Compass, Gauge, Heart } from "lucide-react";
 import { GOALS, type GoalId } from "@/lib/journey";
 import { AppHeader } from "@/components/AppHeader";
-import { AssistantDrawer } from "@/components/AssistantDrawer";
+import { AssistantFab } from "@/components/AssistantFab";
 import { OnboardingDialog } from "@/components/OnboardingDialog";
 import { useProfile, clearProfile } from "@/lib/storage";
 
@@ -35,7 +35,11 @@ function Index() {
   function pickGoal(goal: GoalId) {
     setPendingGoal(goal);
     if (profile) {
-      navigate({ to: "/journey", search: { goal } });
+      if (goal === "register") {
+        navigate({ to: "/dashboard" });
+      } else {
+        navigate({ to: "/journey", search: { goal } });
+      }
     } else {
       setShowOnboarding(true);
     }
@@ -68,10 +72,10 @@ function Index() {
 
           <div className="mt-7 flex flex-col sm:flex-row items-center justify-center gap-3">
             <button
-              onClick={() => (profile ? navigate({ to: "/journey", search: { goal: "register" } }) : setShowOnboarding(true))}
+              onClick={() => (profile ? navigate({ to: "/dashboard" }) : setShowOnboarding(true))}
               className="group inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full bg-primary px-6 py-3.5 text-sm font-medium text-primary-foreground shadow-glow hover:scale-[1.02] transition-transform"
             >
-              {profile ? "Continue your journey" : "Start my journey"}
+              {profile ? "Open my dashboard" : "Start my journey"}
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </button>
             <span className="text-xs text-muted-foreground">⏱️ Takes 60 seconds to personalise</span>
@@ -155,7 +159,7 @@ function Index() {
         />
       )}
 
-      <AssistantDrawer />
+      <AssistantFab />
     </div>
   );
 }
