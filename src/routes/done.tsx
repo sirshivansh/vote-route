@@ -88,16 +88,22 @@ function DonePage() {
   }
 
   return (
-    <PageShell crumbs={[{ label: "Dashboard", to: "/dashboard" }, { label: "🎉 Done" }]}>
+    <PageShell crumbs={[{ label: "Dashboard", to: "/dashboard" }, { label: "Completion" }]}>
+      <Confetti active={celebrate} />
       <div className="mx-auto max-w-2xl">
         <div className="overflow-hidden rounded-3xl border border-border bg-card shadow-glow">
-          <div className="bg-gradient-to-br from-primary via-primary to-leaf p-8 sm:p-10 text-center text-primary-foreground">
-            <div className="mx-auto grid h-20 w-20 place-items-center rounded-full bg-primary-foreground/20 backdrop-blur-sm">
+          <div className="relative bg-gradient-to-br from-primary via-primary to-leaf p-8 sm:p-10 text-center text-primary-foreground">
+            <div className="mx-auto grid h-20 w-20 place-items-center rounded-full bg-primary-foreground/20 backdrop-blur-sm pulse-ring">
               <PartyPopper className="h-10 w-10" />
             </div>
-            <h1 className="mt-5 text-3xl sm:text-4xl font-bold tracking-tight">You're ready to vote!</h1>
+            <h1 className="mt-5 text-[1.75rem] sm:text-4xl font-bold tracking-tight leading-tight">
+              You are fully prepared to vote
+            </h1>
+            <p className="mt-2 text-sm opacity-90">
+              You're doing your civic duty — respect.
+            </p>
             {profile && (
-              <p className="mt-2 text-sm opacity-90 inline-flex items-center gap-1">
+              <p className="mt-3 text-xs opacity-90 inline-flex items-center gap-1">
                 <MapPin className="h-3.5 w-3.5" /> {profile.city}, {profile.state}
               </p>
             )}
@@ -107,30 +113,38 @@ function DonePage() {
           </div>
 
           <div className="p-6 sm:p-8 space-y-3">
-            <p className="text-center text-sm text-muted-foreground">
-              Save this page or take a screenshot. On election day, head to your polling booth between 7 AM – 6 PM with your Voter ID.
-            </p>
+            <div className="rounded-2xl border border-leaf/30 bg-leaf/5 p-4 text-sm text-foreground/80 leading-relaxed">
+              <div className="flex items-start gap-2">
+                <ShieldCheck className="h-4 w-4 text-leaf shrink-0 mt-0.5" />
+                <p>
+                  Save this page or take a screenshot. On election day, head to your polling booth between
+                  <span className="font-medium"> 7 AM – 6 PM </span>
+                  with your Voter ID or any ECI-approved photo identification.
+                </p>
+              </div>
+            </div>
 
             <button
               onClick={share}
-              className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-medium text-primary-foreground hover:bg-primary/90 shadow-glow"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-medium text-primary-foreground hover:bg-primary/90 shadow-glow transition-all"
             >
               <Share2 className="h-4 w-4" />
-              {copied ? "Copied to clipboard ✓" : "Share my voting journey"}
+              {copied ? "Copied to clipboard" : "Share my voting journey"}
             </button>
 
             <Link
               to="/timeline"
-              className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-border bg-background px-5 py-3 text-sm font-medium hover:bg-muted"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-border bg-background px-5 py-3 text-sm font-medium hover:bg-muted transition-colors"
             >
               View my timeline
+              <ArrowRight className="h-3.5 w-3.5" />
             </Link>
 
             <button
               onClick={restart}
-              className="inline-flex w-full items-center justify-center gap-1.5 text-xs text-muted-foreground hover:text-foreground"
+              className="inline-flex w-full items-center justify-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
             >
-              <RotateCcw className="h-3 w-3" /> Start over for next election
+              <RotateCcw className="h-3 w-3" /> Start over for the next election
             </button>
           </div>
         </div>
