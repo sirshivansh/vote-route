@@ -195,7 +195,7 @@ function StepDetailPage() {
                 <HelpCircle className="h-4 w-4 text-primary" /> Common questions
               </h3>
               <div className="mt-3 space-y-3">
-                {step.faqs.map((f) => (
+                {step.faqs.map((f: { q: string; a: string }) => (
                   <details key={f.q} className="group rounded-xl border border-border bg-background p-3">
                     <summary className="cursor-pointer text-sm font-medium list-none flex items-center justify-between gap-2">
                       {f.q}
