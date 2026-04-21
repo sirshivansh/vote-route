@@ -146,11 +146,9 @@ function Index() {
             Visit eci.gov.in →
           </a>
         </section>
-
-        <p className="mt-10 text-center text-xs text-muted-foreground">
-          Made with <Heart className="inline h-3 w-3 -mt-0.5 text-saffron" /> for India's first-time voters
-        </p>
       </main>
+
+      <AppFooter />
 
       {hydrated && showOnboarding && (
         <OnboardingDialog
