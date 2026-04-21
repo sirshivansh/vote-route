@@ -127,8 +127,10 @@ function StepDetailPage() {
             )}
           </div>
 
-          <h1 className="mt-3 text-2xl sm:text-3xl font-semibold tracking-tight">{step.title}</h1>
-          <p className="mt-2 text-base text-muted-foreground">{step.shortDesc}</p>
+          <h1 className="mt-3 text-2xl sm:text-[1.875rem] font-semibold tracking-tight leading-tight break-words">
+            {step.title}
+          </h1>
+          <p className="mt-2 text-[15px] sm:text-base text-muted-foreground leading-relaxed">{step.shortDesc}</p>
 
           {/* Meta strip */}
           <div className="mt-4 flex flex-wrap items-center gap-2 text-xs">
@@ -139,8 +141,14 @@ function StepDetailPage() {
             {step.deadline && (
               <span className="inline-flex items-center gap-1 rounded-full bg-saffron/15 px-3 py-1.5 text-saffron-foreground">
                 <CalendarDays className="h-3 w-3" /> {step.deadline}
+                <InfoTip label="Deadline source">
+                  Deadlines follow ECI's standard 30-day cutoff. Verify your state's exact dates on eci.gov.in.
+                </InfoTip>
               </span>
             )}
+            <span className="inline-flex items-center gap-1 rounded-full border border-leaf/30 bg-leaf/5 px-3 py-1.5 text-[11px] text-leaf">
+              <ShieldCheck className="h-3 w-3" /> ECI-aligned
+            </span>
           </div>
 
           {/* Long description */}
