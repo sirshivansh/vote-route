@@ -166,8 +166,7 @@ function Recommendation({
       <div className="text-sm font-semibold">{title}</div>
       <p className="mt-1 text-xs text-muted-foreground">{body}</p>
       <Link
-        // @ts-expect-error dynamic route helper
-        to={cta.to}
+        to={cta.to as never}
         className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
       >
         {cta.label} <ArrowRight className="h-3 w-3" />

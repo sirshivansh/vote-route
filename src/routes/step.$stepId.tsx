@@ -154,7 +154,7 @@ function StepDetailPage() {
                 <FileText className="h-4 w-4 text-primary" /> Required documents
               </h3>
               <ul className="mt-3 space-y-2">
-                {step.documents.map((d) => (
+                {step.documents.map((d: string) => (
                   <li key={d} className="flex items-start gap-2 text-sm">
                     <span className="mt-0.5 grid h-4 w-4 shrink-0 place-items-center rounded border border-border bg-background">
                       <Check className="h-3 w-3 text-muted-foreground/40" />
@@ -171,7 +171,7 @@ function StepDetailPage() {
             <section className="mt-4 rounded-2xl border border-border bg-card p-5">
               <h3 className="text-sm font-semibold">Quick checklist</h3>
               <ul className="mt-3 space-y-2">
-                {step.checklist.map((item) => (
+                {step.checklist.map((item: string) => (
                   <Checkable key={item} item={item} />
                 ))}
               </ul>

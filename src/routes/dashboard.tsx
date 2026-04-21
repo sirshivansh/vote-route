@@ -288,13 +288,10 @@ function QuickLink({
   label: string;
   search?: Record<string, string>;
 }) {
-  // Use any-cast on `to` is unavoidable for dynamic helper; we only pass static known routes
   return (
     <Link
-      // @ts-expect-error generic helper across known routes
-      to={to}
-      // @ts-expect-error pass through search
-      search={search}
+      to={to as never}
+      search={search as never}
       className="flex items-center justify-between rounded-xl border border-border bg-background px-3 py-2.5 text-sm hover:border-primary/40 hover:bg-primary-soft transition-colors group"
     >
       <span className="inline-flex items-center gap-2 text-foreground">

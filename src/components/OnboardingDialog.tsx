@@ -33,7 +33,8 @@ export function OnboardingDialog({ onComplete, defaultGoal = "register" }: Props
     };
     saveProfile(profile);
     onComplete?.(profile);
-    navigate({ to: "/journey", search: { goal: defaultGoal as "register" } });
+    navigate({ to: "/dashboard" });
+    void defaultGoal;
   }
 
   return (
