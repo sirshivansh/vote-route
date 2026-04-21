@@ -205,9 +205,9 @@ function JourneyPage() {
                   </span>
                 )}
               </div>
-              <h1 className="mt-1 text-2xl sm:text-3xl font-semibold tracking-tight">
+              <h1 className="mt-1 text-[1.625rem] sm:text-3xl font-semibold tracking-tight leading-tight break-words">
                 {allDone
-                  ? "🎉 You are ready to vote!"
+                  ? "You are fully prepared to vote"
                   : profile?.firstTimeVoter
                     ? "Your first-time voter journey"
                     : "Your voting journey"}
