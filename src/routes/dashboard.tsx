@@ -122,21 +122,32 @@ function DashboardPage() {
     <PageShell crumbs={[{ label: "Dashboard" }]}>
       {/* Welcome */}
       <section className="mb-6">
-        <div className="text-xs uppercase tracking-wider text-muted-foreground">
+        <div className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-wider text-muted-foreground">
           {profile && (
-            <span className="inline-flex items-center gap-1">
-              <MapPin className="h-3 w-3 text-saffron" />
-              Your journey in {profile.city}, {profile.state}
+            <span className="inline-flex items-center gap-1 min-w-0">
+              <MapPin className="h-3 w-3 text-saffron shrink-0" />
+              <span className="truncate">Your journey in {profile.city}, {profile.state}</span>
             </span>
           )}
+          <span className="inline-flex items-center gap-1 rounded-full border border-leaf/30 bg-leaf/10 px-2 py-0.5 text-[10px] font-medium normal-case tracking-normal text-leaf">
+            <ShieldCheck className="h-3 w-3" /> Verified guidance
+          </span>
         </div>
-        <h1 className="mt-1 text-2xl sm:text-3xl font-semibold tracking-tight">
-          {allDone ? "🎉 You're ready to vote!" : "Welcome back 👋"}
+        <h1 className="mt-2 text-[1.625rem] sm:text-3xl font-semibold tracking-tight leading-tight">
+          {allDone ? "You are fully prepared to vote" : `Welcome back${profile ? `, voter from ${profile.city}` : ""}`}
         </h1>
-        <p className="mt-1 text-sm text-muted-foreground">
+        <p className="mt-1.5 text-sm sm:text-[15px] text-muted-foreground leading-relaxed">
           {allDone
-            ? "Every step done. Save this page and head to your booth on election day."
-            : `${completed.length} of ${steps.length} steps complete · Keep going, you're doing great.`}
+            ? "Every step is complete. Save this page and head to your assigned booth on election day."
+            : `${completed.length} of ${steps.length} steps complete · ${scoreMeta.label}.`}
+          {!allDone && (
+            <>
+              {" "}
+              <InfoTip label="How readiness works">
+                Your readiness score is weighted by step importance. Critical steps (like registration and casting your vote) contribute the most.
+              </InfoTip>
+            </>
+          )}
         </p>
       </section>
 
@@ -305,9 +316,6 @@ function DashboardPage() {
       <AssistantFab />
     </PageShell>
   );
-
-  // satisfy ts unused
-  void navigate;
 }
 
 function QuickLink({
