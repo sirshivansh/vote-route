@@ -18,7 +18,7 @@ import {
   MapPin,
 } from "lucide-react";
 import { AppHeader } from "@/components/AppHeader";
-import { AssistantDrawer } from "@/components/AssistantDrawer";
+import { AssistantFab } from "@/components/AssistantFab";
 import { OnboardingDialog } from "@/components/OnboardingDialog";
 import { ReadinessRing } from "@/components/ReadinessRing";
 import {
@@ -357,7 +357,7 @@ function JourneyPage() {
         />
       )}
 
-      <AssistantDrawer />
+      <AssistantFab />
     </div>
   );
 }
