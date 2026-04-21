@@ -1,10 +1,13 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Share2, RotateCcw, ArrowRight, MapPin, PartyPopper } from "lucide-react";
+import { toast } from "sonner";
+import { Share2, RotateCcw, ArrowRight, MapPin, PartyPopper, ShieldCheck } from "lucide-react";
 import { PageShell } from "@/components/PageShell";
 import { ReadinessRing } from "@/components/ReadinessRing";
+import { Confetti } from "@/components/Confetti";
 import { FIRST_TIME_VOTER_JOURNEY, calcReadiness } from "@/lib/journey";
 import { useProfile, getCompleted, setCompleted as persistCompleted } from "@/lib/storage";
+import { resetMilestones } from "@/lib/milestones";
 
 export const Route = createFileRoute("/done")({
   head: () => ({
@@ -23,19 +26,26 @@ function DonePage() {
   const { profile } = useProfile();
   const [completed, setCompleted] = useState<string[]>([]);
   const [copied, setCopied] = useState(false);
+  const [celebrate, setCelebrate] = useState(false);
 
-  useEffect(() => setCompleted(getCompleted()), []);
+  useEffect(() => {
+    setCompleted(getCompleted());
+    // brief delay so the user sees the page settle, then celebrate
+    const t = setTimeout(() => setCelebrate(true), 250);
+    return () => clearTimeout(t);
+  }, []);
 
   const score = calcReadiness(completed, FIRST_TIME_VOTER_JOURNEY);
   const allDone = score === 100;
 
   async function share() {
     const city = profile?.city ?? "my city";
-    const text = `🎉 I just completed my voting journey on VoteRoute! Ready to vote in ${city}. Start yours →`;
+    const text = `I just completed my voting journey on VoteRoute — fully prepared to vote in ${city}. Start yours →`;
     const url = typeof window !== "undefined" ? window.location.origin : "";
     if (typeof navigator !== "undefined" && (navigator as Navigator).share) {
       try {
-        await (navigator as Navigator).share({ title: "I'm ready to vote!", text, url });
+        await (navigator as Navigator).share({ title: "I'm ready to vote", text, url });
+        toast.success("Shared", { description: "Thanks for spreading civic awareness." });
         return;
       } catch {
         // fall through
@@ -44,13 +54,16 @@ function DonePage() {
     if (typeof navigator !== "undefined" && navigator.clipboard) {
       await navigator.clipboard.writeText(`${text} ${url}`);
       setCopied(true);
+      toast.success("Copied to clipboard", { description: "Paste it anywhere to share." });
       setTimeout(() => setCopied(false), 2200);
     }
   }
 
   function restart() {
     persistCompleted([]);
+    resetMilestones();
     setCompleted([]);
+    toast("Journey reset", { description: "Ready for the next election." });
     navigate({ to: "/dashboard" });
   }
 
