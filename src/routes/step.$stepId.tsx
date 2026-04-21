@@ -1,5 +1,6 @@
 import { createFileRoute, Link, useNavigate, notFound } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import {
   ArrowLeft,
   ArrowRight,
@@ -12,12 +13,15 @@ import {
   Sparkles,
   FileText,
   Lightbulb,
+  ShieldCheck,
 } from "lucide-react";
 import { PageShell } from "@/components/PageShell";
 import { AssistantFab } from "@/components/AssistantFab";
-import { FIRST_TIME_VOTER_JOURNEY, getStepById, getNextStep } from "@/lib/journey";
+import { InfoTip } from "@/components/InfoTip";
+import { FIRST_TIME_VOTER_JOURNEY, getStepById, getNextStep, calcReadiness } from "@/lib/journey";
 import { getCompleted, toggleCompleted, useProfile } from "@/lib/storage";
 import { OnboardingDialog } from "@/components/OnboardingDialog";
+import { checkMilestones } from "@/lib/milestones";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/step/$stepId")({
@@ -73,14 +77,22 @@ function StepDetailPage() {
 
   function markDone() {
     const wasDone = isDone;
+    const prevScore = calcReadiness(completed, FIRST_TIME_VOTER_JOURNEY);
     const newCompleted = toggleCompleted(step.id);
     setCompletedState(newCompleted);
+    const nextScore = calcReadiness(newCompleted, FIRST_TIME_VOTER_JOURNEY);
     if (!wasDone) {
       setJustDone(true);
+      toast.success("Step completed successfully", {
+        description: `${step.title} · +${step.weight}% readiness`,
+      });
+      checkMilestones(prevScore, nextScore);
       setTimeout(() => {
         if (next) navigate({ to: "/step/$stepId", params: { stepId: next.id } });
         else navigate({ to: "/done" });
       }, 1100);
+    } else {
+      toast("Marked as not done", { description: step.title });
     }
   }
 
@@ -94,8 +106,8 @@ function StepDetailPage() {
     >
       {justDone && (
         <div className="pointer-events-none fixed inset-0 z-40 flex items-start justify-center pt-24 animate-fade-in">
-          <div className="rounded-full bg-leaf/95 px-5 py-2 text-sm font-medium text-leaf-foreground shadow-glow animate-bounce">
-            ✨ One step closer to voting
+          <div className="rounded-full bg-leaf px-5 py-2 text-sm font-medium text-leaf-foreground shadow-glow check-pop inline-flex items-center gap-2">
+            <Check className="h-4 w-4" /> Step completed successfully
           </div>
         </div>
       )}
