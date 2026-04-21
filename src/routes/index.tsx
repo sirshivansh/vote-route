@@ -1,8 +1,10 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { ArrowRight, MapPin, ShieldCheck, Sparkles, Compass, Gauge, Heart } from "lucide-react";
+import { ArrowRight, MapPin, ShieldCheck, Sparkles, Compass, Gauge } from "lucide-react";
 import { GOALS, type GoalId } from "@/lib/journey";
 import { AppHeader } from "@/components/AppHeader";
+import { AppFooter } from "@/components/AppFooter";
+import { TrustBar } from "@/components/TrustBar";
 import { AssistantFab } from "@/components/AssistantFab";
 import { OnboardingDialog } from "@/components/OnboardingDialog";
 import { useProfile, clearProfile } from "@/lib/storage";
@@ -51,20 +53,21 @@ function Index() {
   }
 
   return (
-    <div className="min-h-screen pb-12">
+    <div className="flex min-h-screen flex-col">
       <AppHeader profile={profile} onReset={handleReset} />
+      <TrustBar />
 
-      <main className="mx-auto max-w-6xl px-4">
+      <main className="mx-auto w-full max-w-6xl flex-1 px-4">
         {/* Hero */}
         <section className="relative pt-10 sm:pt-16 pb-10 text-center">
           <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card/70 px-3 py-1 text-xs text-muted-foreground shadow-soft">
             <span className="h-1.5 w-1.5 rounded-full bg-leaf animate-pulse" />
-            Built for first-time voters
+            Built for first-time voters in India
           </div>
-          <h1 className="mt-5 text-4xl sm:text-6xl font-bold tracking-tight">
+          <h1 className="mt-5 text-[2.25rem] sm:text-6xl font-bold tracking-tight leading-[1.05]">
             The <span className="text-primary">GPS</span> for your vote.
           </h1>
-          <p className="mx-auto mt-4 max-w-xl text-base sm:text-lg text-muted-foreground">
+          <p className="mx-auto mt-4 max-w-xl text-[15px] sm:text-lg text-muted-foreground leading-relaxed px-2">
             Don't just read about elections.{" "}
             <span className="text-foreground font-medium">Complete</span> your voting journey —
             personalised, step by step, in plain English.
@@ -78,7 +81,7 @@ function Index() {
               {profile ? "Open my dashboard" : "Start my journey"}
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </button>
-            <span className="text-xs text-muted-foreground">⏱️ Takes 60 seconds to personalise</span>
+            <span className="text-xs text-muted-foreground">Takes 60 seconds to personalise</span>
           </div>
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-2 text-xs text-muted-foreground">
@@ -143,11 +146,9 @@ function Index() {
             Visit eci.gov.in →
           </a>
         </section>
-
-        <p className="mt-10 text-center text-xs text-muted-foreground">
-          Made with <Heart className="inline h-3 w-3 -mt-0.5 text-saffron" /> for India's first-time voters
-        </p>
       </main>
+
+      <AppFooter />
 
       {hydrated && showOnboarding && (
         <OnboardingDialog

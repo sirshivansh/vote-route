@@ -1,5 +1,6 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
 import {
   ArrowRight,
   Sparkles,
@@ -11,11 +12,13 @@ import {
   Clock,
   PartyPopper,
   AlertTriangle,
+  ShieldCheck,
 } from "lucide-react";
 import { PageShell } from "@/components/PageShell";
 import { ReadinessRing } from "@/components/ReadinessRing";
 import { AssistantFab } from "@/components/AssistantFab";
 import { StepCard } from "@/components/StepCard";
+import { InfoTip } from "@/components/InfoTip";
 import {
   FIRST_TIME_VOTER_JOURNEY,
   PHASES,
@@ -25,6 +28,7 @@ import {
 } from "@/lib/journey";
 import { useProfile, getCompleted, toggleCompleted, setCompleted as persistCompleted } from "@/lib/storage";
 import { OnboardingDialog } from "@/components/OnboardingDialog";
+import { checkMilestones, resetMilestones } from "@/lib/milestones";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/dashboard")({
@@ -38,7 +42,6 @@ export const Route = createFileRoute("/dashboard")({
 });
 
 function DashboardPage() {
-  const navigate = useNavigate();
   const { profile, hydrated, setProfile } = useProfile();
   const steps = FIRST_TIME_VOTER_JOURNEY;
   const [completed, setCompletedState] = useState<string[]>([]);
@@ -68,13 +71,25 @@ function DashboardPage() {
   );
 
   function markDone(id: string) {
+    const wasDone = completed.includes(id);
+    const prevScore = calcReadiness(completed, steps);
     const next = toggleCompleted(id);
     setCompletedState(next);
+    const nextScore = calcReadiness(next, steps);
+    if (!wasDone) {
+      const step = steps.find((s) => s.id === id);
+      toast.success("Step completed successfully", {
+        description: step ? `${step.title} · +${step.weight}% readiness` : undefined,
+      });
+      checkMilestones(prevScore, nextScore);
+    }
   }
 
   function resetJourney() {
     persistCompleted([]);
+    resetMilestones();
     setCompletedState([]);
+    toast("Progress reset", { description: "Your journey has been cleared." });
   }
 
   if (hydrated && !profile) {
@@ -85,25 +100,54 @@ function DashboardPage() {
     );
   }
 
+  // Loading skeleton while hydrating
+  if (!hydrated) {
+    return (
+      <PageShell crumbs={[{ label: "Dashboard" }]}>
+        <div className="space-y-6">
+          <div className="skeleton h-24 w-full" />
+          <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
+            <div className="space-y-4">
+              <div className="skeleton h-40 w-full" />
+              <div className="skeleton h-32 w-full" />
+            </div>
+            <div className="skeleton h-72 w-full" />
+          </div>
+        </div>
+      </PageShell>
+    );
+  }
+
   return (
     <PageShell crumbs={[{ label: "Dashboard" }]}>
       {/* Welcome */}
       <section className="mb-6">
-        <div className="text-xs uppercase tracking-wider text-muted-foreground">
+        <div className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-wider text-muted-foreground">
           {profile && (
-            <span className="inline-flex items-center gap-1">
-              <MapPin className="h-3 w-3 text-saffron" />
-              Your journey in {profile.city}, {profile.state}
+            <span className="inline-flex items-center gap-1 min-w-0">
+              <MapPin className="h-3 w-3 text-saffron shrink-0" />
+              <span className="truncate">Your journey in {profile.city}, {profile.state}</span>
             </span>
           )}
+          <span className="inline-flex items-center gap-1 rounded-full border border-leaf/30 bg-leaf/10 px-2 py-0.5 text-[10px] font-medium normal-case tracking-normal text-leaf">
+            <ShieldCheck className="h-3 w-3" /> Verified guidance
+          </span>
         </div>
-        <h1 className="mt-1 text-2xl sm:text-3xl font-semibold tracking-tight">
-          {allDone ? "🎉 You're ready to vote!" : "Welcome back 👋"}
+        <h1 className="mt-2 text-[1.625rem] sm:text-3xl font-semibold tracking-tight leading-tight">
+          {allDone ? "You are fully prepared to vote" : `Welcome back${profile ? `, voter from ${profile.city}` : ""}`}
         </h1>
-        <p className="mt-1 text-sm text-muted-foreground">
+        <p className="mt-1.5 text-sm sm:text-[15px] text-muted-foreground leading-relaxed">
           {allDone
-            ? "Every step done. Save this page and head to your booth on election day."
-            : `${completed.length} of ${steps.length} steps complete · Keep going, you're doing great.`}
+            ? "Every step is complete. Save this page and head to your assigned booth on election day."
+            : `${completed.length} of ${steps.length} steps complete · ${scoreMeta.label}.`}
+          {!allDone && (
+            <>
+              {" "}
+              <InfoTip label="How readiness works">
+                Your readiness score is weighted by step importance. Critical steps (like registration and casting your vote) contribute the most.
+              </InfoTip>
+            </>
+          )}
         </p>
       </section>
 
@@ -272,9 +316,6 @@ function DashboardPage() {
       <AssistantFab />
     </PageShell>
   );
-
-  // satisfy ts unused
-  void navigate;
 }
 
 function QuickLink({

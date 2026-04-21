@@ -1,4 +1,5 @@
 import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
+import { Toaster } from "@/components/ui/sonner";
 
 import appCss from "../styles.css?url";
 
@@ -29,14 +30,18 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "VoteRoute — Your Personal Voting Journey Assistant" },
+      {
+        name: "description",
+        content:
+          "VoteRoute is the GPS for your vote. From registration to election day — personalised, step by step, in plain English.",
+      },
+      { name: "author", content: "VoteRoute" },
+      { name: "theme-color", content: "#1d4ed8" },
+      { property: "og:title", content: "VoteRoute — The GPS for your vote" },
+      { property: "og:description", content: "Don't just understand elections — complete your voting journey, step by step." },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
       {
@@ -65,5 +70,10 @@ function RootShell({ children }: { children: React.ReactNode }) {
 }
 
 function RootComponent() {
-  return <Outlet />;
+  return (
+    <>
+      <Outlet />
+      <Toaster position="top-center" richColors closeButton />
+    </>
+  );
 }

@@ -1,5 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
 import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
 import {
@@ -18,9 +19,11 @@ import {
   MapPin,
 } from "lucide-react";
 import { AppHeader } from "@/components/AppHeader";
+import { TrustBar } from "@/components/TrustBar";
 import { AssistantFab } from "@/components/AssistantFab";
 import { OnboardingDialog } from "@/components/OnboardingDialog";
 import { ReadinessRing } from "@/components/ReadinessRing";
+import { Confetti } from "@/components/Confetti";
 import {
   FIRST_TIME_VOTER_JOURNEY,
   GOALS,
@@ -30,6 +33,7 @@ import {
   type JourneyStep,
 } from "@/lib/journey";
 import { clearProfile, getCompleted, toggleCompleted, useProfile, setCompleted as persistCompleted } from "@/lib/storage";
+import { checkMilestones, resetMilestones } from "@/lib/milestones";
 import { cn } from "@/lib/utils";
 
 const searchSchema = z.object({
@@ -82,11 +86,18 @@ function JourneyPage() {
 
   function completeStep(id: string) {
     const wasDone = completed.includes(id);
+    const prevScore = calcReadiness(completed, steps);
     const next = toggleCompleted(id);
     setCompletedState(next);
+    const nextScore = calcReadiness(next, steps);
     if (!wasDone) {
+      const step = steps.find((s) => s.id === id);
       setCelebrate(true);
-      setTimeout(() => setCelebrate(false), 1200);
+      setTimeout(() => setCelebrate(false), 1400);
+      toast.success("Step completed successfully", {
+        description: step ? `${step.title} · +${step.weight}% readiness` : undefined,
+      });
+      checkMilestones(prevScore, nextScore);
       const idx = steps.findIndex((s) => s.id === id);
       const nextStep = steps[idx + 1];
       if (nextStep) setActiveId(nextStep.id);
@@ -96,9 +107,11 @@ function JourneyPage() {
 
   function resetJourney() {
     persistCompleted([]);
+    resetMilestones();
     setCompletedState([]);
     setActiveId(steps[0].id);
     setShowShare(false);
+    toast("Progress reset", { description: "Starting fresh." });
   }
 
   function resetAll() {
@@ -140,12 +153,16 @@ function JourneyPage() {
   return (
     <div className="min-h-screen pb-32 sm:pb-16">
       <AppHeader profile={profile} onReset={resetAll} />
+      <TrustBar />
 
-      {/* Confetti dot */}
-      {celebrate && (
+      {/* Confetti on full completion */}
+      <Confetti active={celebrate && allDone} />
+
+      {/* Step-completion banner */}
+      {celebrate && !allDone && (
         <div className="pointer-events-none fixed inset-0 z-40 flex items-start justify-center pt-24">
-          <div className="animate-bounce rounded-full bg-leaf/90 px-5 py-2 text-sm font-medium text-leaf-foreground shadow-glow">
-            ✨ One step closer to voting
+          <div className="rounded-full bg-leaf px-5 py-2 text-sm font-medium text-leaf-foreground shadow-glow check-pop inline-flex items-center gap-2">
+            <Check className="h-4 w-4" /> Step completed successfully
           </div>
         </div>
       )}
@@ -159,9 +176,9 @@ function JourneyPage() {
           >
             <ArrowLeft className="h-4 w-4" /> Change goal
           </Link>
-          <div className="flex items-center gap-2 text-xs text-muted-foreground">
-            <span className="hidden sm:inline">Goal:</span>
-            <span className="text-foreground font-medium">{goalMeta.title}</span>
+          <div className="flex items-center gap-2 text-xs text-muted-foreground min-w-0">
+            <span className="hidden sm:inline shrink-0">Goal:</span>
+            <span className="text-foreground font-medium truncate">{goalMeta.title}</span>
           </div>
         </div>
 
@@ -188,9 +205,9 @@ function JourneyPage() {
                   </span>
                 )}
               </div>
-              <h1 className="mt-1 text-2xl sm:text-3xl font-semibold tracking-tight">
+              <h1 className="mt-1 text-[1.625rem] sm:text-3xl font-semibold tracking-tight leading-tight break-words">
                 {allDone
-                  ? "🎉 You are ready to vote!"
+                  ? "You are fully prepared to vote"
                   : profile?.firstTimeVoter
                     ? "Your first-time voter journey"
                     : "Your voting journey"}
