@@ -1,4 +1,4 @@
-import type { TFunction } from "i18next";
+import i18n, { type TFunction } from "i18next";
 
 export type GoalId = "register" | "eligibility" | "learn" | "voting-day";
 
@@ -33,7 +33,9 @@ export interface Goal {
 
 export const PHASES = ["Prepare", "Register", "Verify", "Vote"] as const;
 
-export function getGoals(t: TFunction): Goal[] {
+const fallbackT: TFunction = i18n.t.bind(i18n);
+
+export function getGoals(t: TFunction = fallbackT): Goal[] {
   return [
     { id: "register", emoji: "🗳️", title: t("journey:goals.register.title"), subtitle: t("journey:goals.register.subtitle") },
     { id: "eligibility", emoji: "✅", title: t("journey:goals.eligibility.title"), subtitle: t("journey:goals.eligibility.subtitle") },
@@ -52,7 +54,7 @@ function stepList(t: TFunction, key: string) {
   return Array.isArray(raw) ? raw : [];
 }
 
-export function getJourneySteps(t: TFunction): JourneyStep[] {
+export function getJourneySteps(t: TFunction = fallbackT): JourneyStep[] {
   return [
     { id: "s1", phase: "Prepare", title: t("journey:steps.s1.title"), shortDesc: t("journey:steps.s1.shortDesc"), longDesc: t("journey:steps.s1.longDesc"), estimate: t("journey:steps.s1.estimate"), weight: 8, why: t("journey:steps.s1.why"), consequence: t("journey:steps.s1.consequence"), checklist: stepList(t, "journey:steps.s1.checklist"), faqs: stepFaqs(t, "s1"), action: { label: t("journey:steps.s1.action") } },
     { id: "s2", phase: "Prepare", title: t("journey:steps.s2.title"), shortDesc: t("journey:steps.s2.shortDesc"), longDesc: t("journey:steps.s2.longDesc"), estimate: t("journey:steps.s2.estimate"), weight: 10, why: t("journey:steps.s2.why"), consequence: t("journey:steps.s2.consequence"), documents: stepList(t, "journey:steps.s2.documents"), checklist: stepList(t, "journey:steps.s2.checklist"), faqs: stepFaqs(t, "s2"), action: { label: t("journey:steps.s2.action") } },
@@ -65,7 +67,7 @@ export function getJourneySteps(t: TFunction): JourneyStep[] {
   ];
 }
 
-export function getGlobalFaqs(t: TFunction): StepFaq[] {
+export function getGlobalFaqs(t: TFunction = fallbackT): StepFaq[] {
   const raw = t("journey:globalFaqs", { returnObjects: true, defaultValue: [] }) as StepFaq[];
   return Array.isArray(raw) ? raw : [];
 }
@@ -76,7 +78,7 @@ export function calcReadiness(completedIds: string[], steps: JourneyStep[]): num
   return Math.round((earned / total) * 100);
 }
 
-export function readinessLabel(score: number, t: TFunction): { label: string; tone: "muted" | "primary" | "leaf" } {
+export function readinessLabel(score: number, t: TFunction = fallbackT): { label: string; tone: "muted" | "primary" | "leaf" } {
   if (score === 0) return { label: t("journey:readinessLabels.0"), tone: "muted" };
   if (score < 40) return { label: t("journey:readinessLabels.40"), tone: "primary" };
   if (score < 80) return { label: t("journey:readinessLabels.80"), tone: "primary" };
@@ -84,10 +86,14 @@ export function readinessLabel(score: number, t: TFunction): { label: string; to
   return { label: t("journey:readinessLabels.100"), tone: "leaf" };
 }
 
-export function getStepById(id: string, t: TFunction): JourneyStep | undefined {
+export function getStepById(id: string, t: TFunction = fallbackT): JourneyStep | undefined {
   return getJourneySteps(t).find((step) => step.id === id);
 }
 
 export function getNextStep(completedIds: string[], steps: JourneyStep[]): JourneyStep | undefined {
   return steps.find((step) => !completedIds.includes(step.id));
 }
+
+export const GOALS = getGoals();
+export const FIRST_TIME_VOTER_JOURNEY = getJourneySteps();
+export const GLOBAL_FAQS = getGlobalFaqs();
