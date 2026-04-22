@@ -90,7 +90,7 @@ export function getStepById(id: string, t: TFunction = fallbackT): JourneyStep |
   return getJourneySteps(t).find((step) => step.id === id);
 }
 
-export function getNextStep(completedIds: string[], steps: JourneyStep[]): JourneyStep | undefined {
+export function getNextStep(completedIds: string[], steps: JourneyStep[] = getJourneySteps()): JourneyStep | undefined {
   return steps.find((step) => !completedIds.includes(step.id));
 }
 

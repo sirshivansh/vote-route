@@ -1,5 +1,5 @@
+import i18n, { type TFunction } from "i18next";
 import { toast } from "sonner";
-import type { TFunction } from "i18next";
 
 const SHOWN_KEY = "vja:milestones-shown";
 const MILESTONES = [25, 50, 75, 100] as const;
@@ -25,7 +25,7 @@ function getMilestoneCopy(t: TFunction, at: number) {
   return { title: "100% complete", body: t("journey:readinessLabels.100") };
 }
 
-export function checkMilestones(prevScore: number, nextScore: number, t: TFunction) {
+export function checkMilestones(prevScore: number, nextScore: number, t: TFunction = i18n.t.bind(i18n)) {
   if (nextScore <= prevScore) return;
   const shown = getShown();
   const newShown = [...shown];
