@@ -1,0 +1,299 @@
+{
+  "goals": {
+    "register": {
+      "title": "Register to vote",
+      "subtitle": "First time? We will guide you through every step."
+    },
+    "eligibility": {
+      "title": "Check eligibility",
+      "subtitle": "See whether you can vote in the next election."
+    },
+    "learn": {
+      "title": "Learn the process",
+      "subtitle": "Understand each phase in clear language."
+    },
+    "voting-day": {
+      "title": "Voting day guide",
+      "subtitle": "What to bring, where to go, and what to expect."
+    }
+  },
+  "phases": {
+    "Prepare": "Prepare",
+    "Register": "Register",
+    "Verify": "Verify",
+    "Vote": "Vote"
+  },
+  "readinessLabels": {
+    "0": "Just getting started",
+    "40": "On your way",
+    "80": "Almost there",
+    "100": "Ready to vote 🎉",
+    "close": "So close!"
+  },
+  "landing": {
+    "builtFor": "Built for first-time voters in India",
+    "heroTitle": "The GPS for your vote.",
+    "heroTitleAccent": "GPS",
+    "heroBody": "Do not just read about elections. Complete your voting journey — personalised, step by step, in plain language.",
+    "heroBodySimple": "Get clear help from registration to voting day.",
+    "openDashboard": "Open my dashboard",
+    "startJourney": "Start my journey",
+    "personaliseTime": "Takes 60 seconds to personalise",
+    "stepOne": "Step 1 of your journey",
+    "whatDoYouWant": "What do you want to do?",
+    "goalHelp": "Pick a goal — we will build your personalised journey instantly.",
+    "recommended": "Recommended",
+    "features": [
+      {
+        "n": "01",
+        "t": "Personalised journey",
+        "d": "Steps adapt to your age, location, and progress."
+      },
+      {
+        "n": "02",
+        "t": "Readiness score",
+        "d": "Watch your 0–100 score rise as you complete steps."
+      },
+      {
+        "n": "03",
+        "t": "Smart assistant",
+        "d": "Ask anything and get clear answers, not legal jargon."
+      }
+    ],
+    "trustTitle": "Based on Election Commission of India guidelines",
+    "trustBody": "No misinformation. Verified sources only."
+  },
+  "dashboard": {
+    "titleDone": "You are fully prepared to vote",
+    "titleWelcome": "Welcome back, voter from {{city}}",
+    "titleWelcomeGeneric": "Welcome back",
+    "doneBody": "Every step is complete. Save this page and head to your assigned booth on election day.",
+    "progressBody": "{{done}} of {{total}} steps complete · {{label}}.",
+    "howReadiness": "How readiness works",
+    "howReadinessBody": "Your readiness score is weighted by step importance. Critical steps, like registration and casting your vote, count the most.",
+    "upNext": "Up next for you",
+    "openThisStep": "Open this step",
+    "upcoming": "Upcoming steps"
+  },
+  "journey": {
+    "titleDone": "You are fully prepared to vote",
+    "titleFirstTime": "Your first-time voter journey",
+    "titleDefault": "Your voting journey",
+    "doneBody": "Every step is complete. Save this page and head to your booth on election day.",
+    "progressBody": "{{done}} of {{total}} steps complete · Up next: {{title}}",
+    "whatNext": "What should I do next?",
+    "timeline": "Timeline",
+    "shareTitle": "You are ready to vote!",
+    "shareBody": "Every step is complete. You are all set for election day in {{city}}."
+  },
+  "timelinePage": {
+    "title": "Your voting timeline",
+    "ready": "{{score}}% ready",
+    "doneCount": "{{done}}/{{total}} done"
+  },
+  "readinessPage": {
+    "title": "Voting readiness report",
+    "full": "You are 100% ready 🎉",
+    "partial": "You are {{score}}% ready to vote",
+    "fullBody": "Every step is done. Save this report and head to the booth on election day.",
+    "partialBody": "Complete the remaining {{count}} {{stepWord}} below to reach 100% and be fully voting-ready.",
+    "completed": "What you have completed ({{count}})",
+    "missing": "Still to do ({{count}})",
+    "recommendStart": "Start with the basics",
+    "recommendMomentum": "Keep momentum",
+    "recommendAlmost": "Almost there",
+    "recommendBody": "Open \"{{title}}\" — it takes {{estimate}} and adds {{weight}}% to your readiness.",
+    "recommendDone": "You have completed every step!"
+  },
+  "helpPage": {
+    "title": "Help & frequently asked questions",
+    "body": "Everything you need to know about voting in India and using VoteRoute. Cannot find your answer? Ask the assistant.",
+    "stillStuck": "Still stuck?",
+    "stillStuckBody": "Ask the assistant for answers in plain language.",
+    "officialSources": "Official sources only",
+    "officialSourcesBody": "All guidance is based on Election Commission of India procedures.",
+    "foundBug": "Found a bug?",
+    "foundBugBody": "VoteRoute is open and evolving. Tell us anything that did not work."
+  },
+  "donePage": {
+    "title": "You are fully prepared to vote",
+    "subtitle": "You are doing your civic duty — respect.",
+    "saveReminder": "Save this page or take a screenshot. On election day, head to your polling booth between 7 AM and 6 PM with your Voter ID or any ECI-approved photo identification.",
+    "viewMyTimeline": "View my timeline",
+    "restart": "Start over for the next election",
+    "notYet": "Not quite there yet — {{score}}% ready",
+    "notYetBody": "Finish every step in your journey to unlock your celebration screen."
+  },
+  "assistantPage": {
+    "title": "Voting assistant",
+    "subtitle": "Clear answers · context-aware · ECI-aligned",
+    "emptyTitle": "Ask me anything about voting",
+    "emptyBody": "Documents, deadlines, EVMs, VVPAT, eligibility — try a suggested question or type your own.",
+    "clear": "Clear",
+    "browseFaq": "Browse FAQs",
+    "historyLocal": "History saves to your device only."
+  },
+  "globalFaqs": [
+    {
+      "q": "Is VoteRoute affiliated with the Election Commission?",
+      "a": "No. VoteRoute is an independent guide that follows ECI-published procedures. For official forms and status, always use voters.eci.gov.in."
+    },
+    {
+      "q": "Where is my data stored?",
+      "a": "Everything stays on your device in localStorage. We never send your name, age, or location to a server."
+    },
+    {
+      "q": "What is the difference between Voter ID and e-EPIC?",
+      "a": "They represent the same voter identity. e-EPIC is the digital PDF version you can download instantly, while the physical Voter ID card arrives later."
+    },
+    {
+      "q": "Can I vote if I am in a different city on election day?",
+      "a": "Usually no — you must vote at your assigned booth. Plan ahead or check whether you qualify for a postal ballot."
+    },
+    {
+      "q": "What is VVPAT?",
+      "a": "Voter-Verifiable Paper Audit Trail — a printer attached to the EVM that briefly shows the candidate name and symbol after you vote."
+    }
+  ],
+  "steps": {
+    "s1": {
+      "phase": "Prepare",
+      "title": "Let us check if you are eligible ✨",
+      "shortDesc": "A quick 30-second confirmation before we start.",
+      "longDesc": "To vote in India, you need to be an Indian citizen, be 18 or older on the qualifying date, and live in the constituency where you want to register.",
+      "estimate": "2 min",
+      "why": "Checking eligibility first prevents wasted effort and helps us guide you correctly.",
+      "consequence": "If you skip this, you may complete a form that gets rejected later and lose valuable time.",
+      "checklist": [
+        "I am an Indian citizen",
+        "I will be 18 or older on 1 January",
+        "I have a residential address"
+      ],
+      "faqs": [
+        {
+          "q": "I turn 18 next month — am I eligible?",
+          "a": "Eligibility depends on the qualifying date. If you turn 18 after that date, you may be included in the next revision cycle."
+        },
+        {
+          "q": "I am an Indian citizen living abroad. Can I vote?",
+          "a": "Yes. Overseas citizens can register as overseas electors and vote in person in their home constituency."
+        }
+      ],
+      "action": "Yes, I qualify"
+    },
+    "s2": {
+      "phase": "Prepare",
+      "title": "Gather your 3 essentials 📂",
+      "shortDesc": "A photo, an age proof, and an address proof.",
+      "longDesc": "Keep clear photos or PDFs ready. Blurry uploads are one of the most common reasons applications get rejected.",
+      "estimate": "15 min",
+      "why": "Having documents ready before opening the form saves time and reduces rejections.",
+      "consequence": "Missing or unclear documents can lead to rejection and force you to start again.",
+      "documents": [
+        "Recent passport-size photo",
+        "Age proof — birth certificate, marksheet, passport, or PAN",
+        "Address proof — utility bill, rental agreement, bank statement, or Aadhaar"
+      ],
+      "checklist": [
+        "Recent passport-size photo",
+        "Age proof ready",
+        "Address proof ready"
+      ],
+      "faqs": [
+        {
+          "q": "My address proof is in my parent’s name. Is that okay?",
+          "a": "Usually yes, along with a supporting self-declaration if you live with family."
+        },
+        {
+          "q": "Can I use a selfie as my photo?",
+          "a": "Use a passport-style photo with a plain background and clear lighting."
+        }
+      ],
+      "action": "I have everything ready"
+    },
+    "s3": {
+      "phase": "Register",
+      "title": "Get officially registered 🪪",
+      "shortDesc": "Submit Form 6 on the official voter portal.",
+      "longDesc": "Open the official voter portal, create an account, and fill Form 6 with details exactly as shown on your documents.",
+      "estimate": "20 min",
+      "deadline": "At least 30 days before election day",
+      "why": "Without Form 6 being filed and accepted, your name will not appear on the electoral roll.",
+      "consequence": "If you miss the cutoff, you may not be able to vote in the next election.",
+      "faqs": [
+        {
+          "q": "What if I make a typo in my name?",
+          "a": "You can file a correction request afterward."
+        }
+      ],
+      "action": "Open the voter portal"
+    },
+    "s4": {
+      "phase": "Register",
+      "title": "Upload your documents correctly 📤",
+      "shortDesc": "Attach your photo, age proof, and address proof.",
+      "longDesc": "Keep each file within the allowed size and make sure every document is readable. Good lighting and visible corners help.",
+      "estimate": "10 min",
+      "why": "Clear uploads make verification faster and reduce the chance of rejection.",
+      "consequence": "Unreadable files or wrong formats can delay or reject your application.",
+      "action": "Mark uploads as done"
+    },
+    "s5": {
+      "phase": "Verify",
+      "title": "Track your application 🔎",
+      "shortDesc": "Use your reference number to follow progress.",
+      "longDesc": "After submission, keep your reference ID and watch for updates. The Booth Level Officer may call or visit for verification.",
+      "estimate": "Ongoing",
+      "why": "Tracking helps you react quickly if any follow-up is needed.",
+      "consequence": "If you miss verification follow-up, your application may be rejected silently.",
+      "action": "Mark as tracked"
+    },
+    "s6": {
+      "phase": "Verify",
+      "title": "Your Voter ID is ready 🎟️",
+      "shortDesc": "Download the digital e-EPIC instantly.",
+      "longDesc": "Once approved, you can download the digital version of your voter identity and keep it on your phone.",
+      "estimate": "5 min",
+      "why": "The e-EPIC gives you immediate proof of voter registration.",
+      "consequence": "Without valid ID on polling day, you may be turned away.",
+      "action": "Download e-EPIC"
+    },
+    "s7": {
+      "phase": "Vote",
+      "title": "Find your polling booth 📍",
+      "shortDesc": "Locate your assigned station before election day.",
+      "longDesc": "Search using your voter ID or name and save the booth address before polling day.",
+      "estimate": "5 min",
+      "deadline": "1 week before election day",
+      "why": "Knowing your booth in advance reduces stress and prevents last-minute confusion.",
+      "consequence": "Going to the wrong booth can stop you from voting that day.",
+      "action": "Find my booth"
+    },
+    "s8": {
+      "phase": "Vote",
+      "title": "Cast your vote — you are ready 🗳️",
+      "shortDesc": "Bring your Voter ID and vote with confidence.",
+      "longDesc": "Reach your booth during polling hours, verify your identity, use the EVM, and confirm the VVPAT slip.",
+      "estimate": "30–60 min",
+      "deadline": "Election day",
+      "why": "This is the final and most important step of the journey.",
+      "consequence": "If you skip this step, the entire effort stays incomplete.",
+      "checklist": [
+        "Valid voter photo ID",
+        "Booth address saved",
+        "Polling hours noted"
+      ],
+      "faqs": [
+        {
+          "q": "What if my name is not on the roll at the booth?",
+          "a": "Ask the officer what options are available and whether you qualify for a tendered ballot."
+        },
+        {
+          "q": "Can I take my phone inside?",
+          "a": "Phones and bags are generally not allowed inside the polling booth."
+        }
+      ],
+      "action": "I voted! 🎉"
+    }
+  }
+}

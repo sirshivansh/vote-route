@@ -1,12 +1,8 @@
+import i18n, { type TFunction } from "i18next";
 import { toast } from "sonner";
 
 const SHOWN_KEY = "vja:milestones-shown";
-const MILESTONES: { at: number; title: string; body: string }[] = [
-  { at: 25, title: "25% complete", body: "Great start — momentum builds from here." },
-  { at: 50, title: "Halfway there", body: "You've crossed the midpoint of your voting journey." },
-  { at: 75, title: "75% complete", body: "Almost there — only the final stretch remains." },
-  { at: 100, title: "Journey complete", body: "You are fully prepared to vote." },
-];
+const MILESTONES = [25, 50, 75, 100] as const;
 
 function getShown(): number[] {
   if (typeof window === "undefined") return [];
@@ -22,21 +18,22 @@ function setShown(arr: number[]) {
   localStorage.setItem(SHOWN_KEY, JSON.stringify(arr));
 }
 
-/**
- * Fire a milestone toast the first time the user crosses 25/50/75/100%.
- * Idempotent across reloads — uses localStorage to remember.
- */
-export function checkMilestones(prevScore: number, nextScore: number) {
+function getMilestoneCopy(t: TFunction, at: number) {
+  if (at === 25) return { title: "25% complete", body: t("journey:readinessLabels.40") };
+  if (at === 50) return { title: "50% complete", body: t("journey:dashboard.howReadinessBody") };
+  if (at === 75) return { title: "75% complete", body: t("journey:readinessLabels.close") };
+  return { title: "100% complete", body: t("journey:readinessLabels.100") };
+}
+
+export function checkMilestones(prevScore: number, nextScore: number, t: TFunction = i18n.t.bind(i18n)) {
   if (nextScore <= prevScore) return;
   const shown = getShown();
   const newShown = [...shown];
-  for (const m of MILESTONES) {
-    if (prevScore < m.at && nextScore >= m.at && !shown.includes(m.at)) {
-      toast.success(m.title, {
-        description: m.body,
-        duration: 3500,
-      });
-      newShown.push(m.at);
+  for (const at of MILESTONES) {
+    if (prevScore < at && nextScore >= at && !shown.includes(at)) {
+      const copy = getMilestoneCopy(t, at);
+      toast.success(copy.title, { description: copy.body, duration: 3500 });
+      newShown.push(at);
     }
   }
   if (newShown.length !== shown.length) setShown(newShown);

@@ -1,0 +1,25 @@
+{
+  "suggested": [
+    "What documents do I need to register?",
+    "When is the registration deadline?",
+    "What is VVPAT?",
+    "Can I vote without a Voter ID?",
+    "What should I do next?",
+    "How do I find my polling booth?"
+  ],
+  "placeholder": "Type your question…",
+  "answer": {
+    "documents": "You will usually need three things: a recent passport-size photo, proof of age, and proof of address. Clear files help avoid rejection.",
+    "deadline": "Voter rolls usually close around 30 days before an election. Check your local schedule on the timeline and official ECI pages.",
+    "vvpat": "VVPAT is the paper trail attached to the EVM. After you vote, it briefly shows your chosen candidate before the slip drops into a sealed box.",
+    "voterId": "Besides the Voter ID, several ECI-approved photo IDs are also accepted at the booth.",
+    "register": "To register, fill Form 6 on the official voter portal and upload your supporting documents.",
+    "booth": "Use the official electoral search to find your assigned polling booth by name or voter ID.",
+    "eepic": "The e-EPIC is the digital version of your voter identity that you can download and store on your phone.",
+    "age": "You can vote if you meet the qualifying-date age rule for that election cycle.",
+    "next": "Your next step is \"{{title}}\". Open the step page to see what to do, which documents you need, and how long it should take.",
+    "nextDone": "You have completed every step — open the completion screen to review and share your journey.",
+    "location": "Your registered location is {{city}}. Polling booths are assigned based on your address, so use the booth-finder step to confirm yours.",
+    "fallback": "I do not have a precise answer for that yet. Try opening your next step or browse the Help page for verified guidance."
+  }
+}
