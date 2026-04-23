@@ -95,7 +95,7 @@ function DashboardPage() {
   if (hydrated && !profile) {
     return (
       <PageShell>
-        <OnboardingDialog onComplete={(p) => setProfile(p)} defaultGoal="register" />
+        <OnboardingDialog onClose={() => window.history.back()} onComplete={(p) => setProfile(p)} defaultGoal="register" />
       </PageShell>
     );
   }
