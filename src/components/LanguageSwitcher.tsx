@@ -10,6 +10,16 @@ export function LanguageSwitcher({ compact = false }: { compact?: boolean }) {
 
   return (
     <div className="flex items-center gap-2 min-w-0">
+      <button
+        onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
+        className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border bg-card text-muted-foreground transition-colors hover:text-foreground"
+        type="button"
+        aria-label={t("common:theme.toggleAria")}
+        title={t("common:theme.toggle")}
+      >
+        {resolvedTheme === "dark" ? <Moon className="h-3.5 w-3.5" /> : <Sun className="h-3.5 w-3.5" />}
+      </button>
+
       <label className="inline-flex min-w-0 items-center gap-2 rounded-full border border-border bg-card px-3 py-1.5 text-xs text-muted-foreground">
         <Globe className="h-3.5 w-3.5 shrink-0" />
         {!compact && <span className="hidden sm:inline">{t("common:language.label")}</span>}

@@ -163,11 +163,17 @@
   html, body {
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
+    color-scheme: light;
+  }
+
+  html.dark, html[data-theme="dark"] {
+    color-scheme: dark;
   }
 
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+    transition: background-color 220ms ease, color 220ms ease;
     background-image:
       radial-gradient(ellipse 80% 50% at 50% -10%, color-mix(in oklab, var(--primary) 12%, transparent), transparent),
       radial-gradient(ellipse 60% 40% at 100% 0%, color-mix(in oklab, var(--saffron) 10%, transparent), transparent);

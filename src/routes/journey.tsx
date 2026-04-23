@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
+import { useTranslation } from "react-i18next";
 import {
   ArrowLeft,
   ArrowRight,
@@ -25,8 +26,8 @@ import { OnboardingDialog } from "@/components/OnboardingDialog";
 import { ReadinessRing } from "@/components/ReadinessRing";
 import { Confetti } from "@/components/Confetti";
 import {
-  FIRST_TIME_VOTER_JOURNEY,
-  GOALS,
+  getGoals,
+  getJourneySteps,
   PHASES,
   calcReadiness,
   readinessLabel,
@@ -63,9 +64,11 @@ export const Route = createFileRoute("/journey")({
 function JourneyPage() {
   const { goal } = Route.useSearch();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { profile, hydrated, setProfile } = useProfile();
-  const steps = FIRST_TIME_VOTER_JOURNEY;
-  const goalMeta = GOALS.find((g) => g.id === goal) ?? GOALS[0];
+  const steps = useMemo(() => getJourneySteps(t), [t]);
+  const goals = useMemo(() => getGoals(t), [t]);
+  const goalMeta = goals.find((g) => g.id === goal) ?? goals[0];
 
   const [completed, setCompletedState] = useState<string[]>([]);
   const [activeId, setActiveId] = useState<string>(steps[0].id);

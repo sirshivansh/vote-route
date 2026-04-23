@@ -1,7 +1,8 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { ArrowRight, MapPin, ShieldCheck, Sparkles, Compass, Gauge } from "lucide-react";
-import { GOALS, type GoalId } from "@/lib/journey";
+import { useTranslation } from "react-i18next";
+import { getGoals, type GoalId } from "@/lib/journey";
 import { AppHeader } from "@/components/AppHeader";
 import { AppFooter } from "@/components/AppFooter";
 import { TrustBar } from "@/components/TrustBar";
@@ -30,9 +31,11 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { profile, hydrated, setProfile } = useProfile();
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [pendingGoal, setPendingGoal] = useState<GoalId>("register");
+  const goals = getGoals(t);
 
   function pickGoal(goal: GoalId) {
     setPendingGoal(goal);
@@ -62,15 +65,14 @@ function Index() {
         <section className="relative pt-10 sm:pt-16 pb-10 text-center">
           <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card/70 px-3 py-1 text-xs text-muted-foreground shadow-soft">
             <span className="h-1.5 w-1.5 rounded-full bg-leaf animate-pulse" />
-            Built for first-time voters in India
+            {t("common:home.eyebrow")}
           </div>
           <h1 className="mt-5 text-[2.25rem] sm:text-6xl font-bold tracking-tight leading-[1.05]">
-            The <span className="text-primary">GPS</span> for your vote.
+            {t("common:home.titlePrefix")} <span className="text-primary">{t("common:home.titleHighlight")}</span> {t("common:home.titleSuffix")}
           </h1>
           <p className="mx-auto mt-4 max-w-xl text-[15px] sm:text-lg text-muted-foreground leading-relaxed px-2">
-            Don't just read about elections.{" "}
-            <span className="text-foreground font-medium">Complete</span> your voting journey —
-            personalised, step by step, in plain English.
+            {t("common:home.descriptionStart")}{" "}
+            <span className="text-foreground font-medium">{t("common:home.descriptionEmphasis")}</span> {t("common:home.descriptionEnd")}
           </p>
 
           <div className="mt-7 flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -78,34 +80,34 @@ function Index() {
               onClick={() => (profile ? navigate({ to: "/dashboard" }) : setShowOnboarding(true))}
               className="group inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full bg-primary px-6 py-3.5 text-sm font-medium text-primary-foreground shadow-glow hover:scale-[1.02] transition-transform"
             >
-              {profile ? "Open my dashboard" : "Start my journey"}
+              {profile ? t("common:home.openDashboard") : t("common:home.startJourney")}
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </button>
-            <span className="text-xs text-muted-foreground">Takes 60 seconds to personalise</span>
+            <span className="text-xs text-muted-foreground">{t("common:home.personalizeHint")}</span>
           </div>
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-2 text-xs text-muted-foreground">
-            <Badge icon={<ShieldCheck className="h-3.5 w-3.5 text-leaf" />}>ECI-aligned guidance</Badge>
-            <Badge icon={<MapPin className="h-3.5 w-3.5 text-saffron" />}>Location-aware</Badge>
-            <Badge icon={<Gauge className="h-3.5 w-3.5 text-primary" />}>Readiness score</Badge>
-            <Badge icon={<Sparkles className="h-3.5 w-3.5 text-primary" />}>Plain language</Badge>
+            <Badge icon={<ShieldCheck className="h-3.5 w-3.5 text-leaf" />}>{t("common:home.badges.eci")}</Badge>
+            <Badge icon={<MapPin className="h-3.5 w-3.5 text-saffron" />}>{t("common:home.badges.location")}</Badge>
+            <Badge icon={<Gauge className="h-3.5 w-3.5 text-primary" />}>{t("common:home.badges.readiness")}</Badge>
+            <Badge icon={<Sparkles className="h-3.5 w-3.5 text-primary" />}>{t("common:home.badges.plain")}</Badge>
           </div>
         </section>
 
         {/* Goal selection */}
         <section className="rounded-3xl border border-border bg-card/70 p-6 sm:p-10 shadow-soft backdrop-blur">
           <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
-            <Compass className="h-3.5 w-3.5" /> Step 1 of your journey
+            <Compass className="h-3.5 w-3.5" /> {t("common:home.goalStep")}
           </div>
           <h2 className="mt-2 text-2xl sm:text-3xl font-semibold tracking-tight">
-            What do you want to do?
+            {t("common:home.goalTitle")}
           </h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            Pick a goal — we'll build your personalised journey instantly.
+            {t("common:home.goalDescription")}
           </p>
 
           <div className="mt-6 grid gap-3 sm:grid-cols-2">
-            {GOALS.map((g) => (
+            {goals.map((g) => (
               <GoalCard key={g.id} {...g} onPick={() => pickGoal(g.id)} />
             ))}
           </div>
@@ -114,9 +116,9 @@ function Index() {
         {/* Why */}
         <section className="mt-14 grid gap-4 sm:grid-cols-3">
           {[
-            { n: "01", t: "Personalised journey", d: "Steps adapt to your age, location and progress." },
-            { n: "02", t: "Readiness score", d: "Watch your 0–100 score climb as you complete steps." },
-            { n: "03", t: "Smart assistant", d: "Ask anything — get plain answers, not legal jargon." },
+            { n: "01", t: t("common:home.features.personalizedTitle"), d: t("common:home.features.personalizedBody") },
+            { n: "02", t: t("common:home.features.readinessTitle"), d: t("common:home.features.readinessBody") },
+            { n: "03", t: t("common:home.features.assistantTitle"), d: t("common:home.features.assistantBody") },
           ].map((f) => (
             <div key={f.n} className="rounded-2xl border border-border bg-card p-5 shadow-soft">
               <div className="text-xs font-mono text-primary">{f.n}</div>
@@ -133,8 +135,8 @@ function Index() {
               <ShieldCheck className="h-5 w-5" />
             </div>
             <div>
-              <div className="font-medium">Based on Election Commission of India guidelines</div>
-              <div className="text-xs text-muted-foreground">No misinformation. Verified sources only.</div>
+              <div className="font-medium">{t("common:home.trustTitle")}</div>
+              <div className="text-xs text-muted-foreground">{t("common:home.trustBody")}</div>
             </div>
           </div>
           <a
@@ -143,7 +145,7 @@ function Index() {
             rel="noopener noreferrer"
             className="text-xs text-primary hover:underline"
           >
-            Visit eci.gov.in →
+            {t("common:actions.visitEci")} →
           </a>
         </section>
       </main>
