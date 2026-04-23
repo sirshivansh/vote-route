@@ -24,6 +24,10 @@
     "largeText": "Larger text",
     "largeTextHint": "Makes text easier to read across the app."
   },
+  "theme": {
+    "toggle": "Dark mode",
+    "toggleAria": "Toggle dark mode"
+  },
   "trust": {
     "aligned": "Aligned with Election Commission of India guidelines",
     "source": "Source",
@@ -36,6 +40,37 @@
     "menuOpen": "Open menu",
     "menuClose": "Close menu",
     "resetEverything": "Reset everything"
+  },
+  "home": {
+    "eyebrow": "Built for first-time voters in India",
+    "titlePrefix": "The",
+    "titleHighlight": "GPS",
+    "titleSuffix": "for your vote.",
+    "descriptionStart": "Don't just read about elections.",
+    "descriptionEmphasis": "Complete",
+    "descriptionEnd": "your voting journey — personalised, step by step, in plain language.",
+    "openDashboard": "Open my dashboard",
+    "startJourney": "Start my journey",
+    "personalizeHint": "Takes 60 seconds to personalise",
+    "badges": {
+      "eci": "ECI-aligned guidance",
+      "location": "Location-aware",
+      "readiness": "Readiness score",
+      "plain": "Plain language"
+    },
+    "goalStep": "Step 1 of your journey",
+    "goalTitle": "What do you want to do?",
+    "goalDescription": "Pick a goal — we'll build your personalised journey instantly.",
+    "features": {
+      "personalizedTitle": "Personalised journey",
+      "personalizedBody": "Steps adapt to your age, location and progress.",
+      "readinessTitle": "Readiness score",
+      "readinessBody": "Watch your 0–100 score climb as you complete steps.",
+      "assistantTitle": "Smart assistant",
+      "assistantBody": "Ask anything — get plain answers, not legal jargon."
+    },
+    "trustTitle": "Based on Election Commission of India guidelines",
+    "trustBody": "No misinformation. Verified sources only."
   },
   "footer": {
     "about": "An independent civic guide that helps first-time voters complete their voting journey, end to end.",

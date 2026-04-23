@@ -1,4 +1,4 @@
-import { Globe, Type } from "lucide-react";
+import { Globe, Moon, Sun, Type } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { getLanguageLabel, useAppPreferences, type SupportedLanguage } from "@/lib/preferences";
 
@@ -6,7 +6,7 @@ const LANGUAGES: SupportedLanguage[] = ["en", "hi", "mr", "bn"];
 
 export function LanguageSwitcher({ compact = false }: { compact?: boolean }) {
   const { t } = useTranslation();
-  const { preferences, setLanguage, setLargeText, setSimpleLanguage } = useAppPreferences();
+  const { preferences, resolvedTheme, setLanguage, setLargeText, setSimpleLanguage, setTheme } = useAppPreferences();
 
   return (
     <div className="flex items-center gap-2 min-w-0">
@@ -29,6 +29,16 @@ export function LanguageSwitcher({ compact = false }: { compact?: boolean }) {
 
       {!compact && (
         <div className="hidden lg:flex items-center gap-1 rounded-full border border-border bg-card p-1 text-[11px]">
+          <button
+            onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
+            className={`inline-flex items-center gap-1 rounded-full px-2 py-1 transition-colors ${resolvedTheme === "dark" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
+            type="button"
+            aria-label={t("common:theme.toggleAria")}
+            title={t("common:theme.toggle")}
+          >
+            {resolvedTheme === "dark" ? <Moon className="h-3 w-3" /> : <Sun className="h-3 w-3" />}
+            {t("common:theme.toggle")}
+          </button>
           <button
             onClick={() => setSimpleLanguage(!preferences.simpleLanguage)}
             className={`rounded-full px-2 py-1 transition-colors ${preferences.simpleLanguage ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
