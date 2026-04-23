@@ -4,18 +4,38 @@ import { useTranslation } from "react-i18next";
 const PREFS_KEY = "vja:prefs";
 
 export type SupportedLanguage = "en" | "hi" | "mr" | "bn";
+export type ThemePreference = "light" | "dark" | "system";
 
 export interface AppPreferences {
   language: SupportedLanguage;
   simpleLanguage: boolean;
   largeText: boolean;
+  theme: ThemePreference;
 }
 
 const DEFAULT_PREFS: AppPreferences = {
   language: "en",
   simpleLanguage: false,
   largeText: false,
+  theme: "system",
 };
+
+function getResolvedTheme(theme: ThemePreference) {
+  if (theme !== "system") return theme;
+  if (typeof window === "undefined") return "light";
+  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+}
+
+function applyDocumentPreferences(preferences: AppPreferences) {
+  if (typeof document === "undefined") return;
+
+  const resolvedTheme = getResolvedTheme(preferences.theme);
+  document.documentElement.lang = preferences.language;
+  document.documentElement.dataset.simpleLanguage = String(preferences.simpleLanguage);
+  document.documentElement.dataset.largeText = String(preferences.largeText);
+  document.documentElement.dataset.theme = resolvedTheme;
+  document.documentElement.classList.toggle("dark", resolvedTheme === "dark");
+}
 
 function readPrefs(): AppPreferences {
   if (typeof window === "undefined") return DEFAULT_PREFS;
@@ -33,9 +53,11 @@ function writePrefs(prefs: AppPreferences) {
 
 interface PreferencesContextValue {
   preferences: AppPreferences;
+  resolvedTheme: "light" | "dark";
   setLanguage: (language: SupportedLanguage) => void;
   setSimpleLanguage: (value: boolean) => void;
   setLargeText: (value: boolean) => void;
+  setTheme: (theme: ThemePreference) => void;
 }
 
 const PreferencesContext = createContext<PreferencesContextValue | null>(null);
@@ -43,6 +65,7 @@ const PreferencesContext = createContext<PreferencesContextValue | null>(null);
 export function PreferencesProvider({ children }: { children: React.ReactNode }) {
   const { i18n } = useTranslation();
   const [preferences, setPreferences] = useState<AppPreferences>(() => readPrefs());
+  const resolvedTheme = useMemo(() => getResolvedTheme(preferences.theme), [preferences.theme]);
 
   useEffect(() => {
     const current = readPrefs();
@@ -51,18 +74,28 @@ export function PreferencesProvider({ children }: { children: React.ReactNode })
 
   useEffect(() => {
     writePrefs(preferences);
-    document.documentElement.lang = preferences.language;
-    document.documentElement.dataset.simpleLanguage = String(preferences.simpleLanguage);
-    document.documentElement.dataset.largeText = String(preferences.largeText);
+    applyDocumentPreferences(preferences);
     void i18n.changeLanguage(preferences.language);
   }, [i18n, preferences]);
 
+  useEffect(() => {
+    if (typeof window === "undefined" || preferences.theme !== "system") return;
+
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    const handleChange = () => applyDocumentPreferences(preferences);
+
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
+  }, [preferences]);
+
   const value = useMemo<PreferencesContextValue>(() => ({
     preferences,
+    resolvedTheme,
     setLanguage: (language) => setPreferences((prev) => ({ ...prev, language })),
     setSimpleLanguage: (simpleLanguage) => setPreferences((prev) => ({ ...prev, simpleLanguage })),
     setLargeText: (largeText) => setPreferences((prev) => ({ ...prev, largeText })),
-  }), [preferences]);
+    setTheme: (theme) => setPreferences((prev) => ({ ...prev, theme })),
+  }), [preferences, resolvedTheme]);
 
   return <PreferencesContext.Provider value={value}>{children}</PreferencesContext.Provider>;
 }
