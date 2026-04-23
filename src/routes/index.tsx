@@ -155,6 +155,7 @@ function Index() {
       {hydrated && showOnboarding && (
         <OnboardingDialog
           defaultGoal={pendingGoal}
+          onClose={() => setShowOnboarding(false)}
           onComplete={(p) => {
             setProfile(p);
             setShowOnboarding(false);

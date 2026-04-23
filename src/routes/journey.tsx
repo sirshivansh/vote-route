@@ -147,6 +147,7 @@ function JourneyPage() {
         <AppHeader />
         <OnboardingDialog
           defaultGoal={goal}
+          onClose={() => navigate({ to: "/" })}
           onComplete={(p) => setProfile(p)}
         />
       </div>
