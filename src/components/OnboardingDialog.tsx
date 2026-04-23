@@ -8,9 +8,10 @@ import { cn } from "@/lib/utils";
 interface Props {
   onComplete?: (p: UserProfile) => void;
   defaultGoal?: string;
+  onClose?: () => void;
 }
 
-export function OnboardingDialog({ onComplete, defaultGoal = "register" }: Props) {
+export function OnboardingDialog({ onComplete, defaultGoal = "register", onClose }: Props) {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [step, setStep] = useState(0);
@@ -18,6 +19,20 @@ export function OnboardingDialog({ onComplete, defaultGoal = "register" }: Props
   const [state, setState] = useState("");
   const [city, setCity] = useState("");
   const [firstTime, setFirstTime] = useState<boolean | null>(null);
+
+  function handleBack() {
+    if (step > 0) {
+      setStep((s) => Math.max(0, s - 1));
+      return;
+    }
+
+    if (onClose) {
+      onClose();
+      return;
+    }
+
+    navigate({ to: "/" });
+  }
 
   const canNext =
     (step === 0 && typeof age === "number" && age >= 14 && age <= 120) ||
@@ -108,7 +123,7 @@ export function OnboardingDialog({ onComplete, defaultGoal = "register" }: Props
           )}
 
           <div className="mt-6 flex items-center justify-between gap-3">
-            <button onClick={() => setStep((s) => Math.max(0, s - 1))} disabled={step === 0} className="inline-flex items-center gap-1 rounded-full px-3 py-2 text-sm text-muted-foreground hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed">
+            <button onClick={handleBack} className="inline-flex items-center gap-1 rounded-full px-3 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground">
               <ArrowLeft className="h-4 w-4" /> {t("common:actions.back")}
             </button>
             <button
