@@ -8,9 +8,17 @@ import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
 export default defineConfig({
   vite: {
-    preview: {
+    server: {
       allowedHosts: true
+    },
+    preview: {
+      allowedHosts: [
+        "vote-route-444118208432.asia-south1.run.app",
+        ".run.app",
+        "all"
+      ]
     }
   }
 });
+
 
