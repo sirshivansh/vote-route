@@ -27,5 +27,6 @@ images:
 
 
 substitutions:
-  _REGION: us-central1
+  _REGION: asia-south1
   _REPO_NAME: vote-route-repo
+
