@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 
 interface Props {
@@ -9,7 +9,7 @@ interface Props {
   sublabel?: string;
 }
 
-export function ReadinessRing({
+export const ReadinessRing = React.memo(function ReadinessRing({
   score,
   size = 180,
   stroke = 14,
@@ -77,4 +77,4 @@ export function ReadinessRing({
       </div>
     </div>
   );
-}
+});

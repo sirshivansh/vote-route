@@ -42,8 +42,12 @@ export const Route = createRootRoute({
       { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/0fe667a5-dbb7-4c9f-9bea-87d9ae001b1f/id-preview-ec3376b3--d8f4c411-d929-4565-af05-190c8a6fdad7.lovable.app-1776954861052.png" },
       { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/0fe667a5-dbb7-4c9f-9bea-87d9ae001b1f/id-preview-ec3376b3--d8f4c411-d929-4565-af05-190c8a6fdad7.lovable.app-1776954861052.png" },
     ],
-    links: [{ rel: "stylesheet", href: appCss }],
+    links: [
+      { rel: "stylesheet", href: appCss },
+      { rel: "manifest", href: "/manifest.json" }
+    ],
   }),
+
   shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,

@@ -1,3 +1,4 @@
+import React from "react";
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { Check, Clock, CalendarDays, ArrowRight } from "lucide-react";
@@ -14,7 +15,7 @@ interface Props {
   compact?: boolean;
 }
 
-export function StepCard({ step, index, isDone, isActive, href, onComplete, compact }: Props) {
+export const StepCard = React.memo(function StepCard({ step, index, isDone, isActive, href, onComplete, compact }: Props) {
   const { t } = useTranslation();
 
   return (
@@ -57,4 +58,4 @@ export function StepCard({ step, index, isDone, isActive, href, onComplete, comp
       </div>
     </div>
   );
-}
+});

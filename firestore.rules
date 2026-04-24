@@ -1,0 +1,31 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Default deny all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Interactions Collection Rules
+    match /interactions/{interactionId} {
+      // Only allow writes if the user is authenticated (anonymous is fine)
+      allow create: if request.auth != null 
+                    && request.auth.uid == request.resource.data.userId
+                    // Schema validation: ensure required fields exist and are correct types
+                    && request.resource.data.query is string
+                    && request.resource.data.query.size() < 1000
+                    && request.resource.data.decision is map
+                    && request.resource.data.timestamp != null;
+      
+      // Users can only read their own interactions (privacy)
+      allow read: if request.auth != null && request.auth.uid == resource.data.userId;
+    }
+    
+    // System Config Collection (Global Read, No Write)
+    match /system_config/{configId} {
+      allow read: if true;
+      allow write: if false;
+    }
+  }
+}

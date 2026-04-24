@@ -30,6 +30,9 @@ import { useProfile, getCompleted, toggleCompleted, setCompleted as persistCompl
 import { OnboardingDialog } from "@/components/OnboardingDialog";
 import { checkMilestones, resetMilestones } from "@/lib/milestones";
 import { cn } from "@/lib/utils";
+import { logMilestoneEvent } from "@/services/firebase";
+
+import { StatusPanel } from "@/components/StatusPanel";
 
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
@@ -82,6 +85,7 @@ function DashboardPage() {
         description: step ? `${step.title} · +${step.weight}% readiness` : undefined,
       });
       checkMilestones(prevScore, nextScore);
+      logMilestoneEvent(id);
     }
   }
 
@@ -120,6 +124,7 @@ function DashboardPage() {
 
   return (
     <PageShell crumbs={[{ label: "Dashboard" }]}>
+      <StatusPanel />
       {/* Welcome */}
       <section className="mb-6">
         <div className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-wider text-muted-foreground">

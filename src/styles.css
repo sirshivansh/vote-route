@@ -60,12 +60,12 @@
   --font-display: "Plus Jakarta Sans", "Inter", system-ui, sans-serif;
   --font-sans: "Inter", system-ui, sans-serif;
 
-  --shadow-soft: 0 1px 2px oklch(0 0 0 / 0.04), 0 8px 24px -8px oklch(0.45 0.15 255 / 0.10);
-  --shadow-glow: 0 12px 40px -12px oklch(0.55 0.18 255 / 0.35);
+  --shadow-soft: 0 4px 24px -4px oklch(0 0 0 / 0.06), 0 12px 32px -8px oklch(0.45 0.15 255 / 0.12);
+  --shadow-glow: 0 16px 48px -12px oklch(0.55 0.18 255 / 0.40);
 }
 
 :root {
-  --radius: 0.875rem;
+  --radius: 1.25rem;
 
   --background: oklch(0.985 0.005 250);
   --foreground: oklch(0.18 0.04 260);
@@ -137,7 +137,7 @@
   --accent: oklch(0.3 0.08 258);
   --accent-foreground: oklch(0.92 0.04 258);
   --saffron: oklch(0.78 0.16 65);
-  --saffron-foreground: oklch(0.16 0.03 260);
+  --saffron-foreground: oklch(0.85 0.16 65);
   --leaf: oklch(0.7 0.14 150);
   --leaf-foreground: oklch(0.16 0.03 260);
   --destructive: oklch(0.7 0.19 22);
