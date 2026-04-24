@@ -1,11 +1,11 @@
 steps:
   # 1. Build the container image
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', '$_REGION-docker.pkg.dev/$PROJECT_ID/$_REPO_NAME/vote-route:$COMMIT_SHA', '.']
+    args: ['build', '-t', '$_REGION-docker.pkg.dev/$PROJECT_ID/$_REPO_NAME/vote-route:latest', '.']
 
   # 2. Push the container image to Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', '$_REGION-docker.pkg.dev/$PROJECT_ID/$_REPO_NAME/vote-route:$COMMIT_SHA']
+    args: ['push', '$_REGION-docker.pkg.dev/$PROJECT_ID/$_REPO_NAME/vote-route:latest']
 
   # 3. Deploy container image to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -15,7 +15,7 @@ steps:
       - 'deploy'
       - 'vote-route'
       - '--image'
-      - '$_REGION-docker.pkg.dev/$PROJECT_ID/$_REPO_NAME/vote-route:$COMMIT_SHA'
+      - '$_REGION-docker.pkg.dev/$PROJECT_ID/$_REPO_NAME/vote-route:latest'
       - '--region'
       - '$_REGION'
       - '--platform'
@@ -23,7 +23,8 @@ steps:
       - '--allow-unauthenticated'
 
 images:
-  - '$_REGION-docker.pkg.dev/$PROJECT_ID/$_REPO_NAME/vote-route:$COMMIT_SHA'
+  - '$_REGION-docker.pkg.dev/$PROJECT_ID/$_REPO_NAME/vote-route:latest'
+
 
 substitutions:
   _REGION: us-central1
