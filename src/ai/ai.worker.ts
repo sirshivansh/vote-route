@@ -6,7 +6,8 @@ self.onmessage = async (e: MessageEvent) => {
   try {
     const decision = await getBestAction(query, context);
     self.postMessage({ id, decision });
-  } catch (error: any) {
-    self.postMessage({ id, error: error.message || "Worker Error" });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Worker Error";
+    self.postMessage({ id, error: message });
   }
 };

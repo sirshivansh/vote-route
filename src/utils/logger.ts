@@ -2,12 +2,14 @@
  * Visibility Signals Logger
  * Optimized for Google Cloud Run Structured Logging.
  * Outputs JSON that Cloud Logging can automatically parse for severity and categories.
+ * @see https://cloud.google.com/logging/docs/structured-logging
  */
 
 type LogCategory = '🔥 Firestore' | '🤖 AI Decision' | '☁️ System' | '🔐 Auth' | '⚡ Performance';
 
 export const logger = {
-  info: (category: LogCategory, message: string, data?: any) => {
+  /** Log an informational message with optional metadata. */
+  info: (category: LogCategory, message: string, data?: Record<string, unknown>) => {
     const logEntry = {
       severity: 'INFO',
       message: `${category}: ${message}`,
@@ -19,7 +21,8 @@ export const logger = {
     console.log(JSON.stringify(logEntry));
   },
   
-  error: (category: LogCategory, message: string, error?: any) => {
+  /** Log an error with optional error object for stack trace capture. */
+  error: (category: LogCategory, message: string, error?: unknown) => {
     const logEntry = {
       severity: 'ERROR',
       message: `${category} ERROR: ${message}`,
@@ -34,6 +37,7 @@ export const logger = {
     console.error(JSON.stringify(logEntry));
   },
   
+  /** Log a performance measurement in milliseconds. */
   perf: (label: string, duration: number) => {
     const logEntry = {
       severity: 'DEBUG',

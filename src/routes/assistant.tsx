@@ -63,6 +63,7 @@ function AssistantPage() {
   const [isThinking, setIsThinking] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const lastSendRef = useRef(0);
 
   useEffect(() => {
     setCompleted(getCompleted());
@@ -109,6 +110,11 @@ function AssistantPage() {
   async function send(rawText: string) {
     const text = sanitizeInput(rawText);
     if (!text.trim() || isThinking) return;
+
+    // Rate limiting: 1 query per second
+    const now = Date.now();
+    if (now - lastSendRef.current < 1000) return;
+    lastSendRef.current = now;
     
     setIsThinking(true);
     const userMsg: Msg = { role: "user", text, ts: Date.now() };
@@ -224,7 +230,7 @@ function AssistantPage() {
             )}
           </header>
 
-          <div ref={scrollRef} className="flex-1 overflow-y-auto px-5 py-6 space-y-6">
+          <div ref={scrollRef} className="flex-1 overflow-y-auto px-5 py-6 space-y-6" role="log" aria-live="polite" aria-label="Chat messages">
             {messages.length === 0 && (
               <div className="rounded-2xl bg-muted/20 border border-dashed border-border p-8 text-center max-w-md mx-auto my-12">
                 <div className="w-12 h-12 rounded-full bg-primary-soft text-primary mx-auto grid place-items-center mb-4">

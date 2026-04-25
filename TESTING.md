@@ -1,41 +1,46 @@
-# Testing Plan - VoteRoute Assistant
+# Testing Strategy — VoteRoute
 
-This document outlines the testing strategy to ensure the VoteRoute Assistant is robust, accurate, and performant.
+## Overview
 
-## 🧪 1. Functional Test Cases
+VoteRoute uses **Vitest** for unit testing, with test files co-located alongside their source modules.
 
-| Scenario | Input Query | Expected Output | Logic Check |
-| :--- | :--- | :--- | :--- |
-| **Normal Case** | "What do I do next?" | Exact next milestone in the journey. | Matches `completedCount` to `JOURNEY` array. |
-| **Edge Case** | "aadhaar card vs passport" | Guidance on identity and address proofs. | Pattern matching for document keywords. |
-| **Invalid Input** | "random gibberish 123" | Fallback guidance about voting journey. | Confidence score < 0.5 triggers default. |
-| **Extreme Case** | "Deadline for election tomorrow" | Urgency warning + Timeline link. | Deadline keyword extraction. |
-| **Contextual** | "My city" | "Your registered location is [City]." | Injects `profile.city` into decision action. |
+## Running Tests
 
----
+```bash
+# Run all tests once
+npm test
 
-## ⚡ 2. Performance Testing
-- **Target**: AI Decision latency < 150ms.
-- **Metric**: Measured via `performance.now()` in `predictor.ts`.
-- **Visibility**: Displayed in the `MetricsPanel` in real-time.
+# Watch mode (re-runs on file changes)
+npm run test:watch
 
----
+# With coverage report
+npm run test:coverage
+```
 
-## 🔒 3. Security & Validation
-- **Input Sanitization**: Ensure queries are trimmed and lowered before processing.
-- **Error Boundaries**: Try/Catch blocks in `assistant.tsx` prevent app crashes on AI failure.
-- **Auth Integrity**: Verify `auth.currentUser` is present before logging to Firestore.
+## Test Suite
 
----
+| Module | File | Tests | Coverage |
+|:---|:---|:---:|:---|
+| **AI Decision Engine** | `src/ai/predictor.test.ts` | 5 | Cloud inference mock, local rule engine, intent detection |
+| **Journey Engine** | `src/lib/journey.test.ts` | 4 | Readiness calc, label generation, next-step logic |
+| **Storage Library** | `src/lib/storage.test.ts` | 5 | Profile CRUD, step toggle, localStorage mocking |
+| **Milestones System** | `src/lib/milestones.test.ts` | 4 | Threshold triggers, deduplication, reset logic |
 
-## ♿ 4. Accessibility Checklist (WAI-ARIA)
-- [x] **Buttons**: All buttons have `aria-label` or clear text content.
-- [x] **Live Regions**: Status updates use `role="status"` for screen readers.
-- [x] **Keyboard**: Full Tab-index support for chat and navigation.
-- [x] **Contrast**: OKLCH colors verified for AA/AAA compliance.
+## Testing Approach
 
----
+### Unit Tests
+- **Pure functions** tested in isolation with mocked dependencies
+- **localStorage** mocked via `vi.fn()` to simulate browser storage
+- **External APIs** (Gemini) mocked to ensure tests are deterministic and fast
 
-## 📈 5. Load & Stress Test
-- **Simulation**: Rapid clicking of "Suggested Questions".
-- **Result**: `isThinking` state prevents duplicate concurrent processing, maintaining system stability.
+### Key Patterns
+1. **Gemini Mock**: The predictor test mocks `@/services/gemini` to return `null`, forcing the local rule engine path. This ensures tests remain fast and offline-capable.
+2. **localStorage Mock**: Storage and milestone tests use a custom in-memory mock to avoid JSDOM limitations.
+3. **Sonner Mock**: Toast notifications are mocked to verify milestone triggers without DOM rendering.
+
+## Adding New Tests
+
+1. Create a `*.test.ts` file next to the module
+2. Import from `vitest` (`describe`, `it`, `expect`, `vi`)
+3. Mock external dependencies at the top of the file
+4. Follow the existing patterns for consistency

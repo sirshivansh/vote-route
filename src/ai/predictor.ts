@@ -10,8 +10,9 @@ export interface Decision {
 }
 
 /**
- * Smart Assistant Logic
- * Transitions from simple matching to structured decision making.
+ * AI Decision Engine — Gemini Cloud Inference with Local Rule Engine Fallback.
+ * Analyses user queries and returns structured, context-aware decisions
+ * for the voting journey assistant.
  */
 export async function getBestAction(
   query: string, 
@@ -39,6 +40,8 @@ export async function getBestAction(
     const cloudResponse = await callGemini(cloudPrompt);
 
     if (cloudResponse) {
+      const duration = performance.now() - start;
+      logger.perf('AI Decision (Cloud)', duration);
       return {
         action: cloudResponse,
         explanation: "Decision generated via Google Gemini Cloud Inference with localized context enrichment.",
@@ -55,7 +58,7 @@ export async function getBestAction(
   const currentHour = new Date().getHours();
   const isPeakHour = currentHour >= 10 && currentHour <= 14;
 
-  decision = {
+  let decision: Decision = {
     action: "I'm here to help guide your voting journey. You can ask about registration, documents, or your next steps.",
     explanation: "Default fallback response when no specific intent is detected.",
     confidence: 0.5,
@@ -117,7 +120,7 @@ export async function getBestAction(
   }
 
   const duration = performance.now() - start;
-  logger.perf('AI Decision Generation', duration);
+  logger.perf('AI Decision (Local)', duration);
   
   return decision;
 }

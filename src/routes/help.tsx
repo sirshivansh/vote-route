@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { HelpCircle, Sparkles, Mail, ShieldCheck, ArrowRight } from "lucide-react";
+import { HelpCircle, Sparkles, Mail, ShieldCheck, ArrowRight, ExternalLink } from "lucide-react";
 import { PageShell } from "@/components/PageShell";
 import { GLOBAL_FAQS, FIRST_TIME_VOTER_JOURNEY } from "@/lib/journey";
 
