@@ -2,6 +2,8 @@ import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
 export default defineConfig({
   vite: {
-    // Original settings
+    worker: {
+      format: 'es'
+    }
   }
 });
