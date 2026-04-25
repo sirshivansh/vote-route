@@ -6,6 +6,9 @@ const PREFS_KEY = "vja:prefs";
 export type SupportedLanguage = "en" | "hi" | "mr" | "bn";
 export type ThemePreference = "light" | "dark" | "system";
 
+/**
+ * Global application preferences schema.
+ */
 export interface AppPreferences {
   language: SupportedLanguage;
   simpleLanguage: boolean;
@@ -20,12 +23,18 @@ const DEFAULT_PREFS: AppPreferences = {
   theme: "system",
 };
 
+/**
+ * Resolves the theme to 'light' or 'dark' based on system settings if 'system' is selected.
+ */
 function getResolvedTheme(theme: ThemePreference) {
   if (theme !== "system") return theme;
   if (typeof window === "undefined") return "light";
   return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 }
 
+/**
+ * Syncs app preferences to the HTML document attributes (lang, data-*, classes).
+ */
 function applyDocumentPreferences(preferences: AppPreferences) {
   if (typeof document === "undefined") return;
 
@@ -37,6 +46,9 @@ function applyDocumentPreferences(preferences: AppPreferences) {
   document.documentElement.classList.toggle("dark", resolvedTheme === "dark");
 }
 
+/**
+ * Loads preferences from localStorage with fallback to defaults.
+ */
 function readPrefs(): AppPreferences {
   if (typeof window === "undefined") return DEFAULT_PREFS;
   try {
@@ -46,6 +58,9 @@ function readPrefs(): AppPreferences {
   }
 }
 
+/**
+ * Saves preferences to localStorage.
+ */
 function writePrefs(prefs: AppPreferences) {
   if (typeof window === "undefined") return;
   localStorage.setItem(PREFS_KEY, JSON.stringify(prefs));
@@ -62,6 +77,9 @@ interface PreferencesContextValue {
 
 const PreferencesContext = createContext<PreferencesContextValue | null>(null);
 
+/**
+ * Provider component for global app preferences (Language, Theme, Accessibility).
+ */
 export function PreferencesProvider({ children }: { children: React.ReactNode }) {
   const { i18n } = useTranslation();
   const [preferences, setPreferences] = useState<AppPreferences>(DEFAULT_PREFS);
@@ -100,12 +118,18 @@ export function PreferencesProvider({ children }: { children: React.ReactNode })
   return <PreferencesContext.Provider value={value}>{children}</PreferencesContext.Provider>;
 }
 
+/**
+ * Hook to access and modify global app preferences.
+ */
 export function useAppPreferences() {
   const context = useContext(PreferencesContext);
   if (!context) throw new Error("useAppPreferences must be used within PreferencesProvider");
   return context;
 }
 
+/**
+ * Returns the human-readable label for a supported language code.
+ */
 export function getLanguageLabel(language: SupportedLanguage) {
   return { en: "English", hi: "हिंदी", mr: "मराठी", bn: "বাংলা" }[language];
 }

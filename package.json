@@ -1,5 +1,8 @@
 {
-  "name": "tanstack_start_ts",
+  "name": "vote-route",
+  "version": "1.0.5",
+  "description": "Smart Election Journey Assistant — AI-driven civic dashboard",
+  "author": "VoteRoute Team",
   "private": true,
   "sideEffects": false,
   "type": "module",
