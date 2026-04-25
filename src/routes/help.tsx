@@ -116,6 +116,21 @@ function HelpPage() {
           </div>
         </aside>
       </div>
+      <section className="mt-8 rounded-2xl border border-primary/20 bg-primary-soft/30 p-6">
+        <h2 className="text-sm font-semibold uppercase tracking-wider text-primary">Data Sources & Accuracy</h2>
+        <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+          All voting steps, documents, and guidelines provided by VoteRoute are sourced directly from the 
+          <strong> Election Commission of India (ECI)</strong> official portal.
+        </p>
+        <div className="mt-4 flex flex-wrap gap-4">
+          <a href="https://eci.gov.in" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-xs font-medium text-primary hover:underline">
+            ECI Official Portal <ExternalLink className="h-3 w-3" />
+          </a>
+          <a href="https://voters.eci.gov.in" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-xs font-medium text-primary hover:underline">
+            Voter Services Portal <ExternalLink className="h-3 w-3" />
+          </a>
+        </div>
+      </section>
     </PageShell>
   );
 }

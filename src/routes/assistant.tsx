@@ -144,7 +144,7 @@ function AssistantPage() {
             nextStep,
             city: profile?.city,
             completedCount: completed.length,
-            isFirstTime: profile?.isFirstTime
+            firstTimeVoter: profile?.firstTimeVoter
           }
         });
       });

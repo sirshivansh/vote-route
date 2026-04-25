@@ -72,7 +72,15 @@ const server = createServer((req, res) => {
   }
 
   // 4. Run the App (Universal Web Adapter)
-  appHandler(req, res);
+    // PRODUCTION SECURITY HEADERS
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('X-Frame-Options', 'DENY');
+    res.setHeader('X-XSS-Protection', '1; mode=block');
+    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+    res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://apis.google.com https://*.firebaseapp.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://*.google-analytics.com https://*.googleapis.com https://*.r2.dev; connect-src 'self' https://*.googleapis.com https://*.firebaseio.com https://*.google-analytics.com;");
+
+    appHandler(req, res);
 });
 
 server.listen(port, host, () => {

@@ -6,11 +6,11 @@ export function MetricsPanel() {
 
   // Listen for performance logs from our AI engine (simulated via custom event or similar for this demo)
   useEffect(() => {
-    const handlePerf = (e: any) => {
+    const handlePerf = (e: CustomEvent<{ duration: number }>) => {
       if (e.detail?.duration) setLatency(e.detail.duration);
     };
-    window.addEventListener('ai-perf', handlePerf);
-    return () => window.removeEventListener('ai-perf', handlePerf);
+    window.addEventListener('ai-perf', handlePerf as EventListener);
+    return () => window.removeEventListener('ai-perf', handlePerf as EventListener);
   }, []);
 
   return (

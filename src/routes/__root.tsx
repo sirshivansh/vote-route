@@ -60,6 +60,12 @@ function RootShell({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
+        <a 
+          href="#main-content" 
+          className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md"
+        >
+          Skip to main content
+        </a>
         {children}
         <Scripts />
       </body>
@@ -67,11 +73,15 @@ function RootShell({ children }: { children: React.ReactNode }) {
   );
 }
 
+import { ErrorBoundary } from "@/components/ErrorBoundary";
+
 function RootComponent() {
   return (
-    <PreferencesProvider>
-      <Outlet />
-      <Toaster position="top-center" richColors closeButton />
-    </PreferencesProvider>
+    <ErrorBoundary>
+      <PreferencesProvider>
+        <Outlet />
+        <Toaster position="top-center" richColors closeButton />
+      </PreferencesProvider>
+    </ErrorBoundary>
   );
 }

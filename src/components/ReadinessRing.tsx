@@ -28,7 +28,15 @@ export const ReadinessRing = React.memo(function ReadinessRing({
   const isComplete = score === 100;
 
   return (
-    <div className="relative" style={{ width: size, height: size }}>
+    <div 
+      className="relative flex items-center justify-center transition-all duration-700 ease-out" 
+      style={{ width: size, height: size }}
+      role="progressbar"
+      aria-valuenow={score}
+      aria-valuemin={0}
+      aria-valuemax={100}
+      aria-label={`Voting readiness score: ${score}%`}
+    >
       <svg width={size} height={size} className="-rotate-90">
         <defs>
           <linearGradient id="readinessGradient" x1="0%" y1="0%" x2="100%" y2="100%">

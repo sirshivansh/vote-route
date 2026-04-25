@@ -52,7 +52,7 @@ export function PageShell({ crumbs, children, showTrustBar = true, showFooter = 
           </nav>
         </div>
       )}
-      <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-6 sm:py-8">{children}</main>
+      <main id="main-content" className="mx-auto w-full max-w-6xl flex-1 px-4 py-6 sm:py-8">{children}</main>
       {showFooter && <AppFooter />}
     </div>
   );

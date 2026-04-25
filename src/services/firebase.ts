@@ -6,12 +6,13 @@ import { logger } from "@/utils/logger";
 
 // Placeholder config - in a real app, these would come from import.meta.env
 const firebaseConfig = {
-  apiKey: "AIzaSyDummyKey_For_Evaluation_Compliance",
-  authDomain: "vote-route-demo.firebaseapp.com",
-  projectId: "vote-route-demo",
-  storageBucket: "vote-route-demo.appspot.com",
-  messagingSenderId: "123456789",
-  appId: "1:123456789:web:abcdef123456"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
 // Initialize Firebase
@@ -19,8 +20,11 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 
+import type { Analytics } from "firebase/analytics";
+import type { Decision } from "@/ai/predictor";
+
 // Initialize Analytics only on the client
-export let analytics: any = null;
+export let analytics: Analytics | null = null;
 
 if (typeof window !== "undefined") {
   isSupported().then((supported) => {
@@ -57,7 +61,7 @@ export async function initSession() {
 /**
  * Log Assistant Interaction to Firestore
  */
-export async function logInteraction(query: string, decision: any) {
+export async function logInteraction(query: string, decision: Decision) {
   try {
     const docRef = await addDoc(collection(db, "interactions"), {
       query,

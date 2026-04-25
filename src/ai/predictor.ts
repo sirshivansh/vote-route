@@ -27,23 +27,31 @@ export async function getBestAction(
   
   logger.info('🤖 AI Decision', `Analyzing query: "${query}"`);
 
-  // --- GOD MODE: VERTEX AI SAFE FALLBACK ---
-  let decision: Decision | null = null;
-  
+  // --- PRODUCTION: GEMINI AI CLOUD INFERENCE WITH SAFE FALLBACK ---
   try {
-    // Simulate Vertex AI Call (Strong Boost Criteria)
-    logger.info('☁️ Vertex AI', 'Attempting cloud inference...');
-    
-    // Simulate a network failure or dummy key rejection after 300ms
-    await new Promise((_, reject) => setTimeout(() => reject(new Error("Vertex AI: Invalid Authentication or Timeout")), 300));
-    
-    // If it succeeded, we would parse the result here.
+    const { callGemini } = await import("@/services/gemini");
+    const cloudPrompt = `You are an Indian voting journey assistant. 
+    User Query: "${query}"
+    Context: ${context.completedCount} steps done, City: ${context.city || 'Not set'}. 
+    Goal: Provide a brief, encouraging, and accurate answer in 1-2 sentences. 
+    If the user asks "what next", suggest the milestone: "${context.nextStep?.title || 'Finish journey'}".`;
+
+    const cloudResponse = await callGemini(cloudPrompt);
+
+    if (cloudResponse) {
+      return {
+        action: cloudResponse,
+        explanation: "Decision generated via Google Gemini Cloud Inference with localized context enrichment.",
+        confidence: 0.98,
+        category: lower.includes('booth') ? 'voting' : lower.includes('document') ? 'logistics' : 'general',
+        suggestedSteps: context.nextStep ? [context.nextStep.id] : []
+      };
+    }
   } catch (error) {
-    logger.error('☁️ Vertex AI', 'Inference failed. Triggering Safe Fallback to Local Engine.', error);
-    // Proceed to Local Rule Engine
+    logger.error('🤖 AI Decision', 'Cloud inference failed. Falling back to Local Rule Engine.', error);
   }
 
-  // --- GOD MODE: MULTI-VARIATE DECISION MATRIX (Local Engine) ---
+  // --- SAFE FALLBACK: MULTI-VARIATE LOCAL RULE ENGINE ---
   const currentHour = new Date().getHours();
   const isPeakHour = currentHour >= 10 && currentHour <= 14;
 
