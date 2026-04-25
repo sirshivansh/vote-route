@@ -1,11 +1,4 @@
-node_modules
-dist
-.output
-.tanstack
-.wrangler
+node_modules/
+.git/
 .env
-.git
-.gitignore
-Dockerfile
-README.md
-*.log
+# Removed dist/ and .output/ so the build can actually be deployed!

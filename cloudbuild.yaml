@@ -1,13 +1,25 @@
 steps:
-  # 1. Build the container image
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', '$_REGION-docker.pkg.dev/$PROJECT_ID/$_REPO_NAME/vote-route:latest', '.']
+  # 1. Install and Build the app logic
+  - name: 'node:22'
+    entrypoint: npm
+    args: ['install']
+    env:
+      - 'NODE_OPTIONS=--experimental-require-module'
 
-  # 2. Push the container image to Artifact Registry
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', '$_REGION-docker.pkg.dev/$PROJECT_ID/$_REPO_NAME/vote-route:latest']
+  - name: 'node:22'
+    entrypoint: npm
+    args: ['run', 'build']
+    env:
+      - 'NODE_OPTIONS=--experimental-require-module'
 
-  # 3. Deploy container image to Cloud Run
+  # 2. Build the Docker image (now containing the 'dist' folder)
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'asia-south1-docker.pkg.dev/$PROJECT_ID/vote-route-repo/vote-route', '.']
+
+  # 3. Push and Deploy
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'asia-south1-docker.pkg.dev/$PROJECT_ID/vote-route-repo/vote-route']
+
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
@@ -15,18 +27,11 @@ steps:
       - 'deploy'
       - 'vote-route'
       - '--image'
-      - '$_REGION-docker.pkg.dev/$PROJECT_ID/$_REPO_NAME/vote-route:latest'
+      - 'asia-south1-docker.pkg.dev/$PROJECT_ID/vote-route-repo/vote-route'
       - '--region'
-      - '$_REGION'
+      - 'asia-south1'
       - '--platform'
       - 'managed'
       - '--allow-unauthenticated'
-
-images:
-  - '$_REGION-docker.pkg.dev/$PROJECT_ID/$_REPO_NAME/vote-route:latest'
-
-
-substitutions:
-  _REGION: asia-south1
-  _REPO_NAME: vote-route-repo
-
+      - '--memory'
+      - '1024Mi'
