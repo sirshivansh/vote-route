@@ -64,7 +64,7 @@ const PreferencesContext = createContext<PreferencesContextValue | null>(null);
 
 export function PreferencesProvider({ children }: { children: React.ReactNode }) {
   const { i18n } = useTranslation();
-  const [preferences, setPreferences] = useState<AppPreferences>(() => readPrefs());
+  const [preferences, setPreferences] = useState<AppPreferences>(DEFAULT_PREFS);
   const resolvedTheme = useMemo(() => getResolvedTheme(preferences.theme), [preferences.theme]);
 
   useEffect(() => {
