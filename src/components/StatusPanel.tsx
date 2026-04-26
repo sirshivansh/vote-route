@@ -25,9 +25,14 @@ export function StatusPanel() {
         active={status.firestore} 
       />
       <StatusBadge 
+        icon={<Activity className="w-3 h-3" />} 
+        label="Storage" 
+        active={status.storage} 
+      />
+      <StatusBadge 
         icon={<Zap className="w-3 h-3" />} 
-        label="AI Engine" 
-        active={true} 
+        label="AI Cloud" 
+        active={status.aiCloud} 
       />
       <div className="text-[10px] font-mono text-muted-foreground ml-auto bg-muted/50 px-2 py-1 rounded border border-border">
         v{status.version}

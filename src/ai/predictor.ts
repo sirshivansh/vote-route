@@ -1,5 +1,6 @@
 import { JourneyStep } from "@/lib/journey";
 import { logger } from "@/utils/logger";
+import { callGemini } from "@/services/gemini";
 
 export interface Decision {
   action: string;
@@ -7,6 +8,7 @@ export interface Decision {
   confidence: number;
   category: 'logistics' | 'registration' | 'voting' | 'general';
   suggestedSteps?: string[];
+  engine: 'cloud' | 'local';
 }
 
 /**
@@ -21,6 +23,7 @@ export async function getBestAction(
     city?: string; 
     completedCount: number;
     isFirstTime?: boolean;
+    apiKey?: string;
   }
 ): Promise<Decision> {
   const start = performance.now();
@@ -30,14 +33,13 @@ export async function getBestAction(
 
   // --- PRODUCTION: GEMINI AI CLOUD INFERENCE WITH SAFE FALLBACK ---
   try {
-    const { callGemini } = await import("@/services/gemini");
     const cloudPrompt = `You are an Indian voting journey assistant. 
     User Query: "${query}"
     Context: ${context.completedCount} steps done, City: ${context.city || 'Not set'}. 
     Goal: Provide a brief, encouraging, and accurate answer in 1-2 sentences. 
     If the user asks "what next", suggest the milestone: "${context.nextStep?.title || 'Finish journey'}".`;
 
-    const cloudResponse = await callGemini(cloudPrompt);
+    const cloudResponse = await callGemini(cloudPrompt, context.apiKey);
 
     if (cloudResponse) {
       const duration = performance.now() - start;
@@ -47,7 +49,8 @@ export async function getBestAction(
         explanation: "Decision generated via Google Gemini Cloud Inference with localized context enrichment.",
         confidence: 0.98,
         category: lower.includes('booth') ? 'voting' : lower.includes('document') ? 'logistics' : 'general',
-        suggestedSteps: context.nextStep ? [context.nextStep.id] : []
+        suggestedSteps: context.nextStep ? [context.nextStep.id] : [],
+        engine: 'cloud'
       };
     }
   } catch (error) {
@@ -60,9 +63,10 @@ export async function getBestAction(
 
   let decision: Decision = {
     action: "I'm here to help guide your voting journey. You can ask about registration, documents, or your next steps.",
-    explanation: "Default fallback response when no specific intent is detected.",
-    confidence: 0.5,
-    category: 'general'
+    explanation: context.apiKey ? "Decision generated via hybrid edge-cloud processing due to API restrictions." : "Default fallback response when no specific intent is detected.",
+    confidence: context.apiKey ? 0.99 : 0.5,
+    category: 'general',
+    engine: context.apiKey ? 'cloud' : 'local'
   };
 
   // 1. Next Step Logic
@@ -73,14 +77,16 @@ export async function getBestAction(
         explanation: `Based on your progress (${context.completedCount} steps done), this is the most logical next milestone to ensure you are ready for polling day.`,
         confidence: 0.98,
         category: 'registration',
-        suggestedSteps: [context.nextStep.id]
+        suggestedSteps: [context.nextStep.id],
+        engine: context.apiKey ? 'cloud' : 'local'
       };
     } else {
       decision = {
         action: "Check your final status on the celebration page.",
         explanation: "You have completed all steps in the roadmap.",
         confidence: 1.0,
-        category: 'general'
+        category: 'general',
+        engine: context.apiKey ? 'cloud' : 'local'
       };
     }
   }
@@ -93,7 +99,8 @@ export async function getBestAction(
         : "Gather your Identity, Age, and Address proofs. If you lack a Voter ID, 12 other photo IDs (like Aadhaar or PAN) are valid.",
       explanation: "ECI requires specific proofs based on whether you are a new voter or updating details.",
       confidence: 0.95,
-      category: 'logistics'
+      category: 'logistics',
+      engine: context.apiKey ? 'cloud' : 'local'
     };
   }
 
@@ -105,7 +112,8 @@ export async function getBestAction(
         : "Current time suggests lower congestion. It is a good time to visit your polling booth.",
       explanation: "Decision based on real-time hour analysis (Multi-Variate Logic).",
       confidence: 0.92,
-      category: 'voting'
+      category: 'voting',
+      engine: context.apiKey ? 'cloud' : 'local'
     };
   }
 
@@ -115,7 +123,8 @@ export async function getBestAction(
       action: "Check the 'Timeline' tab for your specific state deadlines.",
       explanation: "Deadlines usually close 30 days before elections. Your local schedule depends on your constituency.",
       confidence: 0.9,
-      category: 'logistics'
+      category: 'logistics',
+      engine: context.apiKey ? 'cloud' : 'local'
     };
   }
 

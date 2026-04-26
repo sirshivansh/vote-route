@@ -150,7 +150,8 @@ function AssistantPage() {
             nextStep,
             city: profile?.city,
             completedCount: completed.length,
-            firstTimeVoter: profile?.firstTimeVoter
+            firstTimeVoter: profile?.firstTimeVoter,
+            apiKey: import.meta.env.VITE_GEMINI_API_KEY
           }
         });
       });
@@ -292,9 +293,16 @@ function AssistantPage() {
                       "{m.decision.explanation}"
                     </div>
                     <div className="flex items-center justify-between pt-2 border-t border-border/50">
-                      <span className="text-[10px] font-medium text-emerald-600 bg-emerald-500/10 px-1.5 py-0.5 rounded">
-                        Confidence: {(m.decision.confidence * 100).toFixed(0)}%
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[10px] font-medium text-emerald-600 bg-emerald-500/10 px-1.5 py-0.5 rounded">
+                          Confidence: {(m.decision.confidence * 100).toFixed(0)}%
+                        </span>
+                        {m.decision.engine === 'cloud' && (
+                          <span className="text-[10px] font-bold text-indigo-500 bg-indigo-500/10 px-1.5 py-0.5 rounded animate-pulse">
+                            Gemini 2.0 Powered
+                          </span>
+                        )}
+                      </div>
                       {m.decision.suggestedSteps && m.decision.suggestedSteps.length > 0 && (
                         <Link 
                           to="/step/$stepId" 

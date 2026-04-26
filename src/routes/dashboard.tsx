@@ -33,6 +33,7 @@ import { cn } from "@/lib/utils";
 import { logMilestoneEvent } from "@/services/firebase";
 
 import { StatusPanel } from "@/components/StatusPanel";
+import { BoothMap } from "@/components/BoothMap";
 
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
@@ -209,6 +210,15 @@ function DashboardPage() {
               <p className="mt-1 text-sm text-muted-foreground">Share your readiness with friends and family.</p>
             </Link>
           )}
+
+          {/* Booth Finder */}
+          <section className="space-y-3">
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Nearby Polling Station</h3>
+              <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-bold border border-primary/20">Google Maps Enabled</span>
+            </div>
+            <BoothMap city={profile?.city} />
+          </section>
 
           {/* Phase progress */}
           <section className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-soft">

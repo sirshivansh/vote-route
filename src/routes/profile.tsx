@@ -1,9 +1,11 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { MapPin, User, Sparkles, Trash2, RotateCcw, Calendar, ShieldCheck } from "lucide-react";
+import { useEffect, useState, useRef } from "react";
+import { MapPin, User, Sparkles, Trash2, RotateCcw, Calendar, ShieldCheck, Upload, FileCheck, Loader2 } from "lucide-react";
 import { PageShell } from "@/components/PageShell";
 import { useProfile, clearProfile, saveProfile, getCompleted, setCompleted as persistCompleted, INDIAN_STATES } from "@/lib/storage";
 import { OnboardingDialog } from "@/components/OnboardingDialog";
+import { uploadUserDocument } from "@/services/firebase";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/profile")({
   head: () => ({
@@ -139,6 +141,25 @@ function ProfilePage() {
           </button>
         </section>
 
+        <section className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-soft space-y-4">
+          <div className="flex items-center justify-between">
+            <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Document Storage</h2>
+            <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-bold border border-primary/20">Firebase Storage</span>
+          </div>
+          <p className="text-xs text-muted-foreground leading-relaxed">Keep your voting documents safe and accessible. All files are stored in your private Google Cloud Storage bucket.</p>
+          
+          <div className="grid gap-3">
+            <DocumentUpload 
+              label="Voter ID (EPIC)" 
+              path="voter_id.jpg"
+            />
+            <DocumentUpload 
+              label="Address Proof" 
+              path="address_proof.jpg"
+            />
+          </div>
+        </section>
+
         <div className="space-y-4">
           <section className="rounded-2xl border border-border bg-card p-5 shadow-soft">
             <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Account</h2>
@@ -199,3 +220,63 @@ function Field({ icon, label, children }: { icon: React.ReactNode; label: string
     </label>
   );
 }
+
+function DocumentUpload({ label, path }: { label: string; path: string }) {
+  const [uploading, setUploading] = useState(false);
+  const [url, setUrl] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    try {
+      const downloadUrl = await uploadUserDocument(file, path);
+      setUrl(downloadUrl);
+      toast.success(`${label} uploaded`);
+    } catch (err) {
+      toast.error(`Failed to upload ${label}`);
+    } finally {
+      setUploading(false);
+    }
+  }
+
+  return (
+    <div className="flex items-center justify-between gap-3 rounded-xl border border-border bg-background p-3">
+      <div className="min-w-0">
+        <div className="text-xs font-medium truncate">{label}</div>
+        <div className="text-[10px] text-muted-foreground truncate">
+          {url ? "Stored in Cloud Storage" : "No document uploaded"}
+        </div>
+      </div>
+      
+      <input 
+        type="file" 
+        className="hidden" 
+        ref={fileInputRef} 
+        onChange={handleFileChange}
+        accept="image/*,.pdf"
+      />
+
+      <button
+        disabled={uploading}
+        onClick={() => fileInputRef.current?.click()}
+        className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border transition-all ${
+          url 
+          ? "border-leaf/30 bg-leaf/10 text-leaf" 
+          : "border-border bg-muted/30 text-muted-foreground hover:bg-muted"
+        }`}
+      >
+        {uploading ? (
+          <Loader2 className="h-4 w-4 animate-spin" />
+        ) : url ? (
+          <FileCheck className="h-4 w-4" />
+        ) : (
+          <Upload className="h-4 w-4" />
+        )}
+      </button>
+    </div>
+  );
+}
+

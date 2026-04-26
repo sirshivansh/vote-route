@@ -7,14 +7,19 @@ const GEMINI_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models
  * Calls the Google Gemini API for cloud-based AI inference.
  * Implements a clean singleton-like fetch pattern.
  */
-export async function callGemini(prompt: string): Promise<string | null> {
-  if (!GEMINI_API_KEY || GEMINI_API_KEY === "your_gemini_api_key_here") {
+export async function callGemini(prompt: string, overrideKey?: string): Promise<string | null> {
+  const activeKey = (overrideKey || GEMINI_API_KEY)?.trim();
+  
+  if (!activeKey || activeKey === "your_gemini_api_key_here") {
     logger.error('☁️ System', 'Gemini API Key is missing or default. Falling back to Local Engine.');
     return null;
   }
 
+  const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${activeKey}`;
+
+
   try {
-    const response = await fetch(GEMINI_ENDPOINT, {
+    const response = await fetch(endpoint, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
