@@ -5,7 +5,13 @@
  * @see https://cloud.google.com/logging/docs/structured-logging
  */
 
-type LogCategory = "🔥 Firestore" | "🤖 AI Decision" | "☁️ System" | "🔐 Auth" | "⚡ Performance";
+type LogCategory =
+  | "🔥 Firestore"
+  | "🤖 AI Decision"
+  | "☁️ System"
+  | "🔐 Auth"
+  | "⚡ Performance"
+  | "📊 Analytics";
 
 export const logger = {
   /** Log an informational message with optional metadata. */
@@ -29,10 +35,12 @@ export const logger = {
       category,
       component: "VoteRouteAssistant",
       timestamp: new Date().toISOString(),
-      ...(error && {
-        error: error instanceof Error ? error.message : String(error),
-        stack: error instanceof Error ? error.stack : undefined,
-      }),
+      ...(error instanceof Object
+        ? {
+            error: error instanceof Error ? error.message : String(error),
+            stack: error instanceof Error ? error.stack : undefined,
+          }
+        : { error: String(error) }),
     };
     console.error(JSON.stringify(logEntry));
   },

@@ -1,22 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import { MapPin, Search, Navigation, ShieldCheck } from "lucide-react";
 import { logger } from "@/utils/logger";
+import { cn } from "@/lib/utils";
 
-declare global {
-  interface Window {
-    google: {
-      maps: {
-        Map: {
-          new (el: HTMLElement, options: unknown): unknown;
-        };
-        Marker: {
-          new (options: unknown): unknown;
-        };
-      };
-    };
-  }
-}
-
+/**
+ * Interactive Polling Booth Map Component.
+ * Integrates Google Maps SDK for real-time booth location visualization.
+ * Falls back to a "Simulated Mode" if the SDK or API Key is missing,
+ * ensuring a robust UX even in restricted environments.
+ *
+ * @param city - Optional city context to center the map.
+ */
 export function BoothMap({ city }: { city?: string }) {
   const mapRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(true);
@@ -31,17 +25,21 @@ export function BoothMap({ city }: { city?: string }) {
         setHasGoogle(true);
         initMap();
       } else if (checkCount > 50) {
-        // Fallback after 5s
+        // Fallback after 5s (e.g. adblocker or missing API key)
         clearInterval(checkGoogle);
         setLoading(false);
       }
     }, 100);
 
+    /**
+     * Initializes the Google Map instance.
+     * Applies custom 'Night Mode' styles for premium aesthetics.
+     */
     function initMap() {
       if (!mapRef.current) return;
 
       try {
-        const center = { lat: 19.076, lng: 72.8777 }; // Default Mumbai
+        const center = { lat: 19.076, lng: 72.8777 }; // Default Mumbai coordinates
         const map = new window.google.maps.Map(mapRef.current, {
           center,
           zoom: 14,
@@ -166,8 +164,4 @@ export function BoothMap({ city }: { city?: string }) {
       </div>
     </div>
   );
-}
-
-function cn(...classes: string[]) {
-  return classes.filter(Boolean).join(" ");
 }

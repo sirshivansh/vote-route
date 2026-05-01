@@ -122,16 +122,16 @@ User Query → Web Worker → Predictor Engine
 
 ## Security Model
 
-| Layer | Protection |
-|:---|:---|
-| **Transport** | HSTS (31536000s), Strict-Origin Referrer |
-| **Content** | CSP (script/style/connect-src locked), X-Content-Type-Options: nosniff |
-| **Framing** | X-Frame-Options: DENY |
-| **XSS** | HTML escaping in server error pages, input sanitization in assistant |
-| **Path Traversal** | Static file serving validates resolved paths stay within client dir |
-| **Auth** | Firebase Anonymous Auth (no PII required) |
-| **Database** | Schema-validated writes, owner-scoped reads, default deny-all |
-| **Permissions** | camera=(), microphone=(), geolocation=() |
+| Layer              | Protection                                                             |
+| :----------------- | :--------------------------------------------------------------------- |
+| **Transport**      | HSTS (31536000s), Strict-Origin Referrer                               |
+| **Content**        | CSP (script/style/connect-src locked), X-Content-Type-Options: nosniff |
+| **Framing**        | X-Frame-Options: DENY                                                  |
+| **XSS**            | HTML escaping in server error pages, input sanitization in assistant   |
+| **Path Traversal** | Static file serving validates resolved paths stay within client dir    |
+| **Auth**           | Firebase Anonymous Auth (no PII required)                              |
+| **Database**       | Schema-validated writes, owner-scoped reads, default deny-all          |
+| **Permissions**    | camera=(), microphone=(), geolocation=()                               |
 
 ---
 
@@ -183,4 +183,4 @@ Developer Push → Cloud Build Trigger
 
 ---
 
-*Architecture documentation for VoteRoute v1.1.0 — Prompt Wars Challenge submission.*
+_Architecture documentation for VoteRoute v1.1.0 — Prompt Wars Challenge submission._

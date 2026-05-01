@@ -144,7 +144,11 @@ export async function initNotifications() {
     }
 
     onMessage(messaging, (payload) => {
-      logger.info("☁️ System", "Foreground notification received", payload);
+      logger.info(
+        "☁️ System",
+        "Foreground notification received",
+        payload as unknown as Record<string, unknown>,
+      );
     });
   } catch {
     // FCM often fails in local dev or without service workers, so we fail gracefully

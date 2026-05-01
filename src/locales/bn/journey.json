@@ -194,11 +194,7 @@
         "Age proof — birth certificate, marksheet, passport, or PAN",
         "Address proof — utility bill, rental agreement, bank statement, or Aadhaar"
       ],
-      "checklist": [
-        "Recent passport-size photo",
-        "Age proof ready",
-        "Address proof ready"
-      ],
+      "checklist": ["Recent passport-size photo", "Age proof ready", "Address proof ready"],
       "faqs": [
         {
           "q": "My address proof is in my parent’s name. Is that okay?",
@@ -278,11 +274,7 @@
       "deadline": "Election day",
       "why": "This is the final and most important step of the journey.",
       "consequence": "If you skip this step, the entire effort stays incomplete.",
-      "checklist": [
-        "Valid voter photo ID",
-        "Booth address saved",
-        "Polling hours noted"
-      ],
+      "checklist": ["Valid voter photo ID", "Booth address saved", "Polling hours noted"],
       "faqs": [
         {
           "q": "What if my name is not on the roll at the booth?",

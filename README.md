@@ -3,28 +3,35 @@
 VoteRoute is a high-fidelity, AI-driven civic dashboard designed to help citizens navigate the election process with absolute clarity. Built for production-grade reliability, it transforms complex Election Commission of India (ECI) data into a personalized, accessible roadmap.
 
 ## 🚀 Live Demo
+
 **URL:** [https://vote-route-444118208432.asia-south1.run.app](https://vote-route-444118208432.asia-south1.run.app)
 
 ---
 
 ## 🏛️ Vertical: Civic Tech & Election Assistance
+
 VoteRoute operates in the **Civic Technology** vertical. Its primary goal is to solve "Civic Friction" — the barrier of complex, fragmented information that prevents citizens from participating in democratic processes. By providing a clear, personalized path to the polling booth, VoteRoute empowers voters and strengthens democratic engagement.
 
 ## 💡 Approach & Logic
+
 Our approach is centered on **Contextual Guidance**. Unlike static guides, VoteRoute uses a logic engine that adapts based on user attributes:
+
 1. **Dynamic Profiling**: Users specify their voter type (General, Overseas, PwD, etc.) and location.
 2. **Path Generation**: A specialized engine calculates an 8-step journey tailored to that profile.
 3. **Progressive Disclosure**: Information is presented in bite-sized, actionable milestones to prevent cognitive overload.
 4. **Hybrid Decision Engine**: A dual-layer logic system (Cloud-based LLM + Local Rule Engine) ensures that users always get reliable advice, even in low-connectivity environments.
 
 ## 🛠️ How the Solution Works
+
 The application functions as a smart, stateful assistant:
+
 - **State Management**: Uses TanStack Router and Query to maintain a robust, type-safe state of the user's journey.
 - **AI Integration**: **Google Gemini 2.0 Flash** acts as the core brain with dedicated system instructions and multi-turn conversation memory, providing natural language answers to voting queries and predicting the user's "Readiness Score."
 - **Telemetry & Trust**: Every AI interaction and milestone is logged to **Cloud Firestore** and **Cloud Logging**, providing transparency and auditability while the **TrustBar** shows real-time system signals to the user.
 - **Privacy First**: Uses Firebase Anonymous Auth to track progress without requiring sensitive PII, keeping user data safe and private.
 
 ## 📋 Key Assumptions
+
 1. **ECI Data Patterns**: We assume ECI procedures follow a standard multi-phase lifecycle (Registration, Verification, Polling, Results).
 2. **Device Capability**: The app assumes modern browser support for Web Workers and LocalStorage to handle AI logic and state persistence.
 3. **Data Freshness**: AI responses are contextually enriched with the current time and state-specific variables provided by the user.
@@ -33,23 +40,23 @@ The application functions as a smart, stateful assistant:
 
 ## ⚙️ Tech Stack
 
-| Layer | Technology |
-|:---|:---|
+| Layer         | Technology                                                     |
+| :------------ | :------------------------------------------------------------- |
 | **Framework** | [TanStack Start](https://tanstack.com/start) (Vite + React 19) |
-| **Language** | TypeScript 5.8 (strict mode, 0 `any` types) |
-| **Styling** | Tailwind CSS 4 + Radix UI primitives |
+| **Language**  | TypeScript 5.8 (strict mode, 0 `any` types)                    |
+| **Styling**   | Tailwind CSS 4 + Radix UI primitives                           |
 | **AI Engine** | Google Gemini 2.0 Flash (Cloud) + Local Rule Engine (Fallback) |
-| **Auth** | Firebase Anonymous Authentication |
-| **Database** | Cloud Firestore (interaction logging) |
-| **Storage** | Firebase Cloud Storage (document uploads) |
-| **Config** | Firebase Remote Config |
-| **Messaging** | Firebase Cloud Messaging |
-| **Analytics** | Firebase Analytics (milestone events) |
-| **Hosting** | Google Cloud Run (containerized) |
-| **CI/CD** | Google Cloud Build |
-| **Testing** | Vitest 4 (54+ unit tests, 10 suites) |
-| **Linting** | ESLint 9 + Prettier |
-| **i18n** | i18next (English, Hindi, Marathi, Bengali) |
+| **Auth**      | Firebase Anonymous Authentication                              |
+| **Database**  | Cloud Firestore (interaction logging)                          |
+| **Storage**   | Firebase Cloud Storage (document uploads)                      |
+| **Config**    | Firebase Remote Config                                         |
+| **Messaging** | Firebase Cloud Messaging                                       |
+| **Analytics** | Firebase Analytics (milestone events)                          |
+| **Hosting**   | Google Cloud Run (containerized)                               |
+| **CI/CD**     | Google Cloud Build                                             |
+| **Testing**   | Vitest 4 (54+ unit tests, 10 suites)                           |
+| **Linting**   | ESLint 9 + Prettier                                            |
+| **i18n**      | i18next (English, Hindi, Marathi, Bengali)                     |
 
 ---
 
@@ -84,6 +91,7 @@ The application functions as a smart, stateful assistant:
 ---
 
 ## 🤖 Advanced AI Architecture
+
 - **Cloud Inference (Primary)**: Uses **Google Gemini 2.0 Flash** with dedicated `systemInstruction` for consistent persona and multi-turn conversation context.
 - **Multi-Turn Memory**: The assistant maintains conversation history (last 4 turns) for contextual follow-up queries.
 - **Local Rule Engine (Fallback)**: A robust 6-rule engine covering registration, documents, booth congestion, deadlines, help, and next-step logic.
@@ -93,6 +101,7 @@ The application functions as a smart, stateful assistant:
 ---
 
 ## ☁️ Google Cloud & Firebase Integration
+
 - **Firebase Auth**: Anonymous authentication for secure, privacy-preserving session tracking.
 - **Cloud Firestore**: Real-time logging of every AI interaction for auditability.
 - **Firebase Storage**: Secure document upload (ID proofs) with user-scoped access rules.
@@ -107,6 +116,7 @@ The application functions as a smart, stateful assistant:
 ---
 
 ## 🛡️ Production Standards
+
 - **Strict Type Safety**: 100% TypeScript with **0 `any` types** across the entire codebase.
 - **Security Headers**: Enterprise-grade protection including **CSP, HSTS, Permissions-Policy, XSS Protection, X-Frame-Options**.
 - **XSS Prevention**: HTML escaping in server error pages, input sanitization in the assistant.
@@ -120,20 +130,21 @@ The application functions as a smart, stateful assistant:
 
 ## 📐 Evaluation Alignment
 
-| Challenge Requirement | Implementation |
-|:---|:---|
-| **Smart, dynamic assistant** | Hybrid AI engine (Gemini 2.0 Flash + Local Rule Engine) with multi-turn memory, systemInstruction, and Web Worker offloading |
-| **Logical decision making** | Multi-variate context analysis: 5 variables (time, location, progress, voter type, query intent) |
-| **Google Services** | Firebase Auth, Firestore, Storage, Analytics, FCM, Remote Config, Performance Monitoring, Gemini 2.0 Flash API, Cloud Run, Cloud Build |
-| **Practical usability** | 8-step ECI-aligned journey with real deadlines, checklists, document lists, and FAQs |
-| **Clean code** | 0 `any` types, strict ESLint/Prettier, full JSDoc, modular architecture |
-| **Security** | CSP, HSTS, XSS escaping, path traversal guard, Firestore rules with schema validation |
-| **Testing** | 54+ unit tests across 10 test suites with edge case coverage |
-| **Accessibility** | WCAG 2.1: skip links, ARIA labels, roles, live regions, semantic HTML, focus management |
+| Challenge Requirement        | Implementation                                                                                                                         |
+| :--------------------------- | :------------------------------------------------------------------------------------------------------------------------------------- |
+| **Smart, dynamic assistant** | Hybrid AI engine (Gemini 2.0 Flash + Local Rule Engine) with multi-turn memory, systemInstruction, and Web Worker offloading           |
+| **Logical decision making**  | Multi-variate context analysis: 5 variables (time, location, progress, voter type, query intent)                                       |
+| **Google Services**          | Firebase Auth, Firestore, Storage, Analytics, FCM, Remote Config, Performance Monitoring, Gemini 2.0 Flash API, Cloud Run, Cloud Build |
+| **Practical usability**      | 8-step ECI-aligned journey with real deadlines, checklists, document lists, and FAQs                                                   |
+| **Clean code**               | 0 `any` types, strict ESLint/Prettier, full JSDoc, modular architecture                                                                |
+| **Security**                 | CSP, HSTS, XSS escaping, path traversal guard, Firestore rules with schema validation                                                  |
+| **Testing**                  | 54+ unit tests across 10 test suites with edge case coverage                                                                           |
+| **Accessibility**            | WCAG 2.1: skip links, ARIA labels, roles, live regions, semantic HTML, focus management                                                |
 
 ---
 
 ## ✅ Deployment & Verification
+
 ```bash
 # Install dependencies
 npm install
@@ -152,6 +163,7 @@ npm start
 ```
 
 ## 🔧 Environment Variables
+
 ```env
 VITE_FIREBASE_API_KEY=...
 VITE_FIREBASE_AUTH_DOMAIN=...
@@ -166,4 +178,5 @@ VITE_FIREBASE_VAPID_KEY=...
 ```
 
 ---
-*Created for the Prompt Wars Challenge — Final Submission State.*
+
+_Created for the Prompt Wars Challenge — Final Submission State._
