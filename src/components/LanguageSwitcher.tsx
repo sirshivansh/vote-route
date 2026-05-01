@@ -7,8 +7,9 @@ const LANGUAGES: SupportedLanguage[] = ["en", "hi", "mr", "bn"];
 
 export function LanguageSwitcher({ compact = false }: { compact?: boolean }) {
   const { t } = useTranslation();
-  const { preferences, resolvedTheme, setLanguage, setLargeText, setSimpleLanguage, setTheme } = useAppPreferences();
-  
+  const { preferences, resolvedTheme, setLanguage, setLargeText, setSimpleLanguage, setTheme } =
+    useAppPreferences();
+
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -31,7 +32,11 @@ export function LanguageSwitcher({ compact = false }: { compact?: boolean }) {
         aria-label={t("common:theme.toggleAria")}
         title={t("common:theme.toggle")}
       >
-        {resolvedTheme === "dark" ? <Moon className="h-3.5 w-3.5" /> : <Sun className="h-3.5 w-3.5" />}
+        {resolvedTheme === "dark" ? (
+          <Moon className="h-3.5 w-3.5" />
+        ) : (
+          <Sun className="h-3.5 w-3.5" />
+        )}
       </button>
 
       <div className="relative" ref={dropdownRef}>
@@ -42,10 +47,18 @@ export function LanguageSwitcher({ compact = false }: { compact?: boolean }) {
         >
           <div className="flex items-center gap-1.5">
             <Globe className="h-3.5 w-3.5 shrink-0" />
-            {!compact && <span className="hidden sm:inline text-foreground font-medium">{t("common:language.label")}:</span>}
-            <span className="font-medium text-foreground">{getLanguageLabel(preferences.language)}</span>
+            {!compact && (
+              <span className="hidden sm:inline text-foreground font-medium">
+                {t("common:language.label")}:
+              </span>
+            )}
+            <span className="font-medium text-foreground">
+              {getLanguageLabel(preferences.language)}
+            </span>
           </div>
-          <ChevronDown className={`h-3.5 w-3.5 shrink-0 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`} />
+          <ChevronDown
+            className={`h-3.5 w-3.5 shrink-0 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+          />
         </button>
 
         {isOpen && (

@@ -28,8 +28,8 @@ export const ReadinessRing = React.memo(function ReadinessRing({
   const isComplete = score === 100;
 
   return (
-    <div 
-      className="relative flex items-center justify-center transition-all duration-700 ease-out" 
+    <div
+      className="relative flex items-center justify-center transition-all duration-700 ease-out"
       style={{ width: size, height: size }}
       role="progressbar"
       aria-valuenow={score}

@@ -33,12 +33,20 @@ import {
   readinessLabel,
   type JourneyStep,
 } from "@/lib/journey";
-import { clearProfile, getCompleted, toggleCompleted, useProfile, setCompleted as persistCompleted } from "@/lib/storage";
+import {
+  clearProfile,
+  getCompleted,
+  toggleCompleted,
+  useProfile,
+  setCompleted as persistCompleted,
+} from "@/lib/storage";
 import { checkMilestones, resetMilestones } from "@/lib/milestones";
 import { cn } from "@/lib/utils";
 
 const searchSchema = z.object({
-  goal: fallback(z.enum(["register", "eligibility", "learn", "voting-day"]), "register").default("register"),
+  goal: fallback(z.enum(["register", "eligibility", "learn", "voting-day"]), "register").default(
+    "register",
+  ),
 });
 
 export const Route = createFileRoute("/journey")({
@@ -124,7 +132,6 @@ function JourneyPage() {
   }
 
   const activeStep = steps.find((s) => s.id === activeId) ?? steps[0];
-  const activeIdx = steps.findIndex((s) => s.id === activeId);
 
   const phaseStatus = useMemo(() => {
     return PHASES.map((phase) => {
@@ -193,11 +200,7 @@ function JourneyPage() {
 
             {/* Readiness ring */}
             <div className="relative flex justify-center md:justify-start">
-              <ReadinessRing
-                score={score}
-                label="Readiness"
-                sublabel={scoreMeta.label}
-              />
+              <ReadinessRing score={score} label="Readiness" sublabel={scoreMeta.label} />
             </div>
 
             <div className="relative">
@@ -448,7 +451,12 @@ function StepCard({
           )}
         </div>
 
-        <h3 className={cn("mt-2 text-lg font-semibold tracking-tight", isDone && "text-muted-foreground")}>
+        <h3
+          className={cn(
+            "mt-2 text-lg font-semibold tracking-tight",
+            isDone && "text-muted-foreground",
+          )}
+        >
           {step.title}
         </h3>
         <p className="mt-1 text-sm text-muted-foreground">{step.shortDesc}</p>

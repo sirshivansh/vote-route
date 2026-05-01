@@ -12,7 +12,10 @@ function buildResources(): Resource {
     if (!match) return;
     const [, lng, ns] = match;
     resources[lng] ??= {};
-    resources[lng]![ns] = ((mod as { default?: unknown }).default ?? mod) as Record<string, unknown>;
+    resources[lng]![ns] = ((mod as { default?: unknown }).default ?? mod) as Record<
+      string,
+      unknown
+    >;
   });
 
   return resources;

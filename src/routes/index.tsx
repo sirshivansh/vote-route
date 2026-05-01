@@ -68,11 +68,16 @@ function Index() {
             {t("common:home.eyebrow")}
           </div>
           <h1 className="mt-5 text-[2.25rem] sm:text-6xl font-bold tracking-tight leading-[1.05]">
-            {t("common:home.titlePrefix")} <span className="text-primary">{t("common:home.titleHighlight")}</span> {t("common:home.titleSuffix")}
+            {t("common:home.titlePrefix")}{" "}
+            <span className="text-primary">{t("common:home.titleHighlight")}</span>{" "}
+            {t("common:home.titleSuffix")}
           </h1>
           <p className="mx-auto mt-4 max-w-xl text-[15px] sm:text-lg text-muted-foreground leading-relaxed px-2">
             {t("common:home.descriptionStart")}{" "}
-            <span className="text-foreground font-medium">{t("common:home.descriptionEmphasis")}</span> {t("common:home.descriptionEnd")}
+            <span className="text-foreground font-medium">
+              {t("common:home.descriptionEmphasis")}
+            </span>{" "}
+            {t("common:home.descriptionEnd")}
           </p>
 
           <div className="mt-7 flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -83,14 +88,24 @@ function Index() {
               {profile ? t("common:home.openDashboard") : t("common:home.startJourney")}
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </button>
-            <span className="text-xs text-muted-foreground">{t("common:home.personalizeHint")}</span>
+            <span className="text-xs text-muted-foreground">
+              {t("common:home.personalizeHint")}
+            </span>
           </div>
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-2 text-xs text-muted-foreground">
-            <Badge icon={<ShieldCheck className="h-3.5 w-3.5 text-leaf" />}>{t("common:home.badges.eci")}</Badge>
-            <Badge icon={<MapPin className="h-3.5 w-3.5 text-saffron" />}>{t("common:home.badges.location")}</Badge>
-            <Badge icon={<Gauge className="h-3.5 w-3.5 text-primary" />}>{t("common:home.badges.readiness")}</Badge>
-            <Badge icon={<Sparkles className="h-3.5 w-3.5 text-primary" />}>{t("common:home.badges.plain")}</Badge>
+            <Badge icon={<ShieldCheck className="h-3.5 w-3.5 text-leaf" />}>
+              {t("common:home.badges.eci")}
+            </Badge>
+            <Badge icon={<MapPin className="h-3.5 w-3.5 text-saffron" />}>
+              {t("common:home.badges.location")}
+            </Badge>
+            <Badge icon={<Gauge className="h-3.5 w-3.5 text-primary" />}>
+              {t("common:home.badges.readiness")}
+            </Badge>
+            <Badge icon={<Sparkles className="h-3.5 w-3.5 text-primary" />}>
+              {t("common:home.badges.plain")}
+            </Badge>
           </div>
         </section>
 
@@ -102,9 +117,7 @@ function Index() {
           <h2 className="mt-2 text-2xl sm:text-3xl font-semibold tracking-tight">
             {t("common:home.goalTitle")}
           </h2>
-          <p className="mt-1 text-sm text-muted-foreground">
-            {t("common:home.goalDescription")}
-          </p>
+          <p className="mt-1 text-sm text-muted-foreground">{t("common:home.goalDescription")}</p>
 
           <div className="mt-6 grid gap-3 sm:grid-cols-2">
             {goals.map((g) => (
@@ -116,9 +129,21 @@ function Index() {
         {/* Why */}
         <section className="mt-14 grid gap-4 sm:grid-cols-3">
           {[
-            { n: "01", t: t("common:home.features.personalizedTitle"), d: t("common:home.features.personalizedBody") },
-            { n: "02", t: t("common:home.features.readinessTitle"), d: t("common:home.features.readinessBody") },
-            { n: "03", t: t("common:home.features.assistantTitle"), d: t("common:home.features.assistantBody") },
+            {
+              n: "01",
+              t: t("common:home.features.personalizedTitle"),
+              d: t("common:home.features.personalizedBody"),
+            },
+            {
+              n: "02",
+              t: t("common:home.features.readinessTitle"),
+              d: t("common:home.features.readinessBody"),
+            },
+            {
+              n: "03",
+              t: t("common:home.features.assistantTitle"),
+              d: t("common:home.features.assistantBody"),
+            },
           ].map((f) => (
             <div key={f.n} className="rounded-2xl border border-border bg-card p-5 shadow-soft">
               <div className="text-xs font-mono text-primary">{f.n}</div>

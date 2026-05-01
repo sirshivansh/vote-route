@@ -1,8 +1,26 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState, useRef } from "react";
-import { MapPin, User, Sparkles, Trash2, RotateCcw, Calendar, ShieldCheck, Upload, FileCheck, Loader2 } from "lucide-react";
+import {
+  MapPin,
+  User,
+  Sparkles,
+  Trash2,
+  RotateCcw,
+  Calendar,
+  ShieldCheck,
+  Upload,
+  FileCheck,
+  Loader2,
+} from "lucide-react";
 import { PageShell } from "@/components/PageShell";
-import { useProfile, clearProfile, saveProfile, getCompleted, setCompleted as persistCompleted, INDIAN_STATES } from "@/lib/storage";
+import {
+  useProfile,
+  clearProfile,
+  saveProfile,
+  getCompleted,
+  setCompleted as persistCompleted,
+  INDIAN_STATES,
+} from "@/lib/storage";
 import { OnboardingDialog } from "@/components/OnboardingDialog";
 import { uploadUserDocument } from "@/services/firebase";
 import { toast } from "sonner";
@@ -63,7 +81,11 @@ function ProfilePage() {
   if (hydrated && !profile) {
     return (
       <PageShell>
-        <OnboardingDialog onClose={() => window.history.back()} onComplete={(p) => setProfile(p)} defaultGoal="register" />
+        <OnboardingDialog
+          onClose={() => window.history.back()}
+          onComplete={(p) => setProfile(p)}
+          defaultGoal="register"
+        />
       </PageShell>
     );
   }
@@ -72,12 +94,16 @@ function ProfilePage() {
     <PageShell crumbs={[{ label: "Dashboard", to: "/dashboard" }, { label: "Profile" }]}>
       <header className="mb-6">
         <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight">Profile & Settings</h1>
-        <p className="mt-1 text-sm text-muted-foreground">Update your details — your journey adapts to changes.</p>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Update your details — your journey adapts to changes.
+        </p>
       </header>
 
       <div className="grid gap-6 md:grid-cols-2">
         <section className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-soft space-y-5">
-          <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Your details</h2>
+          <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+            Your details
+          </h2>
 
           <Field icon={<User className="h-4 w-4" />} label="Age">
             <input
@@ -98,7 +124,9 @@ function ProfilePage() {
             >
               <option value="">Select state</option>
               {INDIAN_STATES.map((s) => (
-                <option key={s} value={s}>{s}</option>
+                <option key={s} value={s}>
+                  {s}
+                </option>
               ))}
             </select>
           </Field>
@@ -143,29 +171,34 @@ function ProfilePage() {
 
         <section className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-soft space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Document Storage</h2>
-            <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-bold border border-primary/20">Firebase Storage</span>
+            <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+              Document Storage
+            </h2>
+            <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-bold border border-primary/20">
+              Firebase Storage
+            </span>
           </div>
-          <p className="text-xs text-muted-foreground leading-relaxed">Keep your voting documents safe and accessible. All files are stored in your private Google Cloud Storage bucket.</p>
-          
+          <p className="text-xs text-muted-foreground leading-relaxed">
+            Keep your voting documents safe and accessible. All files are stored in your private
+            Google Cloud Storage bucket.
+          </p>
+
           <div className="grid gap-3">
-            <DocumentUpload 
-              label="Voter ID (EPIC)" 
-              path="voter_id.jpg"
-            />
-            <DocumentUpload 
-              label="Address Proof" 
-              path="address_proof.jpg"
-            />
+            <DocumentUpload label="Voter ID (EPIC)" path="voter_id.jpg" />
+            <DocumentUpload label="Address Proof" path="address_proof.jpg" />
           </div>
         </section>
 
         <div className="space-y-4">
           <section className="rounded-2xl border border-border bg-card p-5 shadow-soft">
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Account</h2>
+            <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+              Account
+            </h2>
             <dl className="mt-3 space-y-2 text-sm">
               <div className="flex items-center justify-between">
-                <dt className="text-muted-foreground inline-flex items-center gap-1"><Calendar className="h-3.5 w-3.5" /> Created</dt>
+                <dt className="text-muted-foreground inline-flex items-center gap-1">
+                  <Calendar className="h-3.5 w-3.5" /> Created
+                </dt>
                 <dd className="font-medium">
                   {profile && new Date(profile.createdAt).toLocaleDateString()}
                 </dd>
@@ -182,7 +215,8 @@ function ProfilePage() {
               <ShieldCheck className="h-4 w-4" /> Your data stays here
             </div>
             <p className="mt-2 text-xs text-muted-foreground">
-              Everything is stored on your device only. We never send your name, age or location to a server.
+              Everything is stored on your device only. We never send your name, age or location to
+              a server.
             </p>
           </section>
 
@@ -209,7 +243,15 @@ function ProfilePage() {
   );
 }
 
-function Field({ icon, label, children }: { icon: React.ReactNode; label: string; children: React.ReactNode }) {
+function Field({
+  icon,
+  label,
+  children,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  children: React.ReactNode;
+}) {
   return (
     <label className="block">
       <div className="mb-1.5 flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
@@ -235,7 +277,7 @@ function DocumentUpload({ label, path }: { label: string; path: string }) {
       const downloadUrl = await uploadUserDocument(file, path);
       setUrl(downloadUrl);
       toast.success(`${label} uploaded`);
-    } catch (err) {
+    } catch {
       toast.error(`Failed to upload ${label}`);
     } finally {
       setUploading(false);
@@ -250,11 +292,11 @@ function DocumentUpload({ label, path }: { label: string; path: string }) {
           {url ? "Stored in Cloud Storage" : "No document uploaded"}
         </div>
       </div>
-      
-      <input 
-        type="file" 
-        className="hidden" 
-        ref={fileInputRef} 
+
+      <input
+        type="file"
+        className="hidden"
+        ref={fileInputRef}
         onChange={handleFileChange}
         accept="image/*,.pdf"
       />
@@ -263,9 +305,9 @@ function DocumentUpload({ label, path }: { label: string; path: string }) {
         disabled={uploading}
         onClick={() => fileInputRef.current?.click()}
         className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border transition-all ${
-          url 
-          ? "border-leaf/30 bg-leaf/10 text-leaf" 
-          : "border-border bg-muted/30 text-muted-foreground hover:bg-muted"
+          url
+            ? "border-leaf/30 bg-leaf/10 text-leaf"
+            : "border-border bg-muted/30 text-muted-foreground hover:bg-muted"
         }`}
       >
         {uploading ? (
@@ -279,4 +321,3 @@ function DocumentUpload({ label, path }: { label: string; path: string }) {
     </div>
   );
 }
-

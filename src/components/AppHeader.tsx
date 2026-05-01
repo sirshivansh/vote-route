@@ -1,6 +1,17 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { useState } from "react";
-import { MapPin, ShieldCheck, Menu, X, LayoutDashboard, Map, Sparkles, Gauge, HelpCircle, User } from "lucide-react";
+import {
+  MapPin,
+  ShieldCheck,
+  Menu,
+  X,
+  LayoutDashboard,
+  Map,
+  Sparkles,
+  Gauge,
+  HelpCircle,
+  User,
+} from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { UserProfile } from "@/lib/storage";
 import { cn } from "@/lib/utils";
@@ -33,11 +44,17 @@ export function AppHeader({
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
         <Link to="/" className="flex items-center gap-2 group min-w-0">
           <div className="grid h-9 w-9 place-items-center rounded-xl bg-primary text-primary-foreground shadow-glow shrink-0">
-            <span className="text-lg" aria-hidden>🗳️</span>
+            <span className="text-lg" aria-hidden>
+              🗳️
+            </span>
           </div>
           <div className="leading-tight min-w-0">
-            <div className="text-sm font-semibold tracking-tight truncate">{t("common:app.name")}</div>
-            <div className="text-[11px] text-muted-foreground truncate">{t("common:app.tagline")}</div>
+            <div className="text-sm font-semibold tracking-tight truncate">
+              {t("common:app.name")}
+            </div>
+            <div className="text-[11px] text-muted-foreground truncate">
+              {t("common:app.tagline")}
+            </div>
           </div>
         </Link>
 
@@ -74,7 +91,8 @@ export function AppHeader({
             >
               <MapPin className="h-3.5 w-3.5 text-saffron shrink-0" />
               <span className="truncate max-w-[120px]">
-                {profile.city}, {t(`common:states.${profile.state}`, { defaultValue: profile.state })}
+                {profile.city},{" "}
+                {t(`common:states.${profile.state}`, { defaultValue: profile.state })}
               </span>
             </Link>
           ) : (
@@ -108,7 +126,9 @@ export function AppHeader({
                   onClick={() => setOpen(false)}
                   className={cn(
                     "flex items-center gap-2 rounded-xl px-3 py-2.5 text-sm transition-colors",
-                    active ? "bg-primary-soft text-primary font-medium" : "text-muted-foreground hover:bg-muted",
+                    active
+                      ? "bg-primary-soft text-primary font-medium"
+                      : "text-muted-foreground hover:bg-muted",
                   )}
                 >
                   <item.icon className="h-4 w-4" />

@@ -3,7 +3,7 @@ import { getAuth, signInAnonymously } from "firebase/auth";
 import { getFirestore, collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { getAnalytics, logEvent, isSupported } from "firebase/analytics";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { getRemoteConfig, getValue, fetchAndActivate } from "firebase/remote-config";
+import { getRemoteConfig, fetchAndActivate } from "firebase/remote-config";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
 import type { Analytics } from "firebase/analytics";
 import type { Decision } from "@/ai/predictor";
@@ -45,14 +45,16 @@ if (typeof window !== "undefined") {
   // Initialize Remote Config with defaults
   remoteConfig.settings.minimumFetchIntervalMillis = 3600000;
   remoteConfig.defaultConfig = {
-    "show_beta_assistant": true,
-    "announcement_banner": "VoteRoute 1.0.5 is live! Get ready for Polling Day."
+    show_beta_assistant: true,
+    announcement_banner: "VoteRoute 1.0.5 is live! Get ready for Polling Day.",
   };
-  fetchAndActivate(remoteConfig).then(() => {
-    logger.info("☁️ System", "Remote Config activated");
-  }).catch(err => {
-    logger.error("☁️ System", "Remote Config failed to fetch", err);
-  });
+  fetchAndActivate(remoteConfig)
+    .then(() => {
+      logger.info("☁️ System", "Remote Config activated");
+    })
+    .catch((err) => {
+      logger.error("☁️ System", "Remote Config failed to fetch", err);
+    });
 }
 
 /**
@@ -61,8 +63,8 @@ if (typeof window !== "undefined") {
  */
 export async function logMilestoneEvent(stepId: string) {
   if (analytics) {
-    logEvent(analytics, 'milestone_completed', { step_id: stepId });
-    logger.info('☁️ System', `Analytics Event: milestone_completed (${stepId})`);
+    logEvent(analytics, "milestone_completed", { step_id: stepId });
+    logger.info("☁️ System", `Analytics Event: milestone_completed (${stepId})`);
   }
 }
 
@@ -73,10 +75,10 @@ export async function logMilestoneEvent(stepId: string) {
 export async function initSession() {
   try {
     const userCredential = await signInAnonymously(auth);
-    logger.info('🔐 Auth', `Anonymously signed in: ${userCredential.user.uid}`);
+    logger.info("🔐 Auth", `Anonymously signed in: ${userCredential.user.uid}`);
     return userCredential.user;
   } catch (error) {
-    logger.error('🔐 Auth', 'Anonymous sign-in failed', error);
+    logger.error("🔐 Auth", "Anonymous sign-in failed", error);
     return null;
   }
 }
@@ -92,12 +94,12 @@ export async function logInteraction(query: string, decision: Decision) {
       query,
       decision,
       timestamp: serverTimestamp(),
-      userId: auth.currentUser?.uid || 'anonymous'
+      userId: auth.currentUser?.uid || "anonymous",
     });
-    logger.info('🔥 Firestore', `Interaction logged with ID: ${docRef.id}`);
+    logger.info("🔥 Firestore", `Interaction logged with ID: ${docRef.id}`);
   } catch (error) {
     // We log the error but don't break the UI
-    logger.error('🔥 Firestore', 'Failed to log interaction', error);
+    logger.error("🔥 Firestore", "Failed to log interaction", error);
   }
 }
 
@@ -107,13 +109,13 @@ export async function logInteraction(query: string, decision: Decision) {
  */
 export async function uploadUserDocument(file: File, path: string) {
   try {
-    const storageRef = ref(storage, `users/${auth.currentUser?.uid || 'anon'}/${path}`);
+    const storageRef = ref(storage, `users/${auth.currentUser?.uid || "anon"}/${path}`);
     const snapshot = await uploadBytes(storageRef, file);
     const url = await getDownloadURL(snapshot.ref);
-    logger.info('☁️ System', `Document uploaded to Storage: ${path}`);
+    logger.info("☁️ System", `Document uploaded to Storage: ${path}`);
     return url;
   } catch (error) {
-    logger.error('☁️ System', 'Failed to upload document', error);
+    logger.error("☁️ System", "Failed to upload document", error);
     throw error;
   }
 }
@@ -125,19 +127,19 @@ export async function initNotifications() {
   if (typeof window === "undefined") return;
   try {
     const messaging = getMessaging(app);
-    const token = await getToken(messaging, { 
-      vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY 
+    const token = await getToken(messaging, {
+      vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY,
     });
     if (token) {
-      logger.info('☁️ System', `FCM Token acquired: ${token.substring(0, 8)}...`);
+      logger.info("☁️ System", `FCM Token acquired: ${token.substring(0, 8)}...`);
     }
-    
+
     onMessage(messaging, (payload) => {
-      logger.info('☁️ System', 'Foreground notification received', payload);
+      logger.info("☁️ System", "Foreground notification received", payload);
     });
-  } catch (error) {
+  } catch {
     // FCM often fails in local dev or without service workers, so we fail gracefully
-    logger.info('☁️ System', 'FCM not initialized (expected in some environments)');
+    logger.info("☁️ System", "FCM not initialized (expected in some environments)");
   }
 }
 
@@ -151,8 +153,9 @@ export function getSystemStatus() {
     storage: !!storage,
     auth: !!auth.currentUser,
     remoteConfig: !!remoteConfig,
-    aiCloud: !!import.meta.env.VITE_GEMINI_API_KEY && import.meta.env.VITE_GEMINI_API_KEY !== "your_gemini_api_key_here",
-    version: '1.0.5-production'
+    aiCloud:
+      !!import.meta.env.VITE_GEMINI_API_KEY &&
+      import.meta.env.VITE_GEMINI_API_KEY !== "your_gemini_api_key_here",
+    version: "1.0.5-production",
   };
 }
-

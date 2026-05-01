@@ -1,37 +1,52 @@
 steps:
-  # 1. Install and Build the app logic
-  - name: 'node:22'
+  # 1. Install dependencies
+  - name: "node:22"
     entrypoint: npm
-    args: ['install']
+    args: ["install"]
     env:
-      - 'NODE_OPTIONS=--experimental-require-module'
+      - "NODE_OPTIONS=--experimental-require-module"
 
-  - name: 'node:22'
+  # 2. Lint the codebase
+  - name: "node:22"
     entrypoint: npm
-    args: ['run', 'build']
+    args: ["run", "lint"]
     env:
-      - 'NODE_OPTIONS=--experimental-require-module'
+      - "NODE_OPTIONS=--experimental-require-module"
+
+  # 3. Run automated tests
+  - name: "node:22"
+    entrypoint: npm
+    args: ["test"]
+    env:
+      - "NODE_OPTIONS=--experimental-require-module"
+
+  # 4. Build the production bundle
+  - name: "node:22"
+    entrypoint: npm
+    args: ["run", "build"]
+    env:
+      - "NODE_OPTIONS=--experimental-require-module"
 
   # 2. Build the Docker image (now containing the 'dist' folder)
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'asia-south1-docker.pkg.dev/$PROJECT_ID/vote-route-repo/vote-route', '.']
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["build", "-t", "asia-south1-docker.pkg.dev/$PROJECT_ID/vote-route-repo/vote-route", "."]
 
   # 3. Push and Deploy
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'asia-south1-docker.pkg.dev/$PROJECT_ID/vote-route-repo/vote-route']
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["push", "asia-south1-docker.pkg.dev/$PROJECT_ID/vote-route-repo/vote-route"]
 
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
     entrypoint: gcloud
     args:
-      - 'run'
-      - 'deploy'
-      - 'vote-route'
-      - '--image'
-      - 'asia-south1-docker.pkg.dev/$PROJECT_ID/vote-route-repo/vote-route'
-      - '--region'
-      - 'asia-south1'
-      - '--platform'
-      - 'managed'
-      - '--allow-unauthenticated'
-      - '--memory'
-      - '1024Mi'
+      - "run"
+      - "deploy"
+      - "vote-route"
+      - "--image"
+      - "asia-south1-docker.pkg.dev/$PROJECT_ID/vote-route-repo/vote-route"
+      - "--region"
+      - "asia-south1"
+      - "--platform"
+      - "managed"
+      - "--allow-unauthenticated"
+      - "--memory"
+      - "1024Mi"

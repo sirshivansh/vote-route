@@ -55,11 +55,19 @@ export function OnboardingDialog({ onComplete, defaultGoal = "register", onClose
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center px-4 py-6">
-      <div className="absolute inset-0 bg-foreground/40 backdrop-blur-sm" />
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center px-4 py-6"
+      role="dialog"
+      aria-modal="true"
+      aria-label={t("common:onboarding.dialogTitle", { defaultValue: "Set up your profile" })}
+    >
+      <div className="absolute inset-0 bg-foreground/40 backdrop-blur-sm" aria-hidden="true" />
       <div className="relative w-full max-w-md rounded-3xl border border-border bg-card shadow-glow overflow-hidden">
         <div className="h-1 w-full bg-muted">
-          <div className="h-full bg-gradient-to-r from-primary to-leaf transition-all duration-500" style={{ width: `${((step + 1) / 3) * 100}%` }} />
+          <div
+            className="h-full bg-gradient-to-r from-primary to-leaf transition-all duration-500"
+            style={{ width: `${((step + 1) / 3) * 100}%` }}
+          />
         </div>
 
         <div className="p-6 sm:p-8">
@@ -71,8 +79,16 @@ export function OnboardingDialog({ onComplete, defaultGoal = "register", onClose
           </div>
 
           {step === 0 && (
-            <StepShell icon={<User className="h-5 w-5" />} title={t("common:onboarding.ageTitle")} hint={t("common:onboarding.ageHint")}>
+            <StepShell
+              icon={<User className="h-5 w-5" />}
+              title={t("common:onboarding.ageTitle")}
+              hint={t("common:onboarding.ageHint")}
+            >
+              <label htmlFor="onboarding-age" className="sr-only">
+                {t("common:onboarding.ageTitle")}
+              </label>
               <input
+                id="onboarding-age"
                 type="number"
                 inputMode="numeric"
                 min={14}
@@ -80,11 +96,16 @@ export function OnboardingDialog({ onComplete, defaultGoal = "register", onClose
                 value={age}
                 onChange={(e) => setAge(e.target.value ? Number(e.target.value) : "")}
                 placeholder={t("common:onboarding.agePlaceholder")}
+                aria-describedby={typeof age === "number" && age < 18 ? "age-warning" : undefined}
                 className="w-full rounded-2xl border border-border bg-background px-4 py-3 text-2xl font-semibold tracking-tight outline-none focus:border-primary"
                 autoFocus
               />
               {typeof age === "number" && age < 18 && (
-                <p className="mt-3 text-sm text-saffron-foreground bg-saffron/15 rounded-xl px-3 py-2 leading-relaxed">
+                <p
+                  id="age-warning"
+                  role="alert"
+                  className="mt-3 text-sm text-saffron-foreground bg-saffron/15 rounded-xl px-3 py-2 leading-relaxed"
+                >
                   {t("common:onboarding.under18")}
                 </p>
               )}
@@ -92,9 +113,24 @@ export function OnboardingDialog({ onComplete, defaultGoal = "register", onClose
           )}
 
           {step === 1 && (
-            <StepShell icon={<MapPin className="h-5 w-5" />} title={t("common:onboarding.locationTitle")} hint={t("common:onboarding.locationHint")}>
+            <StepShell
+              icon={<MapPin className="h-5 w-5" />}
+              title={t("common:onboarding.locationTitle")}
+              hint={t("common:onboarding.locationHint")}
+            >
               <div className="space-y-3">
-                <select value={state} onChange={(e) => setState(e.target.value)} className="w-full rounded-2xl border border-border bg-background px-4 py-3 outline-none focus:border-primary">
+                <label htmlFor="onboarding-state" className="sr-only">
+                  {t("common:onboarding.locationTitle")}
+                </label>
+                <select
+                  id="onboarding-state"
+                  value={state}
+                  onChange={(e) => setState(e.target.value)}
+                  aria-label={t("common:onboarding.statePlaceholder", {
+                    defaultValue: "Select your state",
+                  })}
+                  className="w-full rounded-2xl border border-border bg-background px-4 py-3 outline-none focus:border-primary"
+                >
                   <option value="">{t("common:onboarding.statePlaceholder")}</option>
                   {INDIAN_STATES.map((s) => (
                     <option key={s} value={s}>
@@ -102,10 +138,17 @@ export function OnboardingDialog({ onComplete, defaultGoal = "register", onClose
                     </option>
                   ))}
                 </select>
+                <label htmlFor="onboarding-city" className="sr-only">
+                  {t("common:onboarding.cityPlaceholder", { defaultValue: "Your city or town" })}
+                </label>
                 <input
+                  id="onboarding-city"
                   value={city}
                   onChange={(e) => setCity(e.target.value)}
                   placeholder={t("common:onboarding.cityPlaceholder")}
+                  aria-label={t("common:onboarding.cityPlaceholder", {
+                    defaultValue: "Your city or town",
+                  })}
                   maxLength={60}
                   className="w-full rounded-2xl border border-border bg-background px-4 py-3 outline-none focus:border-primary"
                 />
@@ -114,16 +157,39 @@ export function OnboardingDialog({ onComplete, defaultGoal = "register", onClose
           )}
 
           {step === 2 && (
-            <StepShell icon={<Sparkles className="h-5 w-5" />} title={t("common:onboarding.firstTimeTitle")} hint={t("common:onboarding.firstTimeHint")}>
-              <div className="grid grid-cols-2 gap-3">
-                <ChoiceCard selected={firstTime === true} onClick={() => setFirstTime(true)} emoji="🌱" label={t("common:onboarding.firstTimeYes")} />
-                <ChoiceCard selected={firstTime === false} onClick={() => setFirstTime(false)} emoji="🗳️" label={t("common:onboarding.firstTimeNo")} />
+            <StepShell
+              icon={<Sparkles className="h-5 w-5" />}
+              title={t("common:onboarding.firstTimeTitle")}
+              hint={t("common:onboarding.firstTimeHint")}
+            >
+              <div
+                className="grid grid-cols-2 gap-3"
+                role="radiogroup"
+                aria-label={t("common:onboarding.firstTimeTitle", {
+                  defaultValue: "First-time voter selection",
+                })}
+              >
+                <ChoiceCard
+                  selected={firstTime === true}
+                  onClick={() => setFirstTime(true)}
+                  emoji="🌱"
+                  label={t("common:onboarding.firstTimeYes")}
+                />
+                <ChoiceCard
+                  selected={firstTime === false}
+                  onClick={() => setFirstTime(false)}
+                  emoji="🗳️"
+                  label={t("common:onboarding.firstTimeNo")}
+                />
               </div>
             </StepShell>
           )}
 
           <div className="mt-6 flex items-center justify-between gap-3">
-            <button onClick={handleBack} className="inline-flex items-center gap-1 rounded-full px-3 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground">
+            <button
+              onClick={handleBack}
+              className="inline-flex items-center gap-1 rounded-full px-3 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+            >
               <ArrowLeft className="h-4 w-4" /> {t("common:actions.back")}
             </button>
             <button
@@ -144,10 +210,22 @@ export function OnboardingDialog({ onComplete, defaultGoal = "register", onClose
   );
 }
 
-function StepShell({ icon, title, hint, children }: { icon: React.ReactNode; title: string; hint: string; children: React.ReactNode }) {
+function StepShell({
+  icon,
+  title,
+  hint,
+  children,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  hint: string;
+  children: React.ReactNode;
+}) {
   return (
     <div className="mt-5">
-      <div className="grid h-10 w-10 place-items-center rounded-full bg-primary-soft text-primary">{icon}</div>
+      <div className="grid h-10 w-10 place-items-center rounded-full bg-primary-soft text-primary">
+        {icon}
+      </div>
       <h2 className="mt-3 text-xl sm:text-2xl font-semibold tracking-tight">{title}</h2>
       <p className="mt-1 text-sm text-muted-foreground leading-relaxed">{hint}</p>
       <div className="mt-5">{children}</div>
@@ -155,16 +233,32 @@ function StepShell({ icon, title, hint, children }: { icon: React.ReactNode; tit
   );
 }
 
-function ChoiceCard({ selected, onClick, emoji, label }: { selected: boolean; onClick: () => void; emoji: string; label: string }) {
+function ChoiceCard({
+  selected,
+  onClick,
+  emoji,
+  label,
+}: {
+  selected: boolean;
+  onClick: () => void;
+  emoji: string;
+  label: string;
+}) {
   return (
     <button
       onClick={onClick}
+      role="radio"
+      aria-checked={selected}
       className={cn(
         "flex min-h-28 flex-col items-center justify-center gap-2 rounded-2xl border-2 bg-background px-4 py-5 text-sm font-medium text-center transition-all",
-        selected ? "border-primary bg-primary-soft shadow-glow scale-[1.02]" : "border-border hover:border-primary/40",
+        selected
+          ? "border-primary bg-primary-soft shadow-glow scale-[1.02]"
+          : "border-border hover:border-primary/40",
       )}
     >
-      <span className="text-3xl">{emoji}</span>
+      <span className="text-3xl" aria-hidden="true">
+        {emoji}
+      </span>
       <span className="leading-snug">{label}</span>
     </button>
   );

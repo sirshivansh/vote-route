@@ -52,7 +52,10 @@ function applyDocumentPreferences(preferences: AppPreferences) {
 function readPrefs(): AppPreferences {
   if (typeof window === "undefined") return DEFAULT_PREFS;
   try {
-    return { ...DEFAULT_PREFS, ...(JSON.parse(localStorage.getItem(PREFS_KEY) || "{}") as Partial<AppPreferences>) };
+    return {
+      ...DEFAULT_PREFS,
+      ...(JSON.parse(localStorage.getItem(PREFS_KEY) || "{}") as Partial<AppPreferences>),
+    };
   } catch {
     return DEFAULT_PREFS;
   }
@@ -106,14 +109,18 @@ export function PreferencesProvider({ children }: { children: React.ReactNode })
     return () => mediaQuery.removeEventListener("change", handleChange);
   }, [preferences]);
 
-  const value = useMemo<PreferencesContextValue>(() => ({
-    preferences,
-    resolvedTheme,
-    setLanguage: (language) => setPreferences((prev) => ({ ...prev, language })),
-    setSimpleLanguage: (simpleLanguage) => setPreferences((prev) => ({ ...prev, simpleLanguage })),
-    setLargeText: (largeText) => setPreferences((prev) => ({ ...prev, largeText })),
-    setTheme: (theme) => setPreferences((prev) => ({ ...prev, theme })),
-  }), [preferences, resolvedTheme]);
+  const value = useMemo<PreferencesContextValue>(
+    () => ({
+      preferences,
+      resolvedTheme,
+      setLanguage: (language) => setPreferences((prev) => ({ ...prev, language })),
+      setSimpleLanguage: (simpleLanguage) =>
+        setPreferences((prev) => ({ ...prev, simpleLanguage })),
+      setLargeText: (largeText) => setPreferences((prev) => ({ ...prev, largeText })),
+      setTheme: (theme) => setPreferences((prev) => ({ ...prev, theme })),
+    }),
+    [preferences, resolvedTheme],
+  );
 
   return <PreferencesContext.Provider value={value}>{children}</PreferencesContext.Provider>;
 }

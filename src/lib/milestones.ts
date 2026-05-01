@@ -25,7 +25,11 @@ function getMilestoneCopy(t: TFunction, at: number) {
   return { title: "100% complete", body: t("journey:readinessLabels.100") };
 }
 
-export function checkMilestones(prevScore: number, nextScore: number, t: TFunction = i18n.t.bind(i18n)) {
+export function checkMilestones(
+  prevScore: number,
+  nextScore: number,
+  t: TFunction = i18n.t.bind(i18n),
+) {
   if (nextScore <= prevScore) return;
   const shown = getShown();
   const newShown = [...shown];

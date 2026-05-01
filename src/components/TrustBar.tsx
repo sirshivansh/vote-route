@@ -15,7 +15,10 @@ export function TrustBar() {
         <TooltipProvider delayDuration={150}>
           <Tooltip>
             <TooltipTrigger asChild>
-              <button className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors shrink-0" aria-label={t("common:trust.source")}>
+              <button
+                className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors shrink-0"
+                aria-label={t("common:trust.source")}
+              >
                 <Info className="h-3 w-3" />
                 <span className="hidden sm:inline">{t("common:trust.source")}</span>
               </button>

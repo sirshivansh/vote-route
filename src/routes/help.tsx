@@ -7,7 +7,10 @@ export const Route = createFileRoute("/help")({
   head: () => ({
     meta: [
       { title: "Help & FAQ — VoteRoute" },
-      { name: "description", content: "Frequently asked questions about voting, the voter journey, and using VoteRoute." },
+      {
+        name: "description",
+        content: "Frequently asked questions about voting, the voter journey, and using VoteRoute.",
+      },
     ],
   }),
   component: HelpPage,
@@ -25,19 +28,27 @@ function HelpPage() {
         <div className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider text-muted-foreground">
           <HelpCircle className="h-3.5 w-3.5" /> Help center
         </div>
-        <h1 className="mt-1 text-2xl sm:text-3xl font-semibold tracking-tight">Help & frequently asked questions</h1>
+        <h1 className="mt-1 text-2xl sm:text-3xl font-semibold tracking-tight">
+          Help & frequently asked questions
+        </h1>
         <p className="mt-1 text-sm text-muted-foreground max-w-2xl">
-          Everything you need to know about voting in India and using VoteRoute. Can't find your answer? Ask the assistant.
+          Everything you need to know about voting in India and using VoteRoute. Can't find your
+          answer? Ask the assistant.
         </p>
       </header>
 
       <div className="grid gap-6 lg:grid-cols-[1fr_260px]">
         <div className="space-y-6">
           <section className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-soft">
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">General</h2>
+            <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+              General
+            </h2>
             <div className="mt-3 space-y-2">
               {GLOBAL_FAQS.map((f) => (
-                <details key={f.q} className="group rounded-xl border border-border bg-background p-4">
+                <details
+                  key={f.q}
+                  className="group rounded-xl border border-border bg-background p-4"
+                >
                   <summary className="cursor-pointer list-none flex items-center justify-between gap-2 text-sm font-medium">
                     {f.q}
                     <ArrowRight className="h-3.5 w-3.5 text-muted-foreground group-open:rotate-90 transition-transform" />
@@ -49,13 +60,18 @@ function HelpPage() {
           </section>
 
           <section className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-soft">
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">By journey step</h2>
+            <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+              By journey step
+            </h2>
             {stepFaqs.length === 0 ? (
               <p className="mt-3 text-sm text-muted-foreground">No step questions yet.</p>
             ) : (
               <div className="mt-3 space-y-2">
                 {stepFaqs.map((f, i) => (
-                  <details key={i} className="group rounded-xl border border-border bg-background p-4">
+                  <details
+                    key={i}
+                    className="group rounded-xl border border-border bg-background p-4"
+                  >
                     <summary className="cursor-pointer list-none flex items-center justify-between gap-2">
                       <div className="min-w-0">
                         <div className="text-sm font-medium">{f.q}</div>
@@ -87,7 +103,9 @@ function HelpPage() {
           >
             <Sparkles className="h-5 w-5 text-primary" />
             <div className="mt-2 text-sm font-semibold">Still stuck?</div>
-            <div className="mt-1 text-xs text-muted-foreground">Ask the assistant — answers in plain English.</div>
+            <div className="mt-1 text-xs text-muted-foreground">
+              Ask the assistant — answers in plain English.
+            </div>
             <div className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-primary">
               Open assistant <ArrowRight className="h-3 w-3" />
             </div>
@@ -112,21 +130,36 @@ function HelpPage() {
           <div className="rounded-2xl border border-border bg-card p-5 shadow-soft">
             <Mail className="h-5 w-5 text-muted-foreground" />
             <div className="mt-2 text-sm font-semibold">Found a bug?</div>
-            <div className="mt-1 text-xs text-muted-foreground">VoteRoute is open & evolving. Tell us anything that didn't work.</div>
+            <div className="mt-1 text-xs text-muted-foreground">
+              VoteRoute is open & evolving. Tell us anything that didn't work.
+            </div>
           </div>
         </aside>
       </div>
       <section className="mt-8 rounded-2xl border border-primary/20 bg-primary-soft/30 p-6">
-        <h2 className="text-sm font-semibold uppercase tracking-wider text-primary">Data Sources & Accuracy</h2>
+        <h2 className="text-sm font-semibold uppercase tracking-wider text-primary">
+          Data Sources & Accuracy
+        </h2>
         <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
-          All voting steps, documents, and guidelines provided by VoteRoute are sourced directly from the 
+          All voting steps, documents, and guidelines provided by VoteRoute are sourced directly
+          from the
           <strong> Election Commission of India (ECI)</strong> official portal.
         </p>
         <div className="mt-4 flex flex-wrap gap-4">
-          <a href="https://eci.gov.in" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-xs font-medium text-primary hover:underline">
+          <a
+            href="https://eci.gov.in"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-xs font-medium text-primary hover:underline"
+          >
             ECI Official Portal <ExternalLink className="h-3 w-3" />
           </a>
-          <a href="https://voters.eci.gov.in" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-xs font-medium text-primary hover:underline">
+          <a
+            href="https://voters.eci.gov.in"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-xs font-medium text-primary hover:underline"
+          >
             Voter Services Portal <ExternalLink className="h-3 w-3" />
           </a>
         </div>

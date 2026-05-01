@@ -26,7 +26,12 @@ import {
   readinessLabel,
   getNextStep,
 } from "@/lib/journey";
-import { useProfile, getCompleted, toggleCompleted, setCompleted as persistCompleted } from "@/lib/storage";
+import {
+  useProfile,
+  getCompleted,
+  toggleCompleted,
+  setCompleted as persistCompleted,
+} from "@/lib/storage";
 import { OnboardingDialog } from "@/components/OnboardingDialog";
 import { checkMilestones, resetMilestones } from "@/lib/milestones";
 import { cn } from "@/lib/utils";
@@ -39,7 +44,11 @@ export const Route = createFileRoute("/dashboard")({
   head: () => ({
     meta: [
       { title: "Your Dashboard — VoteRoute" },
-      { name: "description", content: "Your voting journey at a glance — current step, readiness score, and quick actions." },
+      {
+        name: "description",
+        content:
+          "Your voting journey at a glance — current step, readiness score, and quick actions.",
+      },
     ],
   }),
   component: DashboardPage,
@@ -100,7 +109,11 @@ function DashboardPage() {
   if (hydrated && !profile) {
     return (
       <PageShell>
-        <OnboardingDialog onClose={() => window.history.back()} onComplete={(p) => setProfile(p)} defaultGoal="register" />
+        <OnboardingDialog
+          onClose={() => window.history.back()}
+          onComplete={(p) => setProfile(p)}
+          defaultGoal="register"
+        />
       </PageShell>
     );
   }
@@ -132,7 +145,9 @@ function DashboardPage() {
           {profile && (
             <span className="inline-flex items-center gap-1 min-w-0">
               <MapPin className="h-3 w-3 text-saffron shrink-0" />
-              <span className="truncate">Your journey in {profile.city}, {profile.state}</span>
+              <span className="truncate">
+                Your journey in {profile.city}, {profile.state}
+              </span>
             </span>
           )}
           <span className="inline-flex items-center gap-1 rounded-full border border-leaf/30 bg-leaf/10 px-2 py-0.5 text-[10px] font-medium normal-case tracking-normal text-leaf">
@@ -140,7 +155,9 @@ function DashboardPage() {
           </span>
         </div>
         <h1 className="mt-2 text-[1.625rem] sm:text-3xl font-semibold tracking-tight leading-tight">
-          {allDone ? "You are fully prepared to vote" : `Welcome back${profile ? `, voter from ${profile.city}` : ""}`}
+          {allDone
+            ? "You are fully prepared to vote"
+            : `Welcome back${profile ? `, voter from ${profile.city}` : ""}`}
         </h1>
         <p className="mt-1.5 text-sm sm:text-[15px] text-muted-foreground leading-relaxed">
           {allDone
@@ -150,7 +167,8 @@ function DashboardPage() {
             <>
               {" "}
               <InfoTip label="How readiness works">
-                Your readiness score is weighted by step importance. Critical steps (like registration and casting your vote) contribute the most.
+                Your readiness score is weighted by step importance. Critical steps (like
+                registration and casting your vote) contribute the most.
               </InfoTip>
             </>
           )}
@@ -166,7 +184,9 @@ function DashboardPage() {
               <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-primary">
                 <Sparkles className="h-3.5 w-3.5" /> Up next for you
               </div>
-              <h2 className="mt-2 text-xl sm:text-2xl font-semibold tracking-tight">{nextStep.title}</h2>
+              <h2 className="mt-2 text-xl sm:text-2xl font-semibold tracking-tight">
+                {nextStep.title}
+              </h2>
               <p className="mt-1 text-sm text-muted-foreground">{nextStep.shortDesc}</p>
               <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
                 <span className="inline-flex items-center gap-1 rounded-full bg-background border border-border px-2 py-1">
@@ -206,16 +226,24 @@ function DashboardPage() {
               <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-leaf">
                 <PartyPopper className="h-3.5 w-3.5" /> Journey complete
               </div>
-              <h2 className="mt-2 text-2xl font-semibold tracking-tight">View your completion screen →</h2>
-              <p className="mt-1 text-sm text-muted-foreground">Share your readiness with friends and family.</p>
+              <h2 className="mt-2 text-2xl font-semibold tracking-tight">
+                View your completion screen →
+              </h2>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Share your readiness with friends and family.
+              </p>
             </Link>
           )}
 
           {/* Booth Finder */}
           <section className="space-y-3">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Nearby Polling Station</h3>
-              <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-bold border border-primary/20">Google Maps Enabled</span>
+              <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+                Nearby Polling Station
+              </h3>
+              <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-bold border border-primary/20">
+                Google Maps Enabled
+              </span>
             </div>
             <BoothMap city={profile?.city} />
           </section>
@@ -223,8 +251,13 @@ function DashboardPage() {
           {/* Phase progress */}
           <section className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-soft">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Phases</h3>
-              <Link to="/timeline" className="text-xs text-primary hover:underline inline-flex items-center gap-1">
+              <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+                Phases
+              </h3>
+              <Link
+                to="/timeline"
+                className="text-xs text-primary hover:underline inline-flex items-center gap-1"
+              >
                 Full timeline <ArrowRight className="h-3 w-3" />
               </Link>
             </div>
@@ -241,11 +274,15 @@ function DashboardPage() {
                     {p.name}
                   </div>
                   <div className="mt-1 text-lg font-semibold tabular-nums">
-                    {p.done}<span className="text-sm text-muted-foreground">/{p.total}</span>
+                    {p.done}
+                    <span className="text-sm text-muted-foreground">/{p.total}</span>
                   </div>
                   <div className="mt-2 h-1.5 w-full rounded-full bg-muted overflow-hidden">
                     <div
-                      className={cn("h-full transition-all duration-700", p.complete ? "bg-leaf" : "bg-primary")}
+                      className={cn(
+                        "h-full transition-all duration-700",
+                        p.complete ? "bg-leaf" : "bg-primary",
+                      )}
                       style={{ width: `${(p.done / p.total) * 100}%` }}
                     />
                   </div>
@@ -257,8 +294,14 @@ function DashboardPage() {
           {/* Recent / upcoming steps */}
           <section>
             <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Upcoming steps</h3>
-              <Link to="/journey" search={{ goal: "register" }} className="text-xs text-primary hover:underline inline-flex items-center gap-1">
+              <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+                Upcoming steps
+              </h3>
+              <Link
+                to="/journey"
+                search={{ goal: "register" }}
+                className="text-xs text-primary hover:underline inline-flex items-center gap-1"
+              >
                 View journey <ArrowRight className="h-3 w-3" />
               </Link>
             </div>
@@ -284,7 +327,9 @@ function DashboardPage() {
               {completed.length === steps.length && (
                 <div className="rounded-2xl border border-dashed border-border p-8 text-center">
                   <PartyPopper className="mx-auto h-8 w-8 text-leaf" />
-                  <p className="mt-2 text-sm text-muted-foreground">Nothing left to do — you're voting-ready!</p>
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    Nothing left to do — you're voting-ready!
+                  </p>
                 </div>
               )}
             </div>
@@ -295,7 +340,13 @@ function DashboardPage() {
         <aside className="space-y-4">
           <section className="rounded-2xl border border-border bg-card p-5 shadow-soft text-center">
             <div className="flex justify-center">
-              <ReadinessRing score={score} size={150} stroke={12} label="Readiness" sublabel={scoreMeta.label} />
+              <ReadinessRing
+                score={score}
+                size={150}
+                stroke={12}
+                label="Readiness"
+                sublabel={scoreMeta.label}
+              />
             </div>
             <Link
               to="/readiness"
@@ -307,11 +358,22 @@ function DashboardPage() {
           </section>
 
           <section className="rounded-2xl border border-border bg-card p-5 shadow-soft">
-            <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Quick actions</h3>
+            <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Quick actions
+            </h3>
             <div className="mt-3 space-y-2">
-              <QuickLink to="/journey" search={{ goal: "register" }} icon={<ArrowRight className="h-4 w-4" />} label="Continue journey" />
+              <QuickLink
+                to="/journey"
+                search={{ goal: "register" }}
+                icon={<ArrowRight className="h-4 w-4" />}
+                label="Continue journey"
+              />
               <QuickLink to="/timeline" icon={<Map className="h-4 w-4" />} label="View timeline" />
-              <QuickLink to="/assistant" icon={<Sparkles className="h-4 w-4" />} label="Ask the assistant" />
+              <QuickLink
+                to="/assistant"
+                icon={<Sparkles className="h-4 w-4" />}
+                label="Ask the assistant"
+              />
               <QuickLink to="/help" icon={<Gauge className="h-4 w-4" />} label="Help & FAQ" />
             </div>
           </section>
@@ -351,7 +413,9 @@ function QuickLink({
       className="flex items-center justify-between rounded-xl border border-border bg-background px-3 py-2.5 text-sm hover:border-primary/40 hover:bg-primary-soft transition-colors group"
     >
       <span className="inline-flex items-center gap-2 text-foreground">
-        <span className="grid h-7 w-7 place-items-center rounded-lg bg-primary-soft text-primary">{icon}</span>
+        <span className="grid h-7 w-7 place-items-center rounded-lg bg-primary-soft text-primary">
+          {icon}
+        </span>
         {label}
       </span>
       <ArrowRight className="h-3.5 w-3.5 text-muted-foreground group-hover:text-primary group-hover:translate-x-0.5 transition-all" />

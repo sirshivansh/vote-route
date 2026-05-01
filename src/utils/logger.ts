@@ -5,47 +5,47 @@
  * @see https://cloud.google.com/logging/docs/structured-logging
  */
 
-type LogCategory = '🔥 Firestore' | '🤖 AI Decision' | '☁️ System' | '🔐 Auth' | '⚡ Performance';
+type LogCategory = "🔥 Firestore" | "🤖 AI Decision" | "☁️ System" | "🔐 Auth" | "⚡ Performance";
 
 export const logger = {
   /** Log an informational message with optional metadata. */
   info: (category: LogCategory, message: string, data?: Record<string, unknown>) => {
     const logEntry = {
-      severity: 'INFO',
+      severity: "INFO",
       message: `${category}: ${message}`,
       category,
-      component: 'VoteRouteAssistant',
+      component: "VoteRouteAssistant",
       timestamp: new Date().toISOString(),
-      ...(data && { metadata: data })
+      ...(data && { metadata: data }),
     };
     console.log(JSON.stringify(logEntry));
   },
-  
+
   /** Log an error with optional error object for stack trace capture. */
   error: (category: LogCategory, message: string, error?: unknown) => {
     const logEntry = {
-      severity: 'ERROR',
+      severity: "ERROR",
       message: `${category} ERROR: ${message}`,
       category,
-      component: 'VoteRouteAssistant',
+      component: "VoteRouteAssistant",
       timestamp: new Date().toISOString(),
-      ...(error && { 
+      ...(error && {
         error: error instanceof Error ? error.message : String(error),
-        stack: error instanceof Error ? error.stack : undefined
-      })
+        stack: error instanceof Error ? error.stack : undefined,
+      }),
     };
     console.error(JSON.stringify(logEntry));
   },
-  
+
   /** Log a performance measurement in milliseconds. */
   perf: (label: string, duration: number) => {
     const logEntry = {
-      severity: 'DEBUG',
+      severity: "DEBUG",
       message: `⚡ Performance: ${label} took ${duration.toFixed(2)}ms`,
-      category: '⚡ Performance',
+      category: "⚡ Performance",
       duration_ms: duration,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
     console.log(JSON.stringify(logEntry));
-  }
+  },
 };

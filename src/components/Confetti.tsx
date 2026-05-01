@@ -13,8 +13,8 @@ interface Piece {
 const COLORS = [
   "oklch(0.55 0.18 258)", // primary blue
   "oklch(0.62 0.14 150)", // leaf green
-  "oklch(0.78 0.16 65)",  // saffron
-  "oklch(0.7 0.12 220)",  // sky
+  "oklch(0.78 0.16 65)", // saffron
+  "oklch(0.7 0.12 220)", // sky
   "oklch(0.65 0.18 305)", // violet
 ];
 

@@ -17,7 +17,6 @@ import {
 } from "lucide-react";
 import { PageShell } from "@/components/PageShell";
 import { AssistantFab } from "@/components/AssistantFab";
-import { InfoTip } from "@/components/InfoTip";
 import { FIRST_TIME_VOTER_JOURNEY, getStepById, getNextStep, calcReadiness } from "@/lib/journey";
 import { getCompleted, toggleCompleted, useProfile } from "@/lib/storage";
 import { OnboardingDialog } from "@/components/OnboardingDialog";
@@ -40,8 +39,13 @@ export const Route = createFileRoute("/step/$stepId")({
     <PageShell crumbs={[{ label: "Dashboard", to: "/dashboard" }, { label: "Step not found" }]}>
       <div className="rounded-2xl border border-dashed border-border p-10 text-center">
         <h2 className="text-lg font-semibold">We couldn't find that step</h2>
-        <p className="mt-1 text-sm text-muted-foreground">It may have been removed or the link is wrong.</p>
-        <Link to="/dashboard" className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground">
+        <p className="mt-1 text-sm text-muted-foreground">
+          It may have been removed or the link is wrong.
+        </p>
+        <Link
+          to="/dashboard"
+          className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
+        >
           Back to dashboard
         </Link>
       </div>
@@ -64,7 +68,11 @@ function StepDetailPage() {
   if (hydrated && !profile) {
     return (
       <PageShell>
-        <OnboardingDialog onClose={() => window.history.back()} onComplete={(p) => setProfile(p)} defaultGoal="register" />
+        <OnboardingDialog
+          onClose={() => window.history.back()}
+          onComplete={(p) => setProfile(p)}
+          defaultGoal="register"
+        />
       </PageShell>
     );
   }
@@ -100,7 +108,7 @@ function StepDetailPage() {
     <PageShell
       crumbs={[
         { label: "Dashboard", to: "/dashboard" },
-        { label: "Journey", to: "/journey", },
+        { label: "Journey", to: "/journey" },
         { label: `Step ${idx + 1}` },
       ]}
     >
@@ -161,25 +169,29 @@ function StepDetailPage() {
           <section className="lg:col-span-8 group animate-in fade-in slide-in-from-bottom-4 duration-700 delay-100">
             <div className="h-full rounded-[2.5rem] border border-border bg-card/60 p-8 sm:p-10 shadow-soft backdrop-blur-xl relative overflow-hidden transition-all duration-500 hover:border-primary/30">
               <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
-              
+
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-10 h-10 rounded-2xl bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
                   <FileText className="h-5 w-5" />
                 </div>
-                <h2 className="text-sm font-bold uppercase tracking-[0.15em] text-muted-foreground">Detailed Blueprint</h2>
+                <h2 className="text-sm font-bold uppercase tracking-[0.15em] text-muted-foreground">
+                  Detailed Blueprint
+                </h2>
               </div>
 
               <div className="space-y-6">
                 <p className="text-lg sm:text-xl leading-relaxed text-foreground/90 font-medium">
                   {step.longDesc}
                 </p>
-                
+
                 {step.why && (
                   <div className="p-6 rounded-3xl bg-primary/5 border border-primary/10 transition-colors group-hover:bg-primary/[0.08]">
                     <div className="flex items-center gap-2 text-sm font-bold text-primary mb-3">
                       <Lightbulb className="h-4 w-4" /> The "Why" Factor
                     </div>
-                    <p className="text-sm sm:text-base leading-relaxed text-foreground/70">{step.why}</p>
+                    <p className="text-sm sm:text-base leading-relaxed text-foreground/70">
+                      {step.why}
+                    </p>
                   </div>
                 )}
               </div>
@@ -190,8 +202,12 @@ function StepDetailPage() {
           <aside className="lg:col-span-4 space-y-6 animate-in fade-in slide-in-from-right-4 duration-700 delay-200">
             <div className="rounded-[2.5rem] border border-border bg-card/40 p-8 shadow-soft backdrop-blur-xl space-y-6">
               <div className="space-y-1">
-                <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Action Center</h3>
-                <p className="text-sm text-foreground/60">Tools to help you finish this step faster.</p>
+                <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
+                  Action Center
+                </h3>
+                <p className="text-sm text-foreground/60">
+                  Tools to help you finish this step faster.
+                </p>
               </div>
 
               <div className="space-y-3">
@@ -202,7 +218,9 @@ function StepDetailPage() {
                     className="block group/link rounded-3xl border border-primary/30 bg-primary/5 p-5 transition-all hover:bg-primary/10 hover:border-primary hover:shadow-glow"
                   >
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-primary">Up Next</span>
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-primary">
+                        Up Next
+                      </span>
                       <ArrowRight className="h-4 w-4 text-primary transition-transform group-hover/link:translate-x-1" />
                     </div>
                     <div className="font-bold text-base truncate group-hover/link:text-primary transition-colors">
@@ -240,13 +258,16 @@ function StepDetailPage() {
                 <div className="flex items-center gap-2 text-sm font-bold text-saffron mb-4">
                   <AlertTriangle className="h-4 w-4" /> Crucial Warning
                 </div>
-                <p className="text-sm leading-relaxed text-foreground/80 font-medium">{step.consequence}</p>
+                <p className="text-sm leading-relaxed text-foreground/80 font-medium">
+                  {step.consequence}
+                </p>
               </div>
             )}
           </aside>
 
           {/* Documents & Checklist Row */}
-          {( (step.documents && step.documents.length > 0) || (step.checklist && step.checklist.length > 0) ) && (
+          {((step.documents && step.documents.length > 0) ||
+            (step.checklist && step.checklist.length > 0)) && (
             <section className="lg:col-span-12 grid gap-6 sm:grid-cols-2 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">
               {step.documents && step.documents.length > 0 && (
                 <div className="rounded-[2.5rem] border border-border bg-card/40 p-8 shadow-soft backdrop-blur-xl">
@@ -255,7 +276,10 @@ function StepDetailPage() {
                   </h3>
                   <div className="grid gap-3">
                     {step.documents.map((d: string) => (
-                      <div key={d} className="flex items-center gap-3 p-4 rounded-2xl bg-background/40 border border-border/50 transition-colors hover:border-primary/30">
+                      <div
+                        key={d}
+                        className="flex items-center gap-3 p-4 rounded-2xl bg-background/40 border border-border/50 transition-colors hover:border-primary/30"
+                      >
                         <div className="w-8 h-8 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
                           <Check className="h-4 w-4" />
                         </div>
@@ -268,7 +292,9 @@ function StepDetailPage() {
 
               {step.checklist && step.checklist.length > 0 && (
                 <div className="rounded-[2.5rem] border border-border bg-card/40 p-8 shadow-soft backdrop-blur-xl">
-                  <h3 className="text-sm font-bold uppercase tracking-[0.15em] text-muted-foreground mb-6">Execution Checklist</h3>
+                  <h3 className="text-sm font-bold uppercase tracking-[0.15em] text-muted-foreground mb-6">
+                    Execution Checklist
+                  </h3>
                   <div className="space-y-4">
                     {step.checklist.map((item: string) => (
                       <Checkable key={item} item={item} />
@@ -288,7 +314,10 @@ function StepDetailPage() {
                 </h3>
                 <div className="grid gap-4 sm:grid-cols-2">
                   {step.faqs.map((f: { q: string; a: string }) => (
-                    <details key={f.q} className="group rounded-[2rem] border border-border/50 bg-background/30 p-6 transition-all hover:border-primary/40 open:bg-background/50 open:ring-1 open:ring-primary/20">
+                    <details
+                      key={f.q}
+                      className="group rounded-[2rem] border border-border/50 bg-background/30 p-6 transition-all hover:border-primary/40 open:bg-background/50 open:ring-1 open:ring-primary/20"
+                    >
                       <summary className="cursor-pointer text-[15px] font-bold list-none flex items-center justify-between gap-4">
                         {f.q}
                         <div className="w-6 h-6 rounded-full border border-border flex items-center justify-center group-open:rotate-90 transition-transform">
@@ -342,7 +371,7 @@ function StepDetailPage() {
                   "flex-1 sm:flex-none flex items-center justify-center gap-2 px-8 py-3 rounded-full text-sm font-bold uppercase tracking-[0.1em] transition-all duration-500 shadow-glow",
                   isDone || justDone
                     ? "bg-leaf/20 text-leaf border border-leaf/30 cursor-default"
-                    : "bg-leaf text-leaf-foreground hover:scale-[1.05] active:scale-95 pulse-ring"
+                    : "bg-leaf text-leaf-foreground hover:scale-[1.05] active:scale-95 pulse-ring",
                 )}
               >
                 {isDone || justDone ? (
@@ -390,9 +419,9 @@ function Checkable({ item }: { item: string }) {
       onClick={() => setChecked((v) => !v)}
       className={cn(
         "flex items-center gap-4 w-full p-4 rounded-3xl border transition-all text-left group",
-        checked 
-          ? "border-leaf/40 bg-leaf/10" 
-          : "border-border bg-background/50 hover:border-primary/40 hover:bg-muted"
+        checked
+          ? "border-leaf/40 bg-leaf/10"
+          : "border-border bg-background/50 hover:border-primary/40 hover:bg-muted",
       )}
     >
       <div
@@ -403,10 +432,14 @@ function Checkable({ item }: { item: string }) {
       >
         {checked && <Check className="h-3.5 w-3.5 text-leaf-foreground" strokeWidth={3} />}
       </div>
-      <span className={cn(
-        "text-base font-semibold transition-all", 
-        checked ? "line-through text-muted-foreground" : "text-foreground/90 group-hover:text-primary"
-      )}>
+      <span
+        className={cn(
+          "text-base font-semibold transition-all",
+          checked
+            ? "line-through text-muted-foreground"
+            : "text-foreground/90 group-hover:text-primary",
+        )}
+      >
         {item}
       </span>
     </button>

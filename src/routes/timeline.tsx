@@ -12,7 +12,11 @@ export const Route = createFileRoute("/timeline")({
   head: () => ({
     meta: [
       { title: "Voting Timeline — VoteRoute" },
-      { name: "description", content: "Visual timeline of your voting journey, with deadlines and step-by-step progress." },
+      {
+        name: "description",
+        content:
+          "Visual timeline of your voting journey, with deadlines and step-by-step progress.",
+      },
     ],
   }),
   component: TimelinePage,
@@ -29,7 +33,11 @@ function TimelinePage() {
   if (hydrated && !profile) {
     return (
       <PageShell>
-        <OnboardingDialog onClose={() => window.history.back()} onComplete={(p) => setProfile(p)} defaultGoal="register" />
+        <OnboardingDialog
+          onClose={() => window.history.back()}
+          onComplete={(p) => setProfile(p)}
+          defaultGoal="register"
+        />
       </PageShell>
     );
   }
@@ -63,10 +71,16 @@ function TimelinePage() {
               )}
             >
               <div className="flex items-center gap-1 text-[10px] uppercase tracking-wider text-muted-foreground font-medium">
-                {isComplete ? <Check className="h-3 w-3 text-leaf" /> : <CircleDot className="h-3 w-3 text-primary" />}
+                {isComplete ? (
+                  <Check className="h-3 w-3 text-leaf" />
+                ) : (
+                  <CircleDot className="h-3 w-3 text-primary" />
+                )}
                 {phase}
               </div>
-              <div className="mt-1 text-sm font-semibold">{done}/{phaseSteps.length} done</div>
+              <div className="mt-1 text-sm font-semibold">
+                {done}/{phaseSteps.length} done
+              </div>
             </div>
           );
         })}
@@ -78,7 +92,9 @@ function TimelinePage() {
         <ol className="space-y-4">
           {FIRST_TIME_VOTER_JOURNEY.map((step, i) => {
             const isDone = completed.includes(step.id);
-            const isNext = !isDone && FIRST_TIME_VOTER_JOURNEY.slice(0, i).every((s) => completed.includes(s.id));
+            const isNext =
+              !isDone &&
+              FIRST_TIME_VOTER_JOURNEY.slice(0, i).every((s) => completed.includes(s.id));
             return (
               <li key={step.id} className="relative pl-12 sm:pl-14">
                 <span
@@ -99,7 +115,11 @@ function TimelinePage() {
                   params={{ stepId: step.id }}
                   className={cn(
                     "block rounded-2xl border bg-card p-4 sm:p-5 shadow-soft transition-all hover:-translate-y-0.5",
-                    isNext ? "border-primary/50" : isDone ? "border-leaf/30" : "border-border hover:border-primary/30",
+                    isNext
+                      ? "border-primary/50"
+                      : isDone
+                        ? "border-leaf/30"
+                        : "border-border hover:border-primary/30",
                   )}
                 >
                   <div className="flex flex-wrap items-center gap-2">
@@ -125,7 +145,12 @@ function TimelinePage() {
                       </span>
                     )}
                   </div>
-                  <h3 className={cn("mt-2 text-base sm:text-lg font-semibold tracking-tight", isDone && "text-muted-foreground")}>
+                  <h3
+                    className={cn(
+                      "mt-2 text-base sm:text-lg font-semibold tracking-tight",
+                      isDone && "text-muted-foreground",
+                    )}
+                  >
                     {step.title}
                   </h3>
                   <p className="mt-1 text-sm text-muted-foreground">{step.shortDesc}</p>

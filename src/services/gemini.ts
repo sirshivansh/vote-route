@@ -1,7 +1,6 @@
 import { logger } from "@/utils/logger";
 
 const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
-const GEMINI_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
 
 /**
  * Calls the Google Gemini API for cloud-based AI inference.
@@ -9,30 +8,34 @@ const GEMINI_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models
  */
 export async function callGemini(prompt: string, overrideKey?: string): Promise<string | null> {
   const activeKey = (overrideKey || GEMINI_API_KEY)?.trim();
-  
+
   if (!activeKey || activeKey === "your_gemini_api_key_here") {
-    logger.error('☁️ System', 'Gemini API Key is missing or default. Falling back to Local Engine.');
+    logger.error(
+      "☁️ System",
+      "Gemini API Key is missing or default. Falling back to Local Engine.",
+    );
     return null;
   }
 
   const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${activeKey}`;
 
-
   try {
     const response = await fetch(endpoint, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        contents: [{
-          parts: [{ text: prompt }]
-        }],
+        contents: [
+          {
+            parts: [{ text: prompt }],
+          },
+        ],
         generationConfig: {
           temperature: 0.3,
           maxOutputTokens: 300,
-        }
-      })
+        },
+      }),
     });
 
     if (!response.ok) {
@@ -41,15 +44,15 @@ export async function callGemini(prompt: string, overrideKey?: string): Promise<
 
     const data = await response.json();
     const result = data.candidates?.[0]?.content?.parts?.[0]?.text;
-    
+
     if (result) {
-      logger.info('☁️ System', 'Cloud inference successful via Gemini API');
+      logger.info("☁️ System", "Cloud inference successful via Gemini API");
       return result;
     }
-    
+
     return null;
   } catch (error) {
-    logger.error('☁️ System', 'Gemini API call failed', error);
+    logger.error("☁️ System", "Gemini API call failed", error);
     return null;
   }
 }

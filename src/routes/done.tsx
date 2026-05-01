@@ -13,9 +13,15 @@ export const Route = createFileRoute("/done")({
   head: () => ({
     meta: [
       { title: "You're ready to vote 🎉 — VoteRoute" },
-      { name: "description", content: "Celebration: you've completed your voting journey. Share to encourage friends." },
+      {
+        name: "description",
+        content: "Celebration: you've completed your voting journey. Share to encourage friends.",
+      },
       { property: "og:title", content: "I'm ready to vote 🎉" },
-      { property: "og:description", content: "I just completed my full voting journey on VoteRoute — start yours." },
+      {
+        property: "og:description",
+        content: "I just completed my full voting journey on VoteRoute — start yours.",
+      },
     ],
   }),
   component: DonePage,
@@ -99,16 +105,20 @@ function DonePage() {
             <h1 className="mt-5 text-[1.75rem] sm:text-4xl font-bold tracking-tight leading-tight">
               You are fully prepared to vote
             </h1>
-            <p className="mt-2 text-sm opacity-90">
-              You're doing your civic duty — respect.
-            </p>
+            <p className="mt-2 text-sm opacity-90">You're doing your civic duty — respect.</p>
             {profile && (
               <p className="mt-3 text-xs opacity-90 inline-flex items-center gap-1">
                 <MapPin className="h-3.5 w-3.5" /> {profile.city}, {profile.state}
               </p>
             )}
             <div className="mt-6 inline-block rounded-2xl bg-primary-foreground/15 backdrop-blur-sm p-4">
-              <ReadinessRing score={100} size={140} stroke={12} label="Readiness" sublabel="Complete" />
+              <ReadinessRing
+                score={100}
+                size={140}
+                stroke={12}
+                label="Readiness"
+                sublabel="Complete"
+              />
             </div>
           </div>
 
@@ -117,7 +127,8 @@ function DonePage() {
               <div className="flex items-start gap-2">
                 <ShieldCheck className="h-4 w-4 text-leaf shrink-0 mt-0.5" />
                 <p>
-                  Save this page or take a screenshot. On election day, head to your polling booth between
+                  Save this page or take a screenshot. On election day, head to your polling booth
+                  between
                   <span className="font-medium"> 7 AM – 6 PM </span>
                   with your Voter ID or any ECI-approved photo identification.
                 </p>
