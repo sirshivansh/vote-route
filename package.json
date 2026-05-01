@@ -14,7 +14,9 @@
     "format": "prettier --write .",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "deploy": "gcloud builds submit --config cloudbuild.yaml .",
+    "ship": "npm run lint && npm test && npm run build && npm run deploy"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
