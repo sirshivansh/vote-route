@@ -16,6 +16,7 @@ import { useTranslation } from "react-i18next";
 import type { UserProfile } from "@/lib/storage";
 import { cn } from "@/lib/utils";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const NAV = [
   { to: "/dashboard", key: "dashboard", icon: LayoutDashboard },
@@ -83,6 +84,7 @@ export function AppHeader({
 
         <div className="flex items-center gap-2 min-w-0">
           <LanguageSwitcher compact />
+          <ThemeToggle />
           {profile ? (
             <Link
               to="/profile"

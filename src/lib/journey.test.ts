@@ -65,4 +65,42 @@ describe("Journey Engine", () => {
   it("should handle empty steps array without crashing", () => {
     expect(calcReadiness([], [])).toBeNaN(); // 0/0 edge case
   });
+
+  // --- NEW TESTS ---
+
+  it("should return the first step when none are completed", () => {
+    expect(getNextStep([], mockSteps)?.id).toBe("1");
+  });
+
+  it("should skip completed steps when finding next", () => {
+    expect(getNextStep(["1", "3"], mockSteps)?.id).toBe("2");
+  });
+
+  it("should return correct readinessLabel at boundary values", () => {
+    expect(readinessLabel(1).tone).toBe("primary");
+    expect(readinessLabel(39).tone).toBe("primary");
+    expect(readinessLabel(40).tone).toBe("primary");
+    expect(readinessLabel(79).tone).toBe("primary");
+    expect(readinessLabel(80).tone).toBe("leaf");
+    expect(readinessLabel(99).tone).toBe("leaf");
+  });
+
+  it("should ignore completed IDs that don't match any step", () => {
+    // Completing a non-existent step ID should not affect readiness
+    expect(calcReadiness(["nonexistent"], mockSteps)).toBe(0);
+  });
+
+  it("should calculate correct weighted percentage for single step", () => {
+    // Only completing the heaviest step (50%) should give 50%
+    expect(calcReadiness(["3"], mockSteps)).toBe(50);
+    // Only completing the lightest step (10%) should give 10%
+    expect(calcReadiness(["1"], mockSteps)).toBe(10);
+  });
+
+  it("should return a label object with label and tone properties", () => {
+    const result = readinessLabel(50);
+    expect(result).toHaveProperty("label");
+    expect(result).toHaveProperty("tone");
+    expect(["muted", "primary", "leaf"]).toContain(result.tone);
+  });
 });

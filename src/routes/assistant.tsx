@@ -18,6 +18,7 @@ import { getNextStep } from "@/lib/journey";
 import { cn } from "@/lib/utils";
 import type { Decision } from "@/ai/predictor";
 import { logInteraction, initSession } from "@/services/firebase";
+import { trackAIInteraction } from "@/services/analytics";
 import { StatusPanel } from "@/components/StatusPanel";
 import { MetricsPanel } from "@/components/MetricsPanel";
 import { logger } from "@/utils/logger";
@@ -165,8 +166,12 @@ function AssistantPage() {
             nextStep,
             city: profile?.city,
             completedCount: completed.length,
-            firstTimeVoter: profile?.firstTimeVoter,
+            isFirstTime: profile?.firstTimeVoter,
             apiKey: import.meta.env.VITE_GEMINI_API_KEY,
+            history: messages.slice(-4).map((m) => ({
+              role: m.role,
+              text: m.text,
+            })),
           },
         });
       });
@@ -183,8 +188,9 @@ function AssistantPage() {
 
       setMessages((m) => [...m, reply]);
 
-      // FIREBASE PERSISTENCE
+      // FIREBASE PERSISTENCE + ANALYTICS
       await logInteraction(text, decision);
+      await trackAIInteraction(text, decision.engine, duration, decision.confidence);
     } catch (error) {
       logger.error("☁️ System", "Assistant query failed", error);
       const errorReply: Msg = {
@@ -317,6 +323,13 @@ function AssistantPage() {
                     <div className="text-xs text-muted-foreground italic leading-relaxed">
                       "{m.decision.explanation}"
                     </div>
+                    {/* Confidence visualization bar */}
+                    <div className="h-1 rounded-full bg-muted overflow-hidden">
+                      <div
+                        className="h-full bg-gradient-to-r from-primary to-leaf transition-all duration-1000 ease-out"
+                        style={{ width: `${m.decision.confidence * 100}%` }}
+                      />
+                    </div>
                     <div className="flex items-center justify-between pt-2 border-t border-border/50">
                       <div className="flex items-center gap-2">
                         <span className="text-[10px] font-medium text-emerald-600 bg-emerald-500/10 px-1.5 py-0.5 rounded">
@@ -324,7 +337,12 @@ function AssistantPage() {
                         </span>
                         {m.decision.engine === "cloud" && (
                           <span className="text-[10px] font-bold text-indigo-500 bg-indigo-500/10 px-1.5 py-0.5 rounded animate-pulse">
-                            Gemini 2.0 Powered
+                            Gemini 2.0 Flash
+                          </span>
+                        )}
+                        {m.decision.engine === "local" && (
+                          <span className="text-[10px] font-medium text-amber-600 bg-amber-500/10 px-1.5 py-0.5 rounded">
+                            Local Engine
                           </span>
                         )}
                       </div>

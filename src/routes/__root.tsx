@@ -105,8 +105,10 @@ function RootShell({ children }: { children: React.ReactNode }) {
 }
 
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { initAnalyticsSession } from "@/services/analytics";
 
 function RootComponent() {
+  initAnalyticsSession();
   return (
     <ErrorBoundary>
       <PreferencesProvider>

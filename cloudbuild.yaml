@@ -20,6 +20,13 @@ steps:
     env:
       - "NODE_OPTIONS=--experimental-require-module"
 
+  # 3.5 Generate test coverage report
+  - name: "node:22"
+    entrypoint: npm
+    args: ["run", "test:coverage"]
+    env:
+      - "NODE_OPTIONS=--experimental-require-module"
+
   # 4. Build the production bundle
   - name: "node:22"
     entrypoint: npm

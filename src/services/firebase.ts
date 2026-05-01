@@ -5,6 +5,7 @@ import { getAnalytics, logEvent, isSupported } from "firebase/analytics";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { getRemoteConfig, fetchAndActivate } from "firebase/remote-config";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
+import { getPerformance } from "firebase/performance";
 import type { Analytics } from "firebase/analytics";
 import type { Decision } from "@/ai/predictor";
 import { logger } from "@/utils/logger";
@@ -42,11 +43,19 @@ if (typeof window !== "undefined") {
     }
   });
 
+  // Initialize Firebase Performance Monitoring (automatic page load + network traces)
+  try {
+    getPerformance(app);
+    logger.info("☁️ System", "Firebase Performance Monitoring initialized");
+  } catch {
+    logger.info("☁️ System", "Performance Monitoring not available in this environment");
+  }
+
   // Initialize Remote Config with defaults
   remoteConfig.settings.minimumFetchIntervalMillis = 3600000;
   remoteConfig.defaultConfig = {
     show_beta_assistant: true,
-    announcement_banner: "VoteRoute 1.0.5 is live! Get ready for Polling Day.",
+    announcement_banner: "VoteRoute 1.1.0 is live! AI Assistant now with multi-turn memory.",
   };
   fetchAndActivate(remoteConfig)
     .then(() => {
@@ -156,6 +165,6 @@ export function getSystemStatus() {
     aiCloud:
       !!import.meta.env.VITE_GEMINI_API_KEY &&
       import.meta.env.VITE_GEMINI_API_KEY !== "your_gemini_api_key_here",
-    version: "1.0.5-production",
+    version: "1.1.0-production",
   };
 }

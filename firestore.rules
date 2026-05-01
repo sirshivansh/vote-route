@@ -27,5 +27,19 @@ service cloud.firestore {
       allow read: if true;
       allow write: if false;
     }
+
+    // Analytics Events (Write-only for authenticated users, no client reads)
+    match /analytics_events/{eventId} {
+      allow create: if request.auth != null
+                    && request.resource.data.event is string
+                    && request.resource.data.timestamp != null;
+      allow read: if false;
+    }
+
+    // Structured Logs (Write-only, server-side consumption)
+    match /logs/{logId} {
+      allow create: if request.auth != null;
+      allow read: if false;
+    }
   }
 }

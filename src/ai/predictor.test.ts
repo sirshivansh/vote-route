@@ -23,6 +23,16 @@ describe("AI Predictor Engine", () => {
     expect(decision.action).toContain("Birth Certificate");
   });
 
+  it("should detect document queries for returning voters", async () => {
+    const decision = await getBestAction("What documents are needed?", {
+      completedCount: 3,
+      isFirstTime: false,
+    });
+    expect(decision.category).toBe("logistics");
+    expect(decision.action).toContain("Aadhaar");
+    expect(decision.action).not.toContain("Birth Certificate");
+  });
+
   it("should identify polling booth queries", async () => {
     const decision = await getBestAction("Is there a crowd at the booth?", { completedCount: 4 });
     expect(decision.category).toBe("voting");
@@ -64,18 +74,57 @@ describe("AI Predictor Engine", () => {
     expect(decision.action.length).toBeGreaterThan(0);
   });
 
-  it("should detect registration queries", async () => {
+  it("should detect registration queries for first-time voters", async () => {
     const decision = await getBestAction("How do I register to vote?", {
       completedCount: 0,
       isFirstTime: true,
     });
-    expect(decision.action).toBeDefined();
-    expect(decision.confidence).toBeGreaterThan(0.4);
+    expect(decision.action).toContain("Form 6");
+    expect(decision.category).toBe("registration");
+    expect(decision.confidence).toBeGreaterThan(0.9);
+  });
+
+  it("should detect registration queries for returning voters", async () => {
+    const decision = await getBestAction("I need to register", {
+      completedCount: 2,
+      isFirstTime: false,
+    });
+    expect(decision.action).toContain("Form 8");
+    expect(decision.category).toBe("registration");
   });
 
   it("should produce consistent engine field for local fallback", async () => {
     const decision = await getBestAction("tell me about deadlines", { completedCount: 3 });
     expect(decision.engine).toBe("local");
     expect(decision.category).toBe("logistics");
+  });
+
+  it("should handle help/explain queries", async () => {
+    const decision = await getBestAction("Tell me how this works", { completedCount: 0 });
+    expect(decision.category).toBe("general");
+    expect(decision.confidence).toBeGreaterThanOrEqual(0.7);
+  });
+
+  it("should accept conversation history without crashing", async () => {
+    const decision = await getBestAction("what next", {
+      completedCount: 2,
+      history: [
+        { role: "user", text: "Hello" },
+        { role: "assistant", text: "Hi there!" },
+      ],
+    });
+    expect(decision).toBeDefined();
+    expect(decision.engine).toBe("local");
+  });
+
+  it("should always return all required Decision fields", async () => {
+    const decision = await getBestAction("random test", { completedCount: 0 });
+    expect(decision).toHaveProperty("action");
+    expect(decision).toHaveProperty("explanation");
+    expect(decision).toHaveProperty("confidence");
+    expect(decision).toHaveProperty("category");
+    expect(decision).toHaveProperty("engine");
+    expect(typeof decision.action).toBe("string");
+    expect(typeof decision.confidence).toBe("number");
   });
 });

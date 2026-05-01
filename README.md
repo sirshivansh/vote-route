@@ -20,7 +20,7 @@ Our approach is centered on **Contextual Guidance**. Unlike static guides, VoteR
 ## 🛠️ How the Solution Works
 The application functions as a smart, stateful assistant:
 - **State Management**: Uses TanStack Router and Query to maintain a robust, type-safe state of the user's journey.
-- **AI Integration**: **Google Gemini 1.5 Flash** acts as the core brain, providing natural language answers to voting queries and predicting the user's "Readiness Score."
+- **AI Integration**: **Google Gemini 2.0 Flash** acts as the core brain with dedicated system instructions and multi-turn conversation memory, providing natural language answers to voting queries and predicting the user's "Readiness Score."
 - **Telemetry & Trust**: Every AI interaction and milestone is logged to **Cloud Firestore** and **Cloud Logging**, providing transparency and auditability while the **TrustBar** shows real-time system signals to the user.
 - **Privacy First**: Uses Firebase Anonymous Auth to track progress without requiring sensitive PII, keeping user data safe and private.
 
@@ -38,7 +38,7 @@ The application functions as a smart, stateful assistant:
 | **Framework** | [TanStack Start](https://tanstack.com/start) (Vite + React 19) |
 | **Language** | TypeScript 5.8 (strict mode, 0 `any` types) |
 | **Styling** | Tailwind CSS 4 + Radix UI primitives |
-| **AI Engine** | Google Gemini 1.5 Flash (Cloud) + Local Rule Engine (Fallback) |
+| **AI Engine** | Google Gemini 2.0 Flash (Cloud) + Local Rule Engine (Fallback) |
 | **Auth** | Firebase Anonymous Authentication |
 | **Database** | Cloud Firestore (interaction logging) |
 | **Storage** | Firebase Cloud Storage (document uploads) |
@@ -47,7 +47,7 @@ The application functions as a smart, stateful assistant:
 | **Analytics** | Firebase Analytics (milestone events) |
 | **Hosting** | Google Cloud Run (containerized) |
 | **CI/CD** | Google Cloud Build |
-| **Testing** | Vitest 4 (31+ unit tests) |
+| **Testing** | Vitest 4 (54+ unit tests, 10 suites) |
 | **Linting** | ESLint 9 + Prettier |
 | **i18n** | i18next (English, Hindi, Marathi, Bengali) |
 
@@ -84,9 +84,11 @@ The application functions as a smart, stateful assistant:
 ---
 
 ## 🤖 Advanced AI Architecture
-- **Cloud Inference (Primary)**: Uses **Google Gemini 1.5 Flash** for sophisticated natural language understanding and context enrichment.
-- **Local Rule Engine (Fallback)**: A robust rule-based engine that triggers if cloud services are unreachable, ensuring users are never left without guidance.
+- **Cloud Inference (Primary)**: Uses **Google Gemini 2.0 Flash** with dedicated `systemInstruction` for consistent persona and multi-turn conversation context.
+- **Multi-Turn Memory**: The assistant maintains conversation history (last 4 turns) for contextual follow-up queries.
+- **Local Rule Engine (Fallback)**: A robust 6-rule engine covering registration, documents, booth congestion, deadlines, help, and next-step logic.
 - **Main-Thread Efficiency**: The AI engine runs entirely inside **Web Workers**, keeping the UI responsive even during complex predictions.
+- **Confidence Visualization**: Each AI response includes an animated confidence bar showing decision certainty.
 
 ---
 
@@ -100,6 +102,7 @@ The application functions as a smart, stateful assistant:
 - **Cloud Run**: Fully containerized deployment on Google Cloud's serverless infrastructure.
 - **Cloud Build**: Automated CI/CD pipeline with lint, test, and build steps.
 - **Cloud Logging**: Structured JSON logs are automatically ingested for system monitoring.
+- **Firebase Performance Monitoring**: Automatic page load and network performance tracing.
 
 ---
 
@@ -110,7 +113,8 @@ The application functions as a smart, stateful assistant:
 - **Path Traversal Protection**: Static file serving validates resolved paths stay within the client directory.
 - **Firestore Security Rules**: Schema-validated writes, owner-scoped reads, default deny-all.
 - **Accessibility (A11y)**: WCAG 2.1 compliant with ARIA roles, labels, live regions, skip links, and semantic HTML.
-- **Comprehensive Testing**: 31+ automated unit tests covering the journey engine, storage, AI predictor, milestones, and services.
+- **Comprehensive Testing**: 54+ automated unit tests covering the journey engine, storage, AI predictor, milestones, Firebase service, analytics, and Gemini service.
+- **Dark Mode**: Full dark mode support with system preference detection and manual toggle.
 
 ---
 
@@ -118,13 +122,13 @@ The application functions as a smart, stateful assistant:
 
 | Challenge Requirement | Implementation |
 |:---|:---|
-| **Smart, dynamic assistant** | Hybrid AI engine (Gemini Cloud + Local Rule Engine) with Web Worker offloading |
+| **Smart, dynamic assistant** | Hybrid AI engine (Gemini 2.0 Flash + Local Rule Engine) with multi-turn memory, systemInstruction, and Web Worker offloading |
 | **Logical decision making** | Multi-variate context analysis: 5 variables (time, location, progress, voter type, query intent) |
-| **Google Services** | Firebase Auth, Firestore, Storage, Analytics, FCM, Remote Config, Gemini API, Cloud Run, Cloud Build |
+| **Google Services** | Firebase Auth, Firestore, Storage, Analytics, FCM, Remote Config, Performance Monitoring, Gemini 2.0 Flash API, Cloud Run, Cloud Build |
 | **Practical usability** | 8-step ECI-aligned journey with real deadlines, checklists, document lists, and FAQs |
 | **Clean code** | 0 `any` types, strict ESLint/Prettier, full JSDoc, modular architecture |
 | **Security** | CSP, HSTS, XSS escaping, path traversal guard, Firestore rules with schema validation |
-| **Testing** | 31+ unit tests across 6 test suites with edge case coverage |
+| **Testing** | 54+ unit tests across 10 test suites with edge case coverage |
 | **Accessibility** | WCAG 2.1: skip links, ARIA labels, roles, live regions, semantic HTML, focus management |
 
 ---

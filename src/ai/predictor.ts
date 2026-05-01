@@ -1,6 +1,6 @@
 import { JourneyStep } from "@/lib/journey";
 import { logger } from "@/utils/logger";
-import { callGemini } from "@/services/gemini";
+import { callGemini, type ConversationTurn } from "@/services/gemini";
 
 export interface Decision {
   action: string;
@@ -13,8 +13,14 @@ export interface Decision {
 
 /**
  * AI Decision Engine — Gemini Cloud Inference with Local Rule Engine Fallback.
- * Analyses user queries and returns structured, context-aware decisions
- * for the voting journey assistant.
+ * Analyses user queries with full conversation context and returns structured,
+ * context-aware decisions for the voting journey assistant.
+ *
+ * Features:
+ * - Multi-turn conversation memory (last 4 turns sent to Gemini)
+ * - Dedicated system instructions for consistent persona
+ * - First-time voter context enrichment
+ * - Multi-variate local fallback (time, location, progress, voter type, query intent)
  */
 export async function getBestAction(
   query: string,
@@ -24,6 +30,7 @@ export async function getBestAction(
     completedCount: number;
     isFirstTime?: boolean;
     apiKey?: string;
+    history?: ConversationTurn[];
   },
 ): Promise<Decision> {
   const start = performance.now();
@@ -31,15 +38,14 @@ export async function getBestAction(
 
   logger.info("🤖 AI Decision", `Analyzing query: "${query}"`);
 
-  // --- PRODUCTION: GEMINI AI CLOUD INFERENCE WITH SAFE FALLBACK ---
+  // --- PRODUCTION: GEMINI AI CLOUD INFERENCE WITH MULTI-TURN CONTEXT ---
   try {
-    const cloudPrompt = `You are an Indian voting journey assistant. 
-    User Query: "${query}"
-    Context: ${context.completedCount} steps done, City: ${context.city || "Not set"}. 
-    Goal: Provide a brief, encouraging, and accurate answer in 1-2 sentences. 
-    If the user asks "what next", suggest the milestone: "${context.nextStep?.title || "Finish journey"}".`;
+    const cloudPrompt = `User Query: "${query}"
+Context: ${context.completedCount}/8 steps done, City: ${context.city || "Not set"}, First-time voter: ${context.isFirstTime ? "Yes" : "No"}.
+Next milestone: "${context.nextStep?.title || "Journey complete"}".
+If the user asks "what next", suggest the milestone above.`;
 
-    const cloudResponse = await callGemini(cloudPrompt, context.apiKey);
+    const cloudResponse = await callGemini(cloudPrompt, context.apiKey, context.history);
 
     if (cloudResponse) {
       const duration = performance.now() - start;
@@ -47,7 +53,7 @@ export async function getBestAction(
       return {
         action: cloudResponse,
         explanation:
-          "Decision generated via Google Gemini Cloud Inference with localized context enrichment.",
+          "Decision generated via Google Gemini 2.0 Flash with multi-turn conversation context and system instructions.",
         confidence: 0.98,
         category: lower.includes("booth")
           ? "voting"
@@ -76,9 +82,9 @@ export async function getBestAction(
     explanation: context.apiKey
       ? "Decision generated via hybrid edge-cloud processing due to API restrictions."
       : "Default fallback response when no specific intent is detected.",
-    confidence: context.apiKey ? 0.99 : 0.5,
+    confidence: 0.5,
     category: "general",
-    engine: context.apiKey ? "cloud" : "local",
+    engine: "local",
   };
 
   // 1. Next Step Logic
@@ -90,7 +96,7 @@ export async function getBestAction(
         confidence: 0.98,
         category: "registration",
         suggestedSteps: [context.nextStep.id],
-        engine: context.apiKey ? "cloud" : "local",
+        engine: "local",
       };
     } else {
       decision = {
@@ -98,7 +104,7 @@ export async function getBestAction(
         explanation: "You have completed all steps in the roadmap.",
         confidence: 1.0,
         category: "general",
-        engine: context.apiKey ? "cloud" : "local",
+        engine: "local",
       };
     }
   }
@@ -113,7 +119,7 @@ export async function getBestAction(
         "ECI requires specific proofs based on whether you are a new voter or updating details.",
       confidence: 0.95,
       category: "logistics",
-      engine: context.apiKey ? "cloud" : "local",
+      engine: "local",
     };
   }
 
@@ -126,7 +132,7 @@ export async function getBestAction(
       explanation: "Decision based on real-time hour analysis (Multi-Variate Logic).",
       confidence: 0.92,
       category: "voting",
-      engine: context.apiKey ? "cloud" : "local",
+      engine: "local",
     };
   }
 
@@ -138,7 +144,34 @@ export async function getBestAction(
         "Deadlines usually close 30 days before elections. Your local schedule depends on your constituency.",
       confidence: 0.9,
       category: "logistics",
-      engine: context.apiKey ? "cloud" : "local",
+      engine: "local",
+    };
+  }
+
+  // 5. Registration / Form Logic
+  else if (/(register|form|enroll|sign up|apply)/.test(lower)) {
+    decision = {
+      action: context.isFirstTime
+        ? "Visit voters.eci.gov.in and fill Form 6 for new voter registration. Keep your Age Proof and Address Proof ready."
+        : "Visit voters.eci.gov.in to update your details using Form 8. Your existing Voter ID number will be needed.",
+      explanation:
+        "ECI provides specific forms based on registration type. Form 6 is for new voters, Form 8 for corrections.",
+      confidence: 0.93,
+      category: "registration",
+      suggestedSteps: context.nextStep ? [context.nextStep.id] : [],
+      engine: "local",
+    };
+  }
+
+  // 6. Help / General Info
+  else if (/(help|how|explain|tell me|what is)/.test(lower)) {
+    decision = {
+      action:
+        "I can help with registration, document requirements, booth locations, and deadlines. Try asking a specific question!",
+      explanation: "General help response for broad queries.",
+      confidence: 0.7,
+      category: "general",
+      engine: "local",
     };
   }
 
